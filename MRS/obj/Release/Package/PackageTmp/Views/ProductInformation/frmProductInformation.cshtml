@@ -1,0 +1,2051 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset </button>
+        @*<button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+            <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>*@
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save </button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Product Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="PRODUCT_NAME" tabindex="1" name="PRODUCT_NAME" class="txtBox RequiredTextBox" value="" />
+                </div>
+                <div class="col-lg-3">
+                    <label>Generic Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="GENERIC_NAME" name="GENERIC_NAME" tabindex="9" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Sap Code</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="SAP_CODE" name="SAP_CODE" tabindex="2" class="txtBox RequiredTextBox" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Dosage Form Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="DOSAGE_FORM_NAME" tabindex="10" name="DOSAGE_FORM_NAME" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Product Code</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="TC_L1_CODE" class="txtBox" />
+                    <input type="hidden" id="TC_L2_CODE" class="txtBox" />
+                    <input type="hidden" id="TC_L3_CODE" class="txtBox" />
+                    <input type="hidden" id="TC_L4_CODE" class="txtBox" />
+                    <input type="hidden" id="GENERIC_CODE" class="txtBox" />
+                    <input type="hidden" id="DOSAGE_FORM_CODE" class="txtBox" />
+                    <input type="hidden" id="DSG_STRENGTH_CODE" class="txtBox" />
+                    <input type="hidden" id="MANUFACTURER_CODE" class="txtBox" />
+                    <input type="hidden" id="MFC_NIC_NAME" class="txtBox" />
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    <input type="text" id="PROD_ID" name="PROD_ID" class="txtBox" value="" readonly="readonly" />
+                </div>
+                <div class="col-lg-3">
+                    <label>Dosage Strength </label><label style="color: red">*</label>
+                </div> 
+                <div class="col-lg-3">
+                    <input type="text" id="DSG_STRENGTH_NAME" name="DSG_STRENGTH_NAME" tabindex="11" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Therapeutic Class Level-1 Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="TC_L1_DESC" name="TC_L1_DESC" tabindex="4" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Manufecturer Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="MANUFACTURER_NAME" tabindex="12" name="MANUFACTURER_NAME" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Therapeutic Class Level-2 Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="TC_L2_DESC" tabindex="5" name="TC_L2_DESC" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Unit Price</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="UNIT_PRICE" name="UNIT_PRICE" tabindex="13" class="txtBox RequiredTextBox" value="" placeholder="0.00" style="text-align: right" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Therapeutic Class Level-3 Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="TC_L3_DESC" name="TC_L3_DESC" tabindex="6" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Avg. Prescribe Qty</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="AVG_PRESCRIBE_QTY" tabindex="14" name="AVG_PRESCRIBE_QTY" class="txtBox" value="" placeholder="0.00" style="text-align: right" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Therapeutic Class Level-4 Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="TC_L4_DESC" tabindex="7" name="TC_L4_DESC" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Avg. Bought Qty</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="AVG_BOUGHT_QTY" name="AVG_BOUGHT_QTY" tabindex="15" class="txtBox" value="" placeholder="0.00" style="text-align: right" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Product Status</label>
+                </div>
+                <div class="col-lg-3">
+                    <select id="PROD_STATUS" name="PROD_STATUS" class="txtBox" tabindex="8">
+                        <option value="A">Active</option>
+                        <option value="I">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Pack Size</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="PACK_SIZE" tabindex="16" name="PACK_SIZE" class="txtBox" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>SBU Group</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <select id="SBU_GROUP" name="SBU_GROUP" class="txtBox" tabindex="17">
+                        <option value="SBU_A">SBU_A</option>
+                        <option value="SBU_B">SBU_B</option>
+                        <option value="SBU_C">SBU_C</option>
+                        <option value="SBU_D">SBU_D</option>
+                        <option value="SBU_E">SBU_E</option>
+                        <option value="SBU_N">SBU_N</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="TherapeuticLevel1IDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Therapeutic Level1 Name :</label>
+        <input type="text" id="txtLevel1Code" placeholder="Searching by Therapeutic Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="TherapeuticLevel1Grid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnTherapeuticLevel1IDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTherapeuticLevel1IDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="TherapeuticLevel2IDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Therapeutic Level2 Name :</label>
+        <input type="text" id="txtLevel2Code" placeholder="Searching by Therapeutic Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="TherapeuticLevel2Grid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnTherapeuticLevel2IDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTherapeuticLevel2IDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="TherapeuticLevel3IDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Therapeutic Level3 Name :</label>
+        <input type="text" id="txtLevel3Code" placeholder="Searching by Therapeutic Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="TherapeuticLevel3Grid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnTherapeuticLeve3IDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTherapeuticLeve3IDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="TherapeuticLevel4IDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Therapeutic Level4 Name :</label>
+        <input type="text" id="txtLevel4Code" placeholder="Searching by Therapeutic Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="TherapeuticLevel4Grid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnTherapeuticLeve4IDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTherapeuticLeve4IDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DosageFormIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Dosage From Name :</label>
+        <input type="text" id="txtDosageFormCode" placeholder="Searching by Dosage From Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="DosageFormGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDosageFormIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDosageFormIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DosageStrengthIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Dosage Strength Name :</label>
+        <input type="text" id="txtDosageStrengthCode" placeholder="Searching by Dosage Strength Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="DosageStrengthGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDosageStrengthWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDosageStrengthWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="GenericIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Generic Name :</label>
+        <input type="text" id="txtGenericCode" placeholder="Searching by Generic Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="GenericGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGenericIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGenericIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ManufactureIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Manufacturer Name :</label>
+        <input type="text" id="txtManufacturerCode" placeholder="Searching by Manufacturer Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="ManufactureGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManufactureIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManufactureIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;opacity: .8; filter: alpha(opacity=70); display: none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </p>
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script>
+
+    var btnDisable = '@ViewBag.USER_ID';
+    @*var canDisplay = '@ViewBag.CanDisplay' | true;*@
+    var colHide = false;
+    //if(canDisplay )
+    if (btnDisable == "MRS_9")
+        
+        $('#btnSubmit').attr('disabled', true);
+    
+
+    //$("#").kendoButton({
+    //    enable: false
+    //});
+    //$("#PROD_ID").attr("disabled", "disabled");
+    //$("#PageDetailGrid").kendoGrid({
+    //    columns: [
+    //      { field: "firstProperty" },
+    //      { field: "anotherProperty", hidden: !canDisplay }    
+    //    ]
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+        function checkRole()
+        {
+            if(btnDisable === "MRS_9")
+            {
+                
+            }
+        };
+        checkRole();
+        $("#PRODUCT_NAME").focus();
+
+        NumericAndDecimalValue('UNIT_PRICE');
+        NumericAndDecimalValue('AVG_PRESCRIBE_QTY');
+        NumericAndDecimalValue('AVG_BOUGHT_QTY');
+        //NumericAndDecimalValue(PACK_SIZE);
+
+
+        //************************* Handling DELETE event for DELETING ROW from DETAIL GRID ******************************//
+        function handleDelete(event) {
+            if (btnDisable === "MRS_9") {
+                alert("Your are not authorized to Delete");
+            }
+            else
+            {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                if (changeStatus == 0) {
+                    OpenConfirmationDialog();
+                }
+                else {
+                    resetEditDeleteStatus = 3; //Delete Button
+                    OpenSaveChangesDialog();
+                }
+            }
+        
+        };
+
+
+        //function Role(event){}
+
+        //function setDisabled(disabled) {
+        //    //if (enabled) {
+        //    //    $(".k-add-button").removeClass("k-state-disabled").addClass("k-grid-add");
+        //    //}
+            
+        //}
+
+        //function disableButtons() {
+        //    setTimeout(function () {
+        //        $(".k-grid-pager a").addClass("k-state-disabled")
+        //    })
+        //}
+
+        //************************* EDIT Button for DETAIL GRID******************************//
+
+        function handleEdit(event) {
+            if (btnDisable === "MRS_9") {
+                alert("Your are not authorized to edit");
+            } else {
+                // For Grid Edit Button
+                //resetEditDeleteStatus = 2;
+                // When Changes Data
+                //if (changeStatus == 1) {
+                //    dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                //    OpenSaveChangesDialog();
+                //}
+                    // When No Changes Data
+            //    else {
+                    
+            //        $("#SUStatus").val(1);
+            //        $("#PROD_ID").attr("disabled", "disabled");
+            //}
+            $(".RequiredTextBox").css("border-color", "");
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            SetMasterData(dataitem);
+            $("#SUStatus").val(1);
+            changeStatus == 1;
+            $("#PROD_ID").attr("disabled", "disabled");
+            }
+         
+        };
+
+       // or omit if the user does not have permission
+
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+
+        @*var canDisplay = '@ViewBag.CanDisplay' | false;*@
+        //$("#grid").kendoGrid({
+        //    co
+        //      { field: "firstProperty" },
+                 
+           
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "PROD_ID",
+                    fields: {
+                        PROD_ID: { editable: false },
+                        PRODUCT_NAME: { editable: false },
+                        GENERIC_NAME: { editable: false },
+                        MANUFACTURER_NAME: { editable: false },
+                        DOSAGE_FORM_NAME: { editable: false },
+                        DSG_STRENGTH_NAME: { editable: true },
+                        UNIT_PRICE: { editable: false },
+                        TC_L1_CODE: { editable: false },
+                        TC_L2_CODE: { editable: false },
+                        TC_L3_CODE: { editable: false },
+                        TC_L4_CODE: { editable: false },
+                        TC_L1_DESC: { editable: false },
+                        TC_L2_DESC: { editable: false },
+                        TC_L3_DESC: { editable: false },
+                        TC_L4_DESC: { editable: false },
+              
+                        GENERIC_CODE: { editable: false },
+                        DOSAGE_FORM_CODE: { editable: false },
+                        DSG_STRENGTH_CODE: { editable: false },
+                        MANUFACTURER_CODE: { editable: false },
+                        UNIT_PRICE: { editable: false },
+                        AVG_PRESCRIBE_QTY: { editable: false },
+                        AVG_BOUGHT_QTY: { editable: false },
+                        PACK_SIZE: { editable: false },
+                        SAP_CODE: { editable: false },
+                        PROD_STATUS: { editable: false }
+                    }
+                }
+            },
+            pageSize: 50,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetProductInformationList", "ProductInformation")",
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 500,
+            columns: [
+                //if(btnDisable("MRS_9")),
+                { field: "TC_L1_CODE", title: "Prod. Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center;" } },
+                { field: "TC_L2_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TC_L3_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TC_L4_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "GENERIC_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "DOSAGE_FORM_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "DSG_STRENGTH_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "MANUFACTURER_CODE", title: "Product Code", width: 130, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                
+                { field: "PROD_ID", hidden: false, title: "Prod. Code", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "PRODUCT_NAME", title: "Product Name", width: 100, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "GENERIC_NAME", title: "Generic", width: 100, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "MANUFACTURER_NAME", title: "Manufec.",width: 100, filterable: true,  headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "DOSAGE_FORM_NAME", title: "Dosage Form", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "DSG_STRENGTH_NAME", title: "Dosage Strength",  filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "UNIT_PRICE", title: "Unit Price", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TC_L1_DESC", title: "TC1 Name",  filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TC_L2_DESC", title: "TC2 Name",  filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TC_L3_DESC", title: "TC3 Name",  filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TC_L4_DESC", title: "TC4 Name", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "AVG_PRESCRIBE_QTY", hidden: true, title: "AVG_PRESCRIBE_QTY", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "AVG_BOUGHT_QTY", hidden: true, title: "AVG_BOUGHT_QTY", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "PACK_SIZE", title: "PACK_SIZE", hidden: true, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "SAP_CODE", title: "SAP_CODE", hidden: true, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "PROD_STATUS", title: "Product Status", hidden: true,  filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center;" } },
+                { field: "SBU_GROUP", title: "SBU Group", hidden: false, width: 70, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center;" } },
+                //{ field: "anotherProperty", hidden: !canDisplay } ,
+                
+                  
+                 { command: [{ name: "Edit", text: "Edit", hidden: colHide, imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "75px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "90px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            
+            ]
+        }).data('kendoGrid');
+
+        $("#hide_col1").on("click", function () {
+            grid.hideColumn("Edit");
+        });
+        //grid.hideColumn("Edit");
+        //************************* END OF DETAIL GRID ******************************//
+
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "ProductInformation")',
+                type: 'POST',
+                data: JSON.stringify({ "productId": dataitem.PROD_ID }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $("#PROD_STATUS").val("Active");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            })
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+
+        //************************* Handling NO BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //************************* Click Save Chages Window OK Button******************************//
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#PROD_STATUS").val("Active");
+                $("#PROD_ID").removeAttr("disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#PROD_ID").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "ProductInformation")',
+                    type: 'POST',
+                    data: JSON.stringify({ "productId": dataitem.PROD_ID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $("#PROD_STATUS").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        //$(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //************************* END of Document.Ready Method ******************************//
+    });
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#PROD_STATUS").val("Active");
+            $("#PROD_ID").removeAttr("disabled");
+        }
+    });
+
+    //************************* SAVE Function for SAVE Button ******************************//
+
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+    var productInformationViewModel = {
+        "PROD_ID": "", "PRODUCT_NAME": "", "TC_L1_CODE": "", "TC_L2_CODE": "", "TC_L3_CODE": "", "TC_L4_CODE": ""
+                                        , "GENERIC_CODE": "", "DOSAGE_FORM_CODE": "", "DSG_STRENGTH_CODE": "", "MANUFACTURER_CODE": "", "UNIT_PRICE": "", "AVG_PRESCRIBE_QTY": ""
+                                        , "AVG_BOUGHT_QTY": "", "PACK_SIZE": "", "SAP_CODE": "", "PROD_STATUS": "", "SBU_GROUP": ""
+    };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        //// Check Empty or Maximum Length in ManufacturerName
+        //CheckRequiredTextBoxMaxLength('PROD_ID', 20);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('PRODUCT_NAME', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('GENERIC_NAME', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('TC_L1_DESC', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('TC_L2_DESC', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('TC_L3_DESC', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('TC_L4_DESC', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('DOSAGE_FORM_NAME', 100);
+
+        //// Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('DSG_STRENGTH_NAME', 100);
+
+        //// Check Maximum Length in ContactNumber
+        CheckRequiredTextBoxMaxLength('MANUFACTURER_NAME', 100);
+
+        //// Check Maximum Length in ContactNumber
+        CheckRequiredTextBoxMaxLength('UNIT_PRICE', 6);
+
+        CheckRequiredTextBoxMaxLength('SBU_GROUP', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            productInformationViewModel.PROD_ID = $("#PROD_ID").val();
+            productInformationViewModel.PRODUCT_NAME = $("#PRODUCT_NAME").val();
+            productInformationViewModel.TC_L1_CODE = $("#TC_L1_CODE").val();
+            productInformationViewModel.TC_L2_CODE = $("#TC_L2_CODE").val();
+            productInformationViewModel.TC_L3_CODE = $("#TC_L3_CODE").val();
+            productInformationViewModel.TC_L4_CODE = $("#TC_L4_CODE").val();
+            productInformationViewModel.GENERIC_CODE = $("#GENERIC_CODE").val();
+            productInformationViewModel.DOSAGE_FORM_CODE = $("#DOSAGE_FORM_CODE").val();
+            productInformationViewModel.DSG_STRENGTH_CODE = $("#DSG_STRENGTH_CODE").val();
+            productInformationViewModel.MANUFACTURER_CODE = $("#MANUFACTURER_CODE").val();
+            productInformationViewModel.MFC_NIC_NAME = $("#MFC_NIC_NAME").val();
+            productInformationViewModel.UNIT_PRICE = $("#UNIT_PRICE").val();
+            productInformationViewModel.AVG_PRESCRIBE_QTY = $("#AVG_PRESCRIBE_QTY").val();
+            productInformationViewModel.AVG_BOUGHT_QTY = $("#AVG_BOUGHT_QTY").val();
+            productInformationViewModel.PACK_SIZE = $("#PACK_SIZE").val();
+            productInformationViewModel.SAP_CODE = $("#SAP_CODE").val();
+
+            productInformationViewModel.PROD_STATUS = $("#PROD_STATUS option:selected").val();
+            productInformationViewModel.SBU_GROUP = $("#SBU_GROUP option:selected").val();
+            //alert($("#SBU_GROUP option:selected").val())
+            productInformationViewModel.SUStatus = $("#SUStatus").val();
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("SaveAndUpdateData", "ProductInformation")',
+                    data: JSON.stringify(productInformationViewModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $("#SUStatus").val(1);
+                            GridReload('PageDetailGrid');
+                            $('#PROD_ID').val(response.Code);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#PROD_ID").focus();
+            }
+        }
+    };
+    //************************* END of SAVE Function *******************************************//
+
+
+
+
+
+
+    //********************************************** Therapeutic Leve-1 POP UP Window ****************************************************
+
+    //*********** DEFINE Therapeutic Leve-1 Window ***************************** //
+
+    var TherapeuticLevel1IDWindow = $('#TherapeuticLevel1IDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        //width: "1352px",
+        width: "100%",
+        height: "auto",
+        title: "List of Therapeutic Level-1 Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-1 GRID ***************************** //
+
+    var TherapeuticLevel1DataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TC_L1_CODE",
+                fields: {
+                    TC_L1_CODE: { editable: false, hidden: true },
+                    TC_L1_DESC: { editable: false },
+                    TC_L1_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var TherapeuticLevel1Grid = $("#TherapeuticLevel1Grid").kendoGrid({
+        dataSource: TherapeuticLevel1DataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+                    { field: "TC_L1_DESC", title: "Therapeutic Level-1 Name", width: "150px", filterable: true },
+                    { field: "TC_L1_CODE", title: "Therapeutic Level-1 Code", width: "150px", filterable: true }
+
+                  //{ field: "TC_L1_SLNO", title: "Therapeutic Level-1 Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#TC_L1_DESC").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetTherapeuticLevel1List", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#TherapeuticLevel1Grid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('TherapeuticLevel1Grid');
+                TherapeuticLevel1IDWindow.open();
+                TherapeuticLevel1IDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnTherapeuticLevel1IDWindowOK').click(function () {
+        var grid = $('#TherapeuticLevel1Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L1_CODE").val(selectedItem.TC_L1_CODE);
+        $("#TC_L1_DESC").val(selectedItem.TC_L1_DESC);
+        $("#TC_L2_DESC").focus();
+        changeStatus = 1;
+        TherapeuticLevel1IDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnTherapeuticLevel1IDWindowCancel').click(function () {
+        TherapeuticLevel1IDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#TherapeuticLevel1IDWindow").dblclick(function () {
+        //ListOfValueOpeningBankGridEvent('TherapeuticLevel1Grid');
+        var grid = $('#TherapeuticLevel1Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L1_CODE").val(selectedItem.TC_L1_CODE);
+        $("#TC_L1_DESC").val(selectedItem.TC_L1_DESC);
+        $("#TC_L2_DESC").focus();
+        changeStatus = 1;
+        TherapeuticLevel1IDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#TherapeuticLevel1IDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#TherapeuticLevel1Grid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#TC_L1_CODE").val(selectedItem.TC_L1_CODE);
+            $("#TC_L1_DESC").val(selectedItem.TC_L1_DESC);
+            $("#TC_L2_DESC").focus();
+            changeStatus = 1;
+            TherapeuticLevel1IDWindow.close();
+        }
+        else if (keycode == '27') {
+            TherapeuticLevel1IDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of Therapeutic Leve-1 POP UP Window ****************************************************//
+
+
+    //********************************************** Therapeutic Leve-2 POP UP Window ****************************************************
+
+    //*********** DEFINE Therapeutic Leve-2 Window ***************************** //
+
+    var TherapeuticLevel2IDWindow = $('#TherapeuticLevel2IDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Therapeutic Level-2 Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-2 GRID ***************************** //
+
+    var TherapeuticLevel2DataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TC_L2_CODE",
+                fields: {
+                    TC_L2_CODE: { editable: false, hidden: true },
+                    TC_L2_DESC: { editable: false },
+                    TC_L2_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var TherapeuticLevel2Grid = $("#TherapeuticLevel2Grid").kendoGrid({
+        dataSource: TherapeuticLevel2DataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "TC_L2_DESC", title: "Therapeutic Level-2 Name", width: "150px", filterable: true },
+                  { field: "TC_L2_CODE", title: "Therapeutic Level-2 Code", width: "150px", filterable: true }
+                  //{ field: "TC_L2_SLNO", title: "Therapeutic Level-2 Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#TC_L2_DESC").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetTherapeuticLevel2List", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#TherapeuticLevel2Grid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('TherapeuticLevel2Grid');
+                TherapeuticLevel2IDWindow.open();
+                TherapeuticLevel2IDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnTherapeuticLevel2IDWindowOK').click(function () {
+        var grid = $('#TherapeuticLevel2Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L2_CODE").val(selectedItem.TC_L2_CODE);
+        $("#TC_L2_DESC").val(selectedItem.TC_L2_DESC);
+        $("#TC_L3_DESC").focus();
+        changeStatus = 1;
+        TherapeuticLevel2IDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnTherapeuticLevel2IDWindowCancel').click(function () {
+        TherapeuticLevel2DataSource.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#TherapeuticLevel2IDWindow").dblclick(function () {
+        var grid = $('#TherapeuticLevel2Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L2_CODE").val(selectedItem.TC_L2_CODE);
+        $("#TC_L2_DESC").val(selectedItem.TC_L2_DESC);
+        $("#TC_L3_DESC").focus();
+        changeStatus = 1;
+        TherapeuticLevel2IDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#TherapeuticLevel2IDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#TherapeuticLevel2Grid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#TC_L2_CODE").val(selectedItem.TC_L2_CODE);
+            $("#TC_L2_DESC").val(selectedItem.TC_L2_DESC);
+            changeStatus = 1;
+            $("#TC_L3_DESC").focus();
+
+            TherapeuticLevel2IDWindow.close();
+        }
+        else if (keycode == '27') {
+            TherapeuticLevel2IDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of Therapeutic Leve-2 POP UP Window ****************************************************//
+
+
+    //********************************************** Therapeutic Leve-3 POP UP Window ****************************************************
+
+    //*********** DEFINE Therapeutic Leve-3 Window ***************************** //
+
+    var TherapeuticLevel3IDWindow = $('#TherapeuticLevel3IDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "1352px",
+        height: "auto",
+        title: "List of Therapeutic Level-3 Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-3 GRID ***************************** //
+
+    var TherapeuticLevel3DataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TC_L3_CODE",
+                fields: {
+                    TC_L3_CODE: { editable: false, hidden: true },
+                    TC_L3_DESC: { editable: false },
+                    TC_L3_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var TherapeuticLevel3Grid = $("#TherapeuticLevel3Grid").kendoGrid({
+        dataSource: TherapeuticLevel3DataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "TC_L3_DESC", title: "Therapeutic Level-3 Name", width: "150px", filterable: true },
+                  { field: "TC_L3_CODE", title: "Therapeutic Level-3 Code", width: "150px", filterable: true }
+                  //{ field: "TC_L3_SLNO", title: "Therapeutic Level-3 Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#TC_L3_DESC").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetTherapeuticLevel3List", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#TherapeuticLevel3Grid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('TherapeuticLevel3Grid');
+                TherapeuticLevel3IDWindow.open();
+                TherapeuticLevel3IDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnTherapeuticLevel3IDWindowOK').click(function () {
+        var grid = $('#TherapeuticLevel3Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L3_CODE").val(selectedItem.TC_L3_CODE);
+        $("#TC_L3_DESC").val(selectedItem.TC_L3_DESC);
+        $("#TC_L4_DESC").focus();
+        changeStatus = 1;
+        TherapeuticLevel3IDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnTherapeuticLevel3IDWindowCancel').click(function () {
+        TherapeuticLevel3IDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#TherapeuticLevel3IDWindow").dblclick(function () {
+        var grid = $('#TherapeuticLevel3Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L3_CODE").val(selectedItem.TC_L3_CODE);
+        $("#TC_L3_DESC").val(selectedItem.TC_L3_DESC);
+        $("#TC_L4_DESC").focus();
+        changeStatus = 1;
+        TherapeuticLevel3IDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#TherapeuticLevel3IDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#TherapeuticLevel3Grid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#TC_L3_CODE").val(selectedItem.TC_L3_CODE);
+            $("#TC_L3_DESC").val(selectedItem.TC_L3_DESC);
+            $("#TC_L4_DESC").focus();
+            changeStatus = 1;
+            TherapeuticLevel3IDWindow.close();
+        }
+        else if (keycode == '27') {
+            TherapeuticLevel3IDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+        $("#TC_L3_CODE").val(selectedItem.TC_L3_CODE);
+        $("#TC_L3_DESC").val(selectedItem.TC_L3_DESC);
+        $("#TC_L4_DESC").focus();
+        changeStatus = 1;
+    }
+
+
+
+    //********************************************** END of Therapeutic Leve-3 POP UP Window ****************************************************//
+
+
+    //********************************************** Therapeutic Leve-4 POP UP Window ****************************************************
+
+    //*********** DEFINE Therapeutic Leve-4 Window ***************************** //
+
+    var TherapeuticLevel4IDWindow = $('#TherapeuticLevel4IDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Therapeutic Level-4 Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-4 GRID ***************************** //
+
+    var TherapeuticLevel4DataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TC_L4_CODE",
+                fields: {
+                    TC_L4_CODE: { editable: false, hidden: true },
+                    TC_L4_DESC: { editable: false },
+                    TC_L4_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var TherapeuticLevel4Grid = $("#TherapeuticLevel4Grid").kendoGrid({
+        dataSource: TherapeuticLevel4DataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "TC_L4_DESC", title: "Therapeutic Level-4 Name", width: "150px", filterable: true },
+                  { field: "TC_L4_CODE", title: "Therapeutic Level-4 Code", width: "150px", filterable: true }
+                  //{ field: "TC_L4_SLNO", title: "Therapeutic Level-4 Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#TC_L4_DESC").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetTherapeuticLevel4List", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#TherapeuticLevel4Grid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('TherapeuticLevel4Grid');
+                TherapeuticLevel4IDWindow.open();
+                TherapeuticLevel4IDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnTherapeuticLevel4IDWindowOK').click(function () {
+        var grid = $('#TherapeuticLevel4Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L4_CODE").val(selectedItem.TC_L4_CODE);
+        $("#TC_L4_DESC").val(selectedItem.TC_L4_DESC);
+        $("#PROD_STATUS").focus();
+        changeStatus = 1;
+        TherapeuticLevel4IDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnTherapeuticLevel4IDWindowCancel').click(function () {
+        TherapeuticLevel4IDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#TherapeuticLevel4IDWindow").dblclick(function () {
+        var grid = $('#TherapeuticLevel4Grid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#TC_L4_CODE").val(selectedItem.TC_L4_CODE);
+        $("#TC_L4_DESC").val(selectedItem.TC_L4_DESC);
+        $("#PROD_STATUS").focus();
+        TherapeuticLevel4IDWindow.close();
+        changeStatus = 1;
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#TherapeuticLevel4IDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#TherapeuticLevel4Grid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#TC_L4_CODE").val(selectedItem.TC_L4_CODE);
+            $("#TC_L4_DESC").val(selectedItem.TC_L4_DESC);
+            $("#PROD_STATUS").focus();
+            changeStatus = 1;
+            TherapeuticLevel4IDWindow.close();
+        }
+        else if (keycode == '27') {
+            TherapeuticLevel4IDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of Therapeutic Leve-4 POP UP Window ****************************************************//
+    
+    //********************************************** GENERIC POP UP Window ****************************************************
+
+    //*********** DEFINE GENERIC Window ***************************** //
+
+    var GenericIDWindow = $('#GenericIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Generic Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE GENERIC GRID ***************************** //
+
+    var GenericGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GENERIC_CODE",
+                fields: {
+                    GENERIC_CODE: { editable: false, hidden: true },
+                    GENERIC_NAME: { editable: false },
+                    GEN_ORD_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var GenericGrid = $("#GenericGrid").kendoGrid({
+        dataSource: GenericGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "GENERIC_NAME", title: "Generic Name", width: "150px", filterable: true },
+                  { field: "GENERIC_CODE", title: "Generic Code", width: "150px", filterable: true }
+                  //{ field: "GEN_ORD_SLNO", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#GENERIC_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetGenericInformation", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#GenericGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('GenericGrid');
+                GenericIDWindow.open();
+                GenericIDWindow.center();
+            }
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnGenericIDWindowOK').click(function () {
+        var grid = $('#GenericGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+        $("#DOSAGE_FORM_NAME").focus();
+        changeStatus = 1;
+        GenericIDWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnGenericIDWindowCancel').click(function () {
+        GenericIDWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#GenericIDWindow").dblclick(function () {
+        var grid = $('#GenericGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+        $("#DOSAGE_FORM_NAME").focus();
+        changeStatus = 1;
+        GenericIDWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#GenericIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#GenericGrid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+            $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+            $("#DOSAGE_FORM_NAME").focus();
+            changeStatus = 1;
+            GenericIDWindow.close();
+        }
+        else if (keycode == '27') {
+            GenericIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of GENERIC POP UP Window ****************************************************//
+    
+    //********************************************** Dosage Form POP UP Window ****************************************************
+
+    //*********** DEFINE Dosage Form Window ***************************** //
+
+    var DosageFormIDWindow = $('#DosageFormIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Dosage Form Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Dosage Form GRID ***************************** //
+
+    var DosageFormDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DOSAGE_FORM_CODE",
+                fields: {
+                    DOSAGE_FORM_CODE: { editable: false, hidden: true },
+                    DOSAGE_FORM_NAME: { editable: false },
+                    DF_ODR_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var DosageFormGrid = $("#DosageFormGrid").kendoGrid({
+        dataSource: DosageFormDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+                    { field: "DOSAGE_FORM_NAME", title: "Dosage Form Name", width: "150px", filterable: true },
+                    { field: "DOSAGE_FORM_CODE", title: "Dosage Form Code", width: "150px", filterable: true }
+                    //{ field: "DF_ODR_SLNO", title: "Dosage Form Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#DOSAGE_FORM_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetDosageFormInformation", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#DosageFormGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('DosageFormGrid');
+                DosageFormIDWindow.open();
+                DosageFormIDWindow.center();
+            }
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnDosageFormIDWindowOK').click(function () {
+        var grid = $('#DosageFormGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#DOSAGE_FORM_CODE").val(selectedItem.DOSAGE_FORM_CODE);
+        $("#DOSAGE_FORM_NAME").val(selectedItem.DOSAGE_FORM_NAME);
+        $("#DSG_STRENGTH_NAME").focus();
+        changeStatus = 1;
+        DosageFormIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnDosageFormIDWindowCancel').click(function () {
+        DosageFormIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#DosageFormIDWindow").dblclick(function () {
+        var grid = $('#DosageFormGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#DOSAGE_FORM_CODE").val(selectedItem.DOSAGE_FORM_CODE);
+        $("#DOSAGE_FORM_NAME").val(selectedItem.DOSAGE_FORM_NAME);
+        $("#DSG_STRENGTH_NAME").focus();
+        changeStatus = 1;
+        DosageFormIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#DosageFormIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#DosageFormGrid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#DOSAGE_FORM_CODE").val(selectedItem.DOSAGE_FORM_CODE);
+            $("#DOSAGE_FORM_NAME").val(selectedItem.DOSAGE_FORM_NAME);
+            $("#DSG_STRENGTH_NAME").focus();
+            changeStatus = 1;
+            DosageFormIDWindow.close();
+        }
+        else if (keycode == '27') {
+            DosageFormIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of Dosage Form POP UP Window ****************************************************//
+
+    //********************************************** Dosage Strength POP UP Window ****************************************************
+
+    //*********** DEFINE Dosage Strength Window ***************************** //
+
+    var DosageStrengthIDWindow = $('#DosageStrengthIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Dosage Strength Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Dosage Strength GRID ***************************** //
+
+    var DosageStrengthDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DSG_STRENGTH_CODE",
+                fields: {
+                    DSG_STRENGTH_CODE: { editable: false },
+                    DSG_STRENGTH_NAME: { editable: false },
+                    DF_STRENGTH_SLNO: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var DosageStrengthGrid = $("#DosageStrengthGrid").kendoGrid({
+        dataSource: DosageStrengthDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+                    { field: "DSG_STRENGTH_NAME", title: "Dosage Strength Name", width: "150px", filterable: true },
+                    { field: "DSG_STRENGTH_CODE", title: "Dosage Strength Code", width: "150px", filterable: true }
+
+                  //{ field: "DF_STRENGTH_SLNO", title: "Dosage Strength Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#DSG_STRENGTH_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetDosageStrengthInformation", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#DosageStrengthGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('DosageStrengthGrid');
+                DosageStrengthIDWindow.open();
+                DosageStrengthIDWindow.center();
+            }
+        }
+    });
+    
+    //Press Ok button after Select Data From PopUp
+    $('#btnDosageStrengthWindowOK').click(function () {
+        var grid = $('#DosageStrengthGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#DSG_STRENGTH_CODE").val(selectedItem.DSG_STRENGTH_CODE);
+        $("#DSG_STRENGTH_NAME").val(selectedItem.DSG_STRENGTH_NAME);
+        $("#MANUFACTURER_NAME").focus();
+        changeStatus = 1;
+        DosageStrengthIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnDosageStrengthWindowCancel').click(function () {
+        DosageStrengthIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#DosageStrengthIDWindow").dblclick(function () {
+        var grid = $('#DosageStrengthGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#DSG_STRENGTH_CODE").val(selectedItem.DSG_STRENGTH_CODE);
+        $("#DSG_STRENGTH_NAME").val(selectedItem.DSG_STRENGTH_NAME);
+        $("#MANUFACTURER_NAME").focus();
+        changeStatus = 1;
+        DosageStrengthIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#DosageStrengthIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#DosageStrengthGrid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#DSG_STRENGTH_CODE").val(selectedItem.DSG_STRENGTH_CODE);
+            $("#DSG_STRENGTH_NAME").val(selectedItem.DSG_STRENGTH_NAME);
+            $("#MANUFACTURER_NAME").focus();
+            changeStatus = 1;
+            DosageStrengthIDWindow.close();
+        }
+        else if (keycode == '27') {
+            DosageStrengthIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+    
+    //********************************************** END of Dosage Strength POP UP Window ****************************************************//
+
+    //********************************************** Manufacture POP UP Window ****************************************************
+
+    //*********** DEFINE Manufacture Window ***************************** //
+
+    var ManufactureIDWindow = $('#ManufactureIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Therapeutic Level-4 Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Manufacture GRID ***************************** //
+
+    var ManufactureGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MANUFACTURER_CODE",
+                fields: {
+                    MANUFACTURER_CODE: { editable: false, hidden: true },
+                    MANUFACTURER_NAME: { editable: false },
+                    MFC_NIC_NAME: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var ManufactureGrid = $("#ManufactureGrid").kendoGrid({
+        dataSource: ManufactureGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        columns: [
+                    { field: "MANUFACTURER_NAME", title: "Manufacturer Name", width: "150px", filterable: true },
+                    { field: "MFC_NIC_NAME", title: "Manufacturer Nic Name", width: "150px", filterable: true },
+                    { field: "MANUFACTURER_CODE", title: "Manufacturer Code", width: "150px", filterable: true }
+                    //{ field: "SlNo", title: "Manufacturer Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#MANUFACTURER_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetAllManufacturerList", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#ManufactureGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('ManufactureGrid');
+                ManufactureIDWindow.open();
+                ManufactureIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnManufactureIDWindowOK').click(function () {
+        var grid = $('#ManufactureGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#MANUFACTURER_CODE").val(selectedItem.MANUFACTURER_CODE);
+        $("#MFC_NIC_NAME").val(selectedItem.MFC_NIC_NAME);
+        $("#MANUFACTURER_NAME").val(selectedItem.MANUFACTURER_NAME);
+        $("#UNIT_PRICE").focus();
+        changeStatus = 1;
+        ManufactureIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnManufactureIDWindowCancel').click(function () {
+        ManufactureIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#ManufactureIDWindow").dblclick(function () {
+        var grid = $('#ManufactureGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#MANUFACTURER_CODE").val(selectedItem.MANUFACTURER_CODE);
+        $("#MFC_NIC_NAME").val(selectedItem.MFC_NIC_NAME);
+        $("#MANUFACTURER_NAME").val(selectedItem.MANUFACTURER_NAME);
+        $("#UNIT_PRICE").focus();
+        changeStatus = 1;
+        ManufactureIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#ManufactureIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#ManufactureGrid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#MANUFACTURER_CODE").val(selectedItem.MANUFACTURER_CODE);
+            $("#MFC_NIC_NAME").val(selectedItem.MFC_NIC_NAME);
+            $("#MANUFACTURER_NAME").val(selectedItem.MANUFACTURER_NAME);
+            $("#UNIT_PRICE").focus();
+            changeStatus = 1;
+            ManufactureIDWindow.close();
+        }
+        else if (keycode == '27') {
+            ManufactureIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of Manufacture POP UP Window ****************************************************//
+
+    //******************************************** SEARCH DistrictUpazila DATA **********************************************************//
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Search Doctor Paid Honararium Data",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    /////////////////
+
+
+    //Market Name twise Filter table row
+    $("#txtLevel1Code").keyup(function () {
+        //alert('afd');
+        $("#TherapeuticLevel1Grid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#TherapeuticLevel1Grid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtLevel2Code").keyup(function () {
+        //alert('afd');
+        $("#TherapeuticLevel2Grid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#TherapeuticLevel2Grid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtLevel3Code").keyup(function () {
+        //alert('afd');
+        $("#TherapeuticLevel3Grid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#TherapeuticLevel3Grid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtLevel4Code").keyup(function () {
+        //alert('afd');
+        $("#TherapeuticLevel4Grid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#TherapeuticLevel4Grid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+
+    //Market Name twise Filter table row
+    $("#txtDosageFormCode").keyup(function () {
+        //alert('afd');
+        $("#DosageFormGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#DosageFormGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtDosageStrengthCode").keyup(function () {
+        //alert('afd');
+        $("#DosageStrengthGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#DosageStrengthGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtGenericCode").keyup(function () {
+        //alert('afd');
+        $("#GenericGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#GenericGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtManufacturerCode").keyup(function () {
+        //alert('afd');
+        $("#ManufactureGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#ManufactureGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+    ///////////////
+</script>

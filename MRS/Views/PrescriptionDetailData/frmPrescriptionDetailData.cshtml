@@ -1,0 +1,173 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("frmPrescriptionDetailData", "PrescriptionDetailData", FormMethod.Post, new { name = "PrescriptionDetailData", id = "PrescriptionDetailData" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-6">
+            <span id="MessageText" class="pull-right" style="color:green;font-weight:bold;font-size:16px;">@ViewBag.Msg</span>
+        </div>
+        <div class="col-lg-6">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnCheck" value="Check" class=" btn bg-olive btn-flat margin pull-right">Error Check</button>
+            <button type="button" id="btnLoad" value="Check" class=" btn bg-olive btn-flat margin pull-right">Final Load</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <label style="float: right; margin-right: 3%;">Excel File:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input name="files" id="files" type="file" class="txtBox" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row box box-success">
+        <div id="PageDetailGrid" class="grdKendo" tabindex="5"></div>
+    </div>
+
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+        <p style="position: absolute; top: 50%; left: 42%; color: White;">
+            Please wait... <img src="~/Content/Images/cube.gif" />
+        </p>
+    </div>
+}
+<script type="text/javascript">
+
+    @*// Check Data
+    $("#btnCheck").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("CheckPrescriptionDetailData", "PrescriptionDetailData")',
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (respnse) {
+                if (response.msg.Type == 2) {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                else {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                $("#divLoading").hide();
+            }
+        });
+    });*@
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        $("#MessageText").html("");
+        $(".k-upload-files").remove();
+        $(".k-upload-status").remove();
+        $(".k-upload.k-header").addClass("k-upload-empty");
+        $(".k-upload-button").removeClass("k-state-focused");
+    });
+
+    // Save Data
+    $("#btnLoad").click(function () {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("PrescriptionDetailSaveData", "PrescriptionDetailData")',
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                if (response.msg.Type == 2) {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                else {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                $("#divLoading").hide();
+            }
+        });
+    });
+
+</script>
+
+<script>
+
+    function onSelect(e) {
+        //  kendoConsole.log("Select :: " + getFileInfo(e));
+    }
+
+    function onUpload(e) {
+        //  kendoConsole.log("Upload :: " + getFileInfo(e));
+    }
+
+    function onSuccess(e) {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoadExcelFile", "PrescriptionDetailData")',
+            type: 'GET',
+            data: { "fileName": $("#files").val() },
+            success: function (response) {
+                if (response.msg.Type == 2) {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                else {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                $("#divLoading").hide();
+            } //End of success call
+        });
+        //   kendoConsole.log("Success (" + e.operation + ") :: " + getFileInfo(e));
+    }
+
+    function onError(e) {
+        //$('#MessageText').html(respnse.msg.Msg);
+        //alert(e.Msg);
+    }
+
+    function onComplete(e) {
+        // kendoConsole.log("Complete");
+    }
+
+    function onCancel(e) {
+        //  kendoConsole.log("Cancel :: " + getFileInfo(e));
+    }
+
+    function onRemove(e) {
+        // kendoConsole.log("Remove :: " + getFileInfo(e));
+    }
+
+    function onProgress(e) {
+        //kendoConsole.log("Upload progress :: " + e.percentComplete + "% :: " + getFileInfo(e));
+    }
+
+    $(document).ready(function () {
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: "UploadFile",
+                removeUrl: "Remove",
+                autoUpload: true
+            },
+            cancel: onCancel,
+            complete: onComplete,
+            error: onError,
+            progress: onProgress,
+            remove: onRemove,
+            select: onSelect,
+            success: onSuccess,
+            upload: onUpload
+        });
+    });
+</script>
+

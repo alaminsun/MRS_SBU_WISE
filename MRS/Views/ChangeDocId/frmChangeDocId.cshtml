@@ -1,0 +1,1184 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        @*<button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+            <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>*@
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+        <button type="button" id="btnChange" @*onclick="Change()"*@ class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Change</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Old Doctro Id :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Doc_Id" tabindex="1" name="Old_Doc_Id" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+                <div class="col-lg-3">
+                    <label>New Doctor Id :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Doc_Id" name="New_Doc_Id" tabindex="9" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Honorarium :</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Honorariam" name="Old_Honorariam" tabindex="2" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Honorarium :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Honorariam" tabindex="10" name="New_Honorariam" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Doctor Name :</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Doc_Name" tabindex="10" name="Old_Doc_Name" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                   
+                </div>
+                <div class="col-lg-3">
+                    <label>Doctor Name :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Doc_Name" name="New_Doc_Name" tabindex="11" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Degree :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Degree" name="Old_Degree" tabindex="4" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Degree :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Degree" tabindex="12" name="new_Degree" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Specialization :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Specialization" tabindex="5" name="Old_Specialization" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Specialization :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Specialization" name="New_Specialization" tabindex="13" class="txtBox RequiredTextBox" value="" readonly="readonly"  />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Designation :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Designation" name="Old_Designation" tabindex="6" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Designation :</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Designation" tabindex="14" name="New_Designation" class="txtBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Address :</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Address1" tabindex="7" name="Old_Address1" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Address :</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Address1" name="New_Address1" tabindex="15" class="txtBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    @*<label>Product Status</label>*@
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Address2" name="Old_Address2" tabindex="15" class="txtBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    @*<label>Pack Size</label>*@
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Address2" tabindex="16" name="New_Address2" class="txtBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    @*<label>Product Status</label>*@
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Address3" name="Old_Address3" tabindex="15" class="txtBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    @*<label>Pack Size</label>*@
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Address3" tabindex="16" name="New_Address3" class="txtBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    @*<label>Product Status</label>*@
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_Address4" name="Old_Address4" tabindex="15" class="txtBox" readonly="readonly" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    @*<label>Pack Size</label>*@
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_Address4" tabindex="16" name="New_Address4" class="txtBox" readonly="readonly" value="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>No. of Prescription :</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="Old_NoOfPresc" name="Old_NoOfPresc" tabindex="15" class="txtBox" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>No. of Prescription :</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="New_NoOfPresc" tabindex="16" name="New_NoOfPresc" class="txtBox" value="" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@*<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>*@
+<div id="DeleteAllDataWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="ChangeConfirmWindow" style="display: none;">
+    <input type="button" class="TwoButtonWindow" id="btnChangeConfirmationOK" value="Yes" />
+    <input type="button" class="TwoButtonWindow" id="btnChangeConfirmationCancel" value="No" onclick="CancelWindow()" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+
+@*<div id="OldDocIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Generic Name :</label>
+        <input type="text" id="txtGenericCode" placeholder="Searching by Generic Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    @*</div>
+    <div id="OldDocIDGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGenericIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGenericIDWindowOK" class="PopUpButton" value="OK" />
+</div>*@
+<div id="OldDocIDWindow" style="display: none;">
+    <input type="text" id="txtOldId" class="RequiredTextBox" value="" placeholder="Search By Id" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtOldName" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Name" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtOldDeg" tabindex="23" class="RequiredTextBox" placeholder="Degree" style="padding-right:100px; position:relative" />
+    <input type="button" id="btnOldSearchDoctor" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    <input type="button" id="btnOldClear" class="Button" value="Reset" style="position:absolute; margin-left:100px;" />
+    <div id="OldDocIDGrid" class="PopUpGrid">
+    </div>
+</div>
+
+
+<div id="NewDocIDWindow" style="display: none;">
+    <input type="text" id="txtNewId" class="RequiredTextBox" value="" placeholder="Search By Id" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtNewName" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Name" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtNewDeg" tabindex="23" class="RequiredTextBox" placeholder="Degree" style="padding-right:100px; position:relative" />
+    <input type="button" id="btnNewSearchDoctor" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    <input type="button" id="btnNewClear" class="Button" value="Reset" style="position:absolute; margin-left:100px;" />
+    <div id="NewDocIDGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;opacity: .8; filter: alpha(opacity=70); display: none">
+    <p style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </p>
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script>
+
+    var btnDisable = '@ViewBag.USER_ID';
+    if (btnDisable == "MRS_9")
+        $('#btnSubmit').attr('disabled', true);
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+
+        $("#PRODUCT_NAME").focus();
+
+        NumericAndDecimalValue('UNIT_PRICE');
+        NumericAndDecimalValue('AVG_PRESCRIBE_QTY');
+        NumericAndDecimalValue('AVG_BOUGHT_QTY');
+        //NumericAndDecimalValue(PACK_SIZE);
+
+
+        //************************* Handling DELETE event for DELETING ROW from DETAIL GRID ******************************//
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+
+        //************************* EDIT Button for DETAIL GRID******************************//
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                $(".RequiredTextBox").css("border-color", "");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#PROD_ID").attr("disabled", "disabled");
+            }
+        };
+
+
+
+        /*************Delete ****************/
+
+
+        var confirmDeleteWindow;
+        function CancelWindow() {
+            confirmDeleteWindow.close();
+        }
+
+        function DeleteWindow() {
+            confirmDeleteWindow = $('#ChangeConfirmWindow').kendoWindow({
+                width: "400px",
+                padding: "0px 0px 0px 100px",
+                title: "Do You Want To Change Record?",
+                visible: false,
+                draggable: true,
+                position: { top: 200, left: 400 }
+            }).data('kendoWindow');
+
+            confirmDeleteWindow.open();
+        }
+
+        $('#btnChange').click(function () {
+            DeleteWindow();
+        
+        });
+
+
+        $('#btnChangeConfirmationOK').click(function () {
+
+
+                resetEditDeleteStatus = 1; //Reset Button
+                $("#New_NoOfPresc").val(parseInt($("#Old_NoOfPresc").val()) + parseInt($("#New_NoOfPresc").val()));
+                confirmDeleteWindow.close();
+        });
+
+        $('#btnChangeConfirmationCancel').click(function () {
+            confirmDeleteWindow.close();
+        });
+            //var pageGrid = $('#PageDetailGrid').data("kendoGrid");
+            //var dataItem = (pageGrid.dataItem(pageGrid.select()));
+            //var mstSl = $('#INSTI_MKT_MAS_SLNO').val();
+            //alert(mstSl);  
+            @*$.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteAllData", "InstitutionCoverMarketInformation")',
+                dataType: 'JSON',
+                data: JSON.stringify({ model: mstSl }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        var grid = $('#PageDetailGrid').data("kendoGrid");
+                        var dataItem = grid.dataItem(grid.select());
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        //$("#Status").val("Active");
+                        $(".SetFocus").focus();
+                        //$('#PageDetailGrid').data('kendoGrid').dataSource.data([]);
+                        confirmDeleteWindowAll.close();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        confirmDeleteWindowAll.close();
+                    }
+                }
+            });*@
+ 
+
+
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationOK').click(function () {
+            var OldId = $('#Old_Doc_Name').val();
+            
+            $.ajax({
+                url: '@Url.Action("Delete", "ChangeDocId")',
+                type: 'POST',
+                data: JSON.stringify({ OldId: OldId }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $("#PROD_STATUS").val("Active");
+                        $(".SetFocus").focus();
+                        confirmDeleteWindowAll.close();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        confirmDeleteWindowAll.close();
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+       
+
+        //************************* Click Save Chages Window OK Button******************************//
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#PROD_STATUS").val("Active");
+                $("#PROD_ID").removeAttr("disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#PROD_ID").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "ProductInformation")',
+                    type: 'POST',
+                    data: JSON.stringify({ "productId": dataitem.PROD_ID }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $("#PROD_STATUS").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        //$(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //************************* END of Document.Ready Method ******************************//
+    });
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#PROD_STATUS").val("Active");
+            $("#PROD_ID").removeAttr("disabled");
+        }
+
+    });
+
+    //************************* SAVE Function for SAVE Button ******************************//
+
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+    var model = {
+        "New_Doc_Id": "", "New_Honorariam": "", "New_Doc_Name": "", "New_Degree": "", "New_Specialization": "", "New_Designation": ""
+                                        , "New_Address1": "", "New_Address2": "", "New_Address3": "", "New_Address4": "", "New_NoOfPresc": "", "Old_Doc_Id": ""
+                                        
+    };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        //// Check Empty or Maximum Length in ManufacturerName
+        //CheckRequiredTextBoxMaxLength('PROD_ID', 20);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('PRODUCT_NAME', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('GENERIC_NAME', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('TC_L1_DESC', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('TC_L2_DESC', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('TC_L3_DESC', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('TC_L4_DESC', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('DOSAGE_FORM_NAME', 100);
+
+        ////// Check Maximum Length in MfcNicName
+        //CheckRequiredTextBoxMaxLength('DSG_STRENGTH_NAME', 100);
+
+        ////// Check Maximum Length in ContactNumber
+        //CheckRequiredTextBoxMaxLength('MANUFACTURER_NAME', 100);
+
+        ////// Check Maximum Length in ContactNumber
+        //CheckRequiredTextBoxMaxLength('UNIT_PRICE', 6);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            model.New_Doc_Id = $("#New_Doc_Id").val();
+            model.Old_Doc_Id = $("#Old_Doc_Id").val();
+            //productInformationViewModel.PRODUCT_NAME = $("#PRODUCT_NAME").val();
+    
+            if (changeStatus ==0) {
+                $.ajax({
+                    url: '@Url.Action("SaveAndUpdateData", "ChangeDocId")',
+                    data: JSON.stringify(model),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            //$("#SUStatus").val(1);
+                            //GridReload('PageDetailGrid');
+                            $('#New_Doc_Id').val(response.Code);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#PROD_ID").focus();
+            }
+        }
+    };
+    //************************* END of SAVE Function *******************************************//
+
+
+
+
+
+
+
+
+    //********************************************** Old Doctor POP UP Window ****************************************************
+
+    //*********** DEFINE Old Doctor Id  Window ***************************** //
+
+    var OldDocIDWindow = $('#OldDocIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Generic Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE GENERIC GRID ***************************** //
+
+    var OldDocIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "Old_Doc_Id",
+                fields: {
+                    Old_Doc_Id: { editable: false, hidden: true },
+                    Old_Honorariam: { editable: false },
+                    Old_Doc_Name: { editable: false },
+                    Old_Degree: { editable: false },
+                    Old_Specialization: { editable: false },
+                    Old_Designation: { editable: false },
+                    Old_Address1: { editable: false },
+                    Old_Address2: { editable: false },
+                    Old_Address3: { editable: false },
+                    Old_Address4: { editable: false },
+                    Old_NoOfPresc: { editable: false }
+
+
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var OldDocIDGrid = $("#OldDocIDGrid").kendoGrid({
+        dataSource: OldDocIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "Old_Doc_Id", title: "Doctor Id", width: "150px", filterable: true },
+                  { field: "Old_Honorariam", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Doc_Name", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Degree", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Specialization", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Designation", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Address1", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Address2", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Address3", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_Address4", title: "Generic Code", width: "150px", filterable: true },
+                { field: "Old_NoOfPresc", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    $('#btnDelete').click(function () {
+        //$('#SUStatus').val(0);
+        CheckRequiredTextBoxMaxLength('Old_Doc_Id', 50);
+        if ($('#Old_Doc_Id').val() != '') {
+            DeleteWindowAll();
+        }
+        else {
+            //DeleteWindow();
+            CheckRequiredTextBoxMaxLength('Old_Doc_Id', 50);
+            //$("#MessageText").show(500).css("margin", "0 1px 20px 0").html("Select Institute Code !!").delay(800).fadeOut(10000);
+            //$('#INSTI_CODE').css('border-color', 'red');
+        }
+    });
+
+
+
+    /***********Confirm Delete Window(both master & detail)****************/
+    var confirmDeleteWindowAll;
+    function CancelWindowAll() {
+        confirmDeleteWindowAll.close();
+    }
+
+    function DeleteWindowAll() {
+        confirmDeleteWindowAll = $('#DeleteAllDataWindow').kendoWindow({
+            width: "300px",
+            padding: "0px 0px 0px 100px",
+            title: "Do You Want To Delete Record?",
+            visible: false,
+            draggable: true,
+            position: { top: 200, left: 400 }
+        }).data('kendoWindow');
+
+        confirmDeleteWindowAll.open();
+    }
+
+
+    $("#OldDocIDGrid").dblclick(function () {
+        var gridData = $("#OldDocIDGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $('#Old_Doc_Id').val(selectedItem.Old_Doc_Id);
+        //$('#txtRegistrationNo').val(selectedItem.RegistrationNo);
+        $('#Old_Honorariam').val(selectedItem.Old_Honorariam);
+        $('#Old_Specialization').val(selectedItem.Old_Specialization);
+        $('#Old_Doc_Name').val(selectedItem.Old_Doc_Name);
+        $('#Old_Degree').val(selectedItem.Old_Degree);
+        //$('#ddlDegree').val(selectedItem.DegreeCategory);
+
+        $('#Old_Designation').val(selectedItem.Old_Designation);
+        //alert(selectedItem.DesignationCategory);
+        //$('#ddlDesignationCategory').val(selectedItem.DesignationCategory);
+
+     
+
+        
+        $('#Old_Address1').val(selectedItem.Old_Address1);
+        $('#Old_Address2').val(selectedItem.Old_Address2);
+        $('#Old_Address3').val(selectedItem.Old_Address3);
+        $('#Old_Address4').val(selectedItem.Old_Address4);
+        //$('#Remarks').val(selectedItem.Remarks);
+        $("#SUStatus").val(1);
+        var OldId = selectedItem.Old_Doc_Id;
+        GetOldMasterDetailsData("/ChangeDocId/GetOldPrescrCount", OldId);
+        OldDocIDWindow.close();
+        //loadMarketDetail(selectedItem.DoctorId);
+        //loadRelationGrid(selectedItem.DoctorId);
+        //$('#btnDelete').attr('disabled', false);
+        //openSearchDoctorWindow.close();
+        //$('#txtRegistrationNo').focus();
+    });
+
+
+    function GetOldMasterDetailsData(RequestedURL, OldId) {
+        $.ajax({
+            url: RequestedURL,
+            type: 'GET',
+            data: { "OldId": OldId },
+            success: function (response) {
+                ////alert(response);
+                //$("#DISTC_CODE").val(response);
+                $("#Old_NoOfPresc").val(response);
+
+            }
+        });
+    }
+
+
+    $('#btnOldSearchDoctor').click(function () {
+        var doctorOldId = $('#txtOldId').val();
+        if (doctorOldId == '') {
+            doctorOldId = 0;
+        }
+        var doctorOldName = $('#txtOldName').val();
+        var Olddegree = $('#txtOldDeg').val();
+        $.ajax({
+            url: '/ChangeDocId/GetOldDoctorsData',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ doctorOldId: doctorOldId, doctorOldName: doctorOldName, Olddegree: Olddegree }),
+            dataType: 'json',
+            success: function (dataOld) {
+                $("#OldDocIDGrid").data("kendoGrid").dataSource.data(dataOld);
+
+            }
+        });
+    });
+
+    $('#btnOldClear').click(function () {
+        $('#txtOldName').val('');
+        $('#txtOldId').val('');
+        $('#txtOldDeg').val('');
+        $("#OldDocIDGrid").data("kendoGrid").dataSource.data([]);
+        //$("#DoctorMarketPopupGrid").data("kendoGrid").dataSource.data([]);
+    });
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#Old_Doc_Id").is(":focus")) {
+            if (e.keyCode == 120) {
+
+                $('#txtOldName').val('');
+                $('#txtOldId').val('');
+                $('#txtOldDeg').val('');
+                $("#OldDocIDGrid").data("kendoGrid").dataSource.data([]);
+                //$("#divLoading").show();
+            //var doctorId = $('#txtId').val();
+            //if (doctorId == '') {
+            //    doctorId = 0;
+            //}
+            //var doctorName = $('#txtName').val();
+            //var degree = $('#txtDeg').val();
+            //$.ajax({
+            //    url: '/ChangeDocId/GetDoctorsData',
+            //    type: 'post',
+            //    contentType: 'application/json;charset=utf-8',
+            //    data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree }),
+            //    dataType: 'json',
+            //    success: function (data) {
+            //        $("#OldDocIDGrid").data("kendoGrid").dataSource.data(data);
+
+            //    }
+            //});
+                SelectedItemOfListOfValue('OldDocIDGrid');
+                OldDocIDWindow.open();
+                OldDocIDWindow.center();
+            }
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnOldDocIDWindowOK').click(function () {
+        var grid = $('#OldDocIDGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+        $("#DOSAGE_FORM_NAME").focus();
+        OldDocIDWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnGenericIDWindowCancel').click(function () {
+        OldDocIDWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#OldDocIDWindow").dblclick(function () {
+        var grid = $('#OldDocIDGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+        $("#DOSAGE_FORM_NAME").focus();
+        OldDocIDWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#OldDocIDGrid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+            $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+            $("#DOSAGE_FORM_NAME").focus();
+            OldDocIDWindow.close();
+        }
+        else if (keycode == '27') {
+            OldDocIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of Old Doctor Id Window ****************************************************//
+
+
+
+    //********************************************** New Doctor POP UP Window ****************************************************
+
+    //*********** DEFINE New Doctor Id  Window ***************************** //
+
+    var NewDocIDWindow = $('#NewDocIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of New Doctor",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE GENERIC GRID ***************************** //
+
+    var NewDocIDDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "New_Doc_Id",
+                fields: {
+                    New_Doc_Id: { editable: false, hidden: true },
+                    //New_Honorariam: { editable: false },
+                    New_Doc_Name: { editable: false },
+                    New_Degree: { editable: false },
+                    //New_Specialization: { editable: false },
+                    New_Designation: { editable: false },
+                    New_Address1: { editable: false },
+                    New_Address2: { editable: false },
+                    New_Address3: { editable: false },
+                    New_Address4: { editable: false },
+                    New_NoOfPresc: { editable: false }
+
+
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var NewDocIDGrid = $("#NewDocIDGrid").kendoGrid({
+        dataSource: NewDocIDDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "New_Doc_Id", title: "New Doctor Id", width: "150px", filterable: true },
+                  //{ field: "New_Honorariam", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Doc_Name", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Degree", title: "Generic Code", width: "150px", filterable: true },
+                //{ field: "New_Specialization", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Designation", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Address1", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Address2", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Address3", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_Address4", title: "Generic Code", width: "150px", filterable: true },
+                { field: "New_NoOfPresc", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+    $("#NewDocIDGrid").dblclick(function () {
+        var gridData = $("#NewDocIDGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $('#New_Doc_Id').val(selectedItem.New_Doc_Id);
+        //$('#txtRegistrationNo').val(selectedItem.RegistrationNo);
+        //$('#New_Honorariam').val(selectedItem.New_Honorariam);
+        $('#New_Specialization').val(selectedItem.New_Specialization);
+        $('#New_Doc_Name').val(selectedItem.New_Doc_Name);
+        $('#New_Degree').val(selectedItem.New_Degree);
+        //$('#ddlDegree').val(selectedItem.DegreeCategory);
+
+        $('#New_Designation').val(selectedItem.New_Designation);
+        //alert(selectedItem.DesignationCategory);
+        //$('#ddlDesignationCategory').val(selectedItem.DesignationCategory);
+
+
+
+
+        $('#New_Address1').val(selectedItem.New_Address1);
+        $('#New_Address2').val(selectedItem.New_Address2);
+        $('#New_Address3').val(selectedItem.New_Address3);
+        $('#New_Address4').val(selectedItem.New_Address4);
+        //$('#New_NoOfPresc').val(selectedItem.New_NoOfPresc);
+        var NewId = selectedItem.New_Doc_Id;
+        GetNewMasterDetailsData("/ChangeDocId/GetNewPrescrCount", NewId);
+        //$("#SUStatus").val(1);
+        NewDocIDWindow.close();
+        //loadMarketDetail(selectedItem.DoctorId);
+        //loadRelationGrid(selectedItem.DoctorId);
+        //$('#btnDelete').attr('disabled', false);
+        //openSearchDoctorWindow.close();
+        //$('#txtRegistrationNo').focus();
+    });
+
+
+
+    function GetNewMasterDetailsData(RequestedURL, NewId) {
+        $.ajax({
+            url: RequestedURL,
+            type: 'GET',
+            data: { "NewId": NewId },
+            success: function (response) {
+                ////alert(response);
+                //$("#DISTC_CODE").val(response);
+                $("#New_NoOfPresc").val(response);
+
+            }
+        });
+    }
+
+
+    $('#btnNewSearchDoctor').click(function () {
+        var doctorNewId = $('#txtNewId').val();
+        if (doctorNewId == '') {
+            doctorNewId = 0;
+        }
+        var doctorNewName = $('#txtNewName').val();
+        var Newdegree = $('#txtNewDeg').val();
+        $.ajax({
+            url: '/ChangeDocId/GetNewDoctorsData',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ doctorNewId: doctorNewId, doctorNewName: doctorNewName, Newdegree: Newdegree }),
+            dataType: 'json',
+            success: function (dataNew) {
+                $("#NewDocIDGrid").data("kendoGrid").dataSource.data(dataNew);
+
+            }
+        });
+    });
+
+    $('#btnNewClear').click(function () {
+        $('#txtNewName').val('');
+        $('#txtNewId').val('');
+        $('#txtNewDeg').val('');
+        $("#NewDocIDGrid").data("kendoGrid").dataSource.data([]);
+        //$("#DoctorMarketPopupGrid").data("kendoGrid").dataSource.data([]);
+    });
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#New_Doc_Id").is(":focus")) {
+            if (e.keyCode == 120) {
+
+                $('#txtNewName').val('');
+                $('#txtNewId').val('');
+                $('#txtNewDeg').val('');
+                $("#NewDocIDGrid").data("kendoGrid").dataSource.data([]);
+                //$("#divLoading").show();
+                //var doctorId = $('#txtId').val();
+                //if (doctorId == '') {
+                //    doctorId = 0;
+                //}
+                //var doctorName = $('#txtName').val();
+                //var degree = $('#txtDeg').val();
+                //$.ajax({
+                //    url: '/ChangeDocId/GetDoctorsData',
+                //    type: 'post',
+                //    contentType: 'application/json;charset=utf-8',
+                //    data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree }),
+                //    dataType: 'json',
+                //    success: function (data) {
+                //        $("#OldDocIDGrid").data("kendoGrid").dataSource.data(data);
+
+                //    }
+                //});
+                SelectedItemOfListOfValue('NewDocIDGrid');
+                NewDocIDWindow.open();
+                NewDocIDWindow.center();
+            }
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnNewDocIDWindowOK').click(function () {
+        var grid = $('#NewDocIDGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+        $("#DOSAGE_FORM_NAME").focus();
+        NewDocIDWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnGenericIDWindowCancel').click(function () {
+        NewDocIDWindow.close();
+    });
+
+    //// Select Data through double Click From PopUp
+    //$("#NewDocIDWindow").dblclick(function () {
+    //    var grid = $('#OldDocIDGrid').data("kendoGrid");
+    //    var selectedItem = (grid.dataItem(grid.select()));
+    //    $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+    //    $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+    //    $("#DOSAGE_FORM_NAME").focus();
+    //    OldDocIDWindow.close();
+    //});
+
+    // Select Data through keyup From PopUp
+    $("#").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            var grid = $('#OldDocIDGrid').data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+            $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+            $("#DOSAGE_FORM_NAME").focus();
+            NewDocIDWindow.close();
+        }
+        else if (keycode == '27') {
+            NewDocIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //********************************************** END of New Doctor Id Window ****************************************************//
+
+
+
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+   
+
+
+
+
+
+  
+  
+</script>

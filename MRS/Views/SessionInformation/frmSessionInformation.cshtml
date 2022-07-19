@@ -1,0 +1,224 @@
+﻿@{
+    ViewBag.Title = "Session Information.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.Title</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                @*<input type="button" id="btnSearch" class="Button" value="Search" style="position: absolute;" />*@
+                <input type="button" id="btnSubmit" class="Button" value="Save" style="position: absolute; right: 75px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Session No</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" id="SUStatus" class="txtBox" />
+                <input type="text" id="txtSessionSl" name="SessionSl" tabindex="1" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <label>User</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" id="txtUserId" name="UserId" class="txtBox" />
+                <input type="text" id="txtUserName" tabindex="2" name="UserName" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Product Purchase Date</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtEntryDate" name="EntryDate" tabindex="3" class="RequiredTextBox currentDate" value="" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Data Entry Date</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtPurchaseDate" name="PurchaseDate" tabindex="4" class="RequiredTextBox currentDate" />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="FormBody" style="">
+            <div id="SessionInfoGrid" class="MainGrid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var SessionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SessionSl",
+                    fields: {
+                        SessionSl: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: '/SessionInformation/GetSessionData',
+                    type: "GET"
+                }
+            }
+        });
+
+        var SessionGrid = $("#SessionInfoGrid").kendoGrid({
+            dataSource: SessionGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 350,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "SessionSl", title: "Session No", width: "150px", filterable: true },
+                      { field: "EntryDate", title: "Entry Date", width: "150px", filterable: false },
+                      { field: "PurchaseDate", title: "Purchase Date", width: "150px", filterable: false },
+                      { field: "UserId", title: "User", width: "150px", filterable: false, hidden: true },
+                      { field: "UserName", title: "User", width: "150px", filterable: false },
+                      { field: "DataSource", title: "Data Source", width: "150px", filterable: false, hidden: true },
+                      { field: "Tag", title: "Tag", width: "150px", filterable: false, hidden: true },
+                      { command: [{ name: "DeletedRow", text: "Remove", imageClass: "k-icon k-i-close", click: handleDelete }], title: "Remove", width: "90px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+
+            ]
+        });
+
+        function handleEdit() {
+
+        }
+
+        function handleDelete() {
+            OpenConfirmationDialog();
+        }
+        $('#btnConfirmationOK').click(function () {
+            var grid = $('#SessionInfoGrid').data('kendoGrid');
+            var selectRow = grid.dataItem(grid.select());
+            var slNo = selectRow.SessionSl;
+            $.ajax({
+                url: '/SessionInformation/Delete',
+                method: 'post',
+                data: JSON.stringify({ slNo: slNo }),
+                contentType: 'application/json;charset=utf-8',
+                success: function (response) {
+                    //ResetOnlyMasterPageData();
+                    CloseConfirmationDialog();
+                    $("#SessionInfoGrid").data("kendoGrid").dataSource.remove(selectRow);
+                },
+                error: function () {
+                    alert('error');
+                }
+            })
+        });
+
+        $('#btnConfirmationCancel').click(function () {
+            CloseConfirmationDialog();
+        });
+
+        $('#btnSubmit').click(function () {
+            var model = {};
+            model.SessionSl = $('#txtSessionSl').val();
+            model.EntryDate = $('#txtEntryDate').val();
+            model.PurchaseDate = $('#txtPurchaseDate').val();
+            model.UserId = $('#txtUserId').val();
+            model.DataSource = '';
+            model.Tag = '';
+
+            $.ajax({
+                url: '/SessionInformation/SessionInfo',
+                method: 'post',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify({ model: model }),
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        //ResetOnlyMasterPageData();
+                        $('#txtSessionSl').val(response.msg.ReturnId);
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#SessionInfoGrid").data('kendoGrid').dataSource.read();
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else if (response.msg.Type == 3) {
+
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else {
+
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+        })
+        //Append user into textbox
+        appendUser();
+        function appendUser() {
+            $.ajax({
+                url: '/SessionInformation/FillUserId',
+                method: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $('#txtUserId').val(data.UserID);
+                    $('#txtUserName').val(data.UserName);
+                }
+            });
+        }
+
+        $('#btnReset').click(function () {
+            $('#txtSessionSl').val('');
+            $('#MessageText').html('');
+            var todayDate = kendo.toString(kendo.parseDate(new Date()), 'dd/MM/yyyy');
+            $('#txtEntryDate').data("kendoDatePicker").value(todayDate);
+            $('#txtPurchaseDate').data("kendoDatePicker").value(todayDate);
+        });
+    });
+</script>
+

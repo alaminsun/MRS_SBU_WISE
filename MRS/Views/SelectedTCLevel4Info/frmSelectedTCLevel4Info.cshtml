@@ -1,0 +1,422 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-4">
+                    <label>Therapeutic Class Level-4 Code<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    <input type="text" id="TC_L4_CODE" readonly="readonly" class="txtBox RequiredTextBox SetFocus" name="TC_L4_CODE" placeholder="Press F9" tabindex="1" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Therapeutic Class Level-4 Name<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="TC_L4_DESC" readonly="readonly" class="txtBox RequiredTextBox" name="TC_L4_DESC" tabindex="1" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>
+
+<div id="ManufacturerWindow" style="display: none;">
+    <div id="ManufacturerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManufacturerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManufacturerWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        OnlyNumericValue('SlNo');
+        //To Define Data TCLevel1 for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "TC_L4_CODE",
+                    fields: {
+                        TC_L4_CODE: { editable: false },
+                        TC_L4_DESC: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllSelectedTCLevel4List", "SelectedTCLevel4Info")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for TCLevel1 Kendo Grid
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 440,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "TC_L4_CODE", title: "Therapeutic Class Level-4 Code", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "TC_L4_DESC", title: "Therapeutic Class Level-4 Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "SelectedTCLevel4Info")',
+                type: 'POST',
+                data: JSON.stringify({ "TC_L4_CODE": dataitem.TC_L4_CODE }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $("#Status").val("Active");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus TC_L2_DESC textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#Status").val("Active");
+                $("#TC_L4_CODE").removeAttr("disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#TC_L4_CODE").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "SelectedTCLevel4Info")',
+                    type: 'POST',
+                    data: JSON.stringify({ "TC_L4_CODE": dataitem.TC_L4_CODE }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $("#Status").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var manufacturerInfoModel = { "TC_L4_CODE": "", "TC_L4_DESC": "" };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        // Check Empty or Maximum Length in TC_L4_CODE
+        CheckRequiredTextBoxMaxLength('TC_L4_CODE', 100);
+        // Check Empty or Maximum Length in TC_L4_DESC
+        CheckRequiredTextBoxMaxLength('TC_L4_DESC', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            manufacturerInfoModel.TC_L4_CODE = $("#TC_L4_CODE").val();
+            manufacturerInfoModel.TC_L4_DESC = $("#TC_L4_DESC").val();
+            manufacturerInfoModel.SUStatus = $("#SUStatus").val();
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("SelectedTCLevel4Info", "SelectedTCLevel4Info")',
+                    data: JSON.stringify(manufacturerInfoModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $("#SUStatus").val(1);
+                            GridReload('PageDetailGrid');
+                            //ResetOnlyMasterPageData();
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 4) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#TC_L4_CODE").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#Status").val("Active");
+            $("#TC_L4_CODE").removeAttr("disabled");
+        }
+    });
+
+
+    ////////////////////////Therapeutic Class Level-1 Information ///////////////////////////////////////////
+
+    $(document.body).keyup(function (e) {
+        if ($("#TC_L4_CODE").is(":focus")) {
+            if (e.which == 120) {
+                GetManufacturerInfo();
+                //SelectedItemOfListOfValue('ManufacturerWindowGrid');
+                ManufacturerWindow.open(); //Open Popup
+                ManufacturerWindow.center();
+            }
+        }
+    });
+
+    function GetManufacturerInfo() {
+        $.ajax({
+            url: '@Url.Action("GetTherapeuticLevel4List", "TCLevel4")',
+            type: 'GET',
+            success: function (response) {
+                $("#ManufacturerWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var ManufacturerWindow = $('#ManufacturerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Therapeutic Class Level-4 Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ManufacturerDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "TC_L4_CODE",
+                fields: {
+                    TC_L4_CODE: { editable: false },
+                    TC_L4_DESC: { editable: false }
+                }
+            }
+        },
+        pageSize: 40
+    });
+
+    var ManufacturerGrid = $("#ManufacturerWindowGrid").kendoGrid({
+        dataSource: ManufacturerDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 420,
+        //autoBind: false,
+        columns: [
+                { field: "TC_L4_CODE", title: "Therapeutic Class Level-4 Code", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "TC_L4_DESC", title: "Therapeutic Class Level-4 Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    function ManufacturerWindowEvent() {
+        var WindowGrid = $("#ManufacturerWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#TC_L4_CODE").val(WindowGridItem.TC_L4_CODE);
+        $("#TC_L4_DESC").val(WindowGridItem.TC_L4_DESC);
+
+        changeStatus = 1;
+    };
+
+    $('#btnManufacturerWindowOK').click(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+    $('#btnManufacturerWindowCancel').click(function () {
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindow").dblclick(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ManufacturerWindowEvent();
+            ManufacturerWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ManufacturerWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+</script>

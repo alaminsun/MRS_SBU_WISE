@@ -1,0 +1,701 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptSpacialCampaignMarketWiseShare", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-2">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: A4, Landscape</label>
+        </div>
+        <div class="col-lg-3" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="MessageText" class="col-sm-12">
+            @if (!string.IsNullOrEmpty(ViewBag.msg))
+            {
+                <p style="color:red; text-shadow:1px 0px 0px red; text-align:center;">
+                    @ViewBag.msg
+                </p>
+            }
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-lg-5">
+                                    <label class="pull-right">Special Campaign</label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <input type="hidden" id="SCP_CODE" class="txtBox" name="SCP_CODE" />
+                                    <input type="text" id="SCP_NAME" name="SCP_NAME" tabindex="2" class="txtBox RequiredTextBox" readonly="readonly" required="required" placeholder="Press F9" value="" style="text-align: center" />
+                                </div>
+                            </div> <br />
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-lg-5">
+                                    <label class="pull-right">From Date:</label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <input type="text" id="FromDate" name="FromDate" tabindex="6" class="txtBox datePicker" placeholder="dd/mm/yyyy" />
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <label class="pull-right">To Date:</label>
+                            </div>
+                            <div class="col-lg-7">
+                                <input type="text" id="ToDate" name="ToDate" tabindex="7" class="txtBox datePicker" placeholder="dd/mm/yyyy" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign Group Wise Share Value</label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpGroupValueShare" name="ReportName" value="ScpGroupValueShare" checked="checked" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign Group Wise Share % Value </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpGroupValueSharePersent" name="ReportName" value="ScpGroupValueSharePersent" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign Group Wise Doctor Share Value </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpGroupWiseDoctorValueShare" name="ReportName" value="ScpGroupWiseDoctorValueShare" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign Group Wise Doctor Share % Value </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpGroupWiseDoctorValueSharePercent" name="ReportName" value="ScpGroupWiseDoctorValueSharePercent" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign Group Wise Institute Share Value </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpGroupWiseInstValueShare" name="ReportName" value="ScpGroupWiseInstValueShare" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign Group Wise Institute Share % Value </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpGroupWiseInstValueSharePercent" name="ReportName" value="ScpGroupWiseInstValueSharePercent" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Doctor Prescription Information </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpDoctorPrescriptionInfo" name="ReportName" value="ScpDoctorPrescriptionInfo" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign National Value Share </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpNationalValueShare" name="ReportName" value="ScpNationalValueShare" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 text-right">
+                                <label style="">Special Campaign National % Share </label>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <input type="radio" id="ScpNationalValueSharePercent" name="ReportName" value="ScpNationalValueSharePercent" />
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+
+
+                @*<div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Degree:</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="hidden" id="DEGREE_CODE" name="DEGREE_CODE" class="txtBox" />
+                            <input type="text" id="DEGREE" placeholder="All Degree/Press F9" readonly="readonly" name="DEGREE" class="txtBox" tabindex="2" />
+                        </div>
+                    </div><br />
+
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Specialization:</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="hidden" id="SPECIALIZATION_CODE" name="SPECIALIZATION_CODE" class="txtBox" />
+                            <input type="text" id="SPECIALIZATION" placeholder="All Specialization/Press F9" readonly="readonly" name="SPECIALIZATION" class="txtBox" tabindex="3" />
+                        </div>
+                    </div><br />
+
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Designation:</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="hidden" id="DESIGNATION_CODE" name="DESIGNATION_CODE" class="txtBox" />
+                            <input type="text" id="DESIGNATION" placeholder="All Designation/Press F9" readonly="readonly" name="DESIGNATION" class="txtBox" tabindex="4" />
+                        </div>
+                    </div><br />
+
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Potencial Category:</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <select id="PotencialCategory" name="PotencialCategory" class="txtBox" tabindex="5">
+                                <option value="">All Category</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                        </div>
+                    </div><br />*@
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<div id="ScpWindow" style="display: none;">
+    <div id="ScpWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnScpWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnScpWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DegreeWindow" style="display: none;">
+    <div id="DegreeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDegreeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDegreeWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="SpecializationWindow" style="display: none;">
+    <div id="SpecializationWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSpecializationWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSpecializationWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DesignationWindow" style="display: none;">
+    <div id="DesignationWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDesignationWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDesignationWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+            //,
+            //value: new Date()
+        });
+    }); //End of Document.Ready()
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        $("#FromDate").val("");
+        $("#ToDate").val("");
+        location.reload();
+    });
+
+    ////////////////////Special Campign Program/////////////////////////
+
+    var ScpGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SCP_CODE",
+                fields: {
+                    SCP_CODE: { editable: false },
+                    SCP_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSCPList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var ScpPageGrid = $("#ScpWindowGrid").kendoGrid({
+        dataSource: ScpGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "SCP_CODE", title: "SCP Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SCP_NAME", title: "Special Campaign Program Name", filterable: true, width: 160, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var scpWindow = $('#ScpWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Special Campaign Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function ScpWindowEvent() {
+        var WindowGrid = $("#ScpWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#SCP_CODE").val(WindowGridItem.SCP_CODE);
+        $("#SCP_NAME").val(WindowGridItem.SCP_NAME);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnScpWindowOK').click(function () {
+        ScpWindowEvent();
+        scpWindow.close();
+    });
+
+    $('#btnScpWindowCancel').click(function () {
+        scpWindow.close();
+    });
+
+    $("#ScpWindowGrid").dblclick(function () {
+        ScpWindowEvent();
+        scpWindow.close();
+    });
+
+    $("#ScpWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ScpWindowEvent();
+            scpWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            scpWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#SCP_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ScpWindowGrid');
+                scpWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+    ////////////////////Specialization/////////////////////////
+
+    var SpecializationGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SpecializationCode",
+                fields: {
+                    SpecializationCode: { editable: false },
+                    Specialization: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSpecializationList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var SpecializationPageGrid = $("#SpecializationWindowGrid").kendoGrid({
+        dataSource: SpecializationGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "Specialization", title: "Specialization", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SpecializationCode", title: "Specialization Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var SpecializationWindow = $('#SpecializationWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Specialization Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function SpecializationWindowEvent() {
+        var WindowGrid = $("#SpecializationWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#SPECIALIZATION_CODE").val(WindowGridItem.SpecializationCode);
+        $("#SPECIALIZATION").val(WindowGridItem.Specialization);
+        $("#DESIGNATION").focus();
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSpecializationWindowOK').click(function () {
+        SpecializationWindowEvent();
+        SpecializationWindow.close();
+    });
+
+    $('#btnSpecializationWindowCancel').click(function () {
+        SpecializationWindow.close();
+    });
+
+    $("#SpecializationWindowGrid").dblclick(function () {
+        SpecializationWindowEvent();
+        SpecializationWindow.close();
+    });
+
+    $("#SpecializationWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SpecializationWindowEvent();
+            SpecializationWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SpecializationWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#SPECIALIZATION").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SpecializationWindowGrid');
+                SpecializationWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    ////////////////////Degree/////////////////////////
+
+    var DegreeGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DEGREE_CODE",
+                fields: {
+                    DEGREE_CODE: { editable: false },
+                    DEGREE: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDegreeList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var DegreePageGrid = $("#DegreeWindowGrid").kendoGrid({
+        dataSource: DegreeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DEGREE", title: "Degree", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DEGREE_CODE", title: "Degree Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var DegreeWindow = $('#DegreeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Degree Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function DegreeWindowEvent() {
+        var WindowGrid = $("#DegreeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DEGREE_CODE").val(WindowGridItem.DEGREE_CODE);
+        $("#DEGREE").val(WindowGridItem.DEGREE);
+        $("#SPECIALIZATION").focus();
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnDegreeWindowOK').click(function () {
+        DegreeWindowEvent();
+        DegreeWindow.close();
+    });
+
+    $('#btnDegreeWindowCancel').click(function () {
+        DegreeWindow.close();
+    });
+
+    $("#DegreeWindowGrid").dblclick(function () {
+        DegreeWindowEvent();
+        DegreeWindow.close();
+    });
+
+    $("#DegreeWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            DegreeWindowEvent();
+            DegreeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DegreeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DEGREE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('DegreeWindowGrid');
+                DegreeWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    //////////////////Region///////////////////////////
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RegionCode",
+                fields: {
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetReportRegionList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "REGION_NAME", title: "Region Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "REGION_CODE", title: "Region Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Region Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#REGION_CODE").val(WindowGridItem.REGION_CODE);
+        $("#REGION_NAME").val(WindowGridItem.REGION_NAME);
+        $("#DEGREE").focus();
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+</script>

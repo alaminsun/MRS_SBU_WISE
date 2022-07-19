@@ -1,0 +1,300 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLteLayout.cshtml";
+}
+@*<title>Bill Movement Status</title>*@
+<div class="box box-primary box-body" ng-controller="checqueCtrl" data-ng-init="init()">
+    <!-- box-header -->
+    <div class="box-header with-border">
+        <i class="fa fa-user"></i>
+        <h3 class="box-title">Referance Documents Details</h3>
+        <div class="box-tools pull-right">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            @*<button ng-disabled="saveIsReadOnly" type="submit" id="btnSubmit" name="ReportType" ng-click="Save(displayedCollection, $event)" class="btn btn-flat btn-success pull-right">
+                                    <i class="fa fa-save"></i> Save
+                                </button>*@
+                        </div>
+                        <div class="col-lg-4">
+                            @using (Html.BeginForm("ReferanceDocumentsDetails", "../Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+                            {
+                                <button ng-disabled="showPrint" type="submit" id="btnSubmit" name="ReportType" class="btn btn-flat btn-success pull-right">
+                                    <i class="fa fa-print"></i> Print
+                                </button>
+                            }
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="button" id="btnRefresh" data-ng-click="toggleRefreshTable()" class="btn btn-warning btn-flat pull-right" ng-disabled="loading"><i class="fa fa-refresh"></i> Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>Company</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <select id="ddCompany" class="form-control" ng-change="LoadDocCategory()" ng-model="vmCheckPrint.Owner"
+                            data-ng-options="owner as owner.OwnerName for owner in
+                            ownersForSpecificOwnerLevel track by owner.OwnerID">
+                        <option value="">--Select--</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>Vendor</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="input-group">
+                    <input type="text" id="selectBeneficiary" name="selectBeneficiary" class="form-control" data-ng-model="selectedBeneficiary" placeholder=""
+                           data-ng-keydown="getBeneficiaryF9($event,selectedOwner)">
+                    @*<div id="btnGetVendor" class="input-group-addon" ng-click="ShowInvoicingPartyList">
+                            <i class="fa fa-search"></i> Search
+                        </div>*@
+                    <input class="btn btn-flat btn-default" ng-click="ShowInvoicingPartyList()" value="Search">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>PO Number</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>To</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>Tracking Number</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>To</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>Parking Number</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>To</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>Posting Number</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>To</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>Clearing Number</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                    <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <label>To</label>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <input type="text" id="clearingNo" name="clearingNo" class="input-group form-control" data-ng-model="inputClearingNo" placeholder="">
+            </div>
+        </div>      
+    </div>
+
+    <div id="InvoicingPartyModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="ResetModel()" aria-hidden="true">x</button>
+                    <h3 class="modal-title">Invoicing Parties</h3>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table st-table="displayedUserCollection" st-safe-src="UserGridData" class="table table-condensed table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th class="hidden" st-sort="VendorCode">Invoicing Party Code</th>
+                                <th st-sort="VendorName">Invoicing Party Name</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <input st-search="VendorName"
+                                           placeholder="Vendor Name" class="input-sm form-control"
+                                           type="search" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in displayedCollection">
+                                <td class="hidden">{{row.VendorCode}}</td>
+                                <td>{{row.VendorName}}</td>
+                                <td>
+                                    <a class="btn col-center btn-sm btn-flat btn-success" ng-href="#" ng-rel="" data-ng-click="toggleSelect(row)">Select</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ResetModel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+</div>
+
+
+<script type="text/javascript">
+
+
+    $('.DatePicker').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true
+    });
+
+    $('#InvoiceDateID').datepicker()
+      .on('changeDate', function (ev) {
+          $('.datepicker').hide();
+      });
+
+    app.controller('checqueCtrl', function ($scope, $http) {
+
+
+
+        $scope.ShowInvoicingPartyList = function (model) {
+            $http.get('/Common/GetVendorCodedNameList')
+            .success(function (response) {
+                $scope.VendorGridData = response;
+                $scope.displayedCollection = [].concat($scope.VendorGridData);
+                $scope.loading = false;
+            })
+            .error(function () {
+                $scope.loading = false;
+            });
+
+            $('#InvoicingPartyModal').modal('show');
+        };
+
+        $scope.toggleSelect = function (tableRow) {
+            $scope.BillReceiveModel.InvoicingPartyCode = tableRow.VendorCode;
+            $scope.BillReceiveModel.InvoicingPartyName = tableRow.VendorName;
+
+            $('#InvoicingPartyModal').modal('hide');
+        };
+
+        $scope.saveIsReadOnly = false;
+        $scope.showPrint = false;
+        $scope.itemsByPage = 10;
+        $scope.Currencies = [];
+        $scope.getAllCheque = [];  // base collection
+        $scope.displayedCollection = [].concat($scope.getAllCheque);  // displayed collection
+        $scope.vmCheckPrint = {
+            Owner: { OwnerID: "", OwnerName: "" },
+            DocCategory: { DocCategoryID: "", DocCategoryName: "" },
+            Branch: { BranchID: "", BranchName: "" },
+            Account: { AccountID: "", AccountName: "", AccountNo: "" },
+            BillClearingID: "",
+            ClearingNo: "",
+            Beneficiary: "",
+            Amount: "",
+            ChequeDate: "",
+            TransType: "",
+            LeafNo: "",
+            VoidChequeNo: "",
+            IsChecked: "",
+            LeafNo: "",
+            OwnerID: "",
+            BankID: "",
+            AccountID: "",
+            PaymentMode: "",
+            PrintMode: "",
+            AmtInWord: ""
+        };
+        $scope.ArrayData = [];
+
+        $http.post('/CheckPrintModule/ChequePrint/GetChequePrintCompany',
+           { companyID: $scope.vmCheckPrint.companyCode })
+           .success(function (response) {
+               $scope.ownersForSpecificOwnerLevel = response.obChequeCompany;
+               $scope.loading = false;
+           }).error(function () {
+               $scope.loading = false;
+               toastr.error('Data Loading Faild.');
+           });
+
+        $scope.LoadDocCategory = function () {
+            $http.post('/DocScanningModule/OwnerProperIdentity/GetDocumentCategoriesForSpecificOwner',
+                { _OwnerID: $scope.vmCheckPrint.Owner.OwnerID })
+                .success(function (response) {
+                    $scope.docCategoriesForSpecificOwner = response.result;
+                    $scope.loading = false;
+                }).error(function () {
+                    $scope.loading = false;
+                });
+        }
+
+        $scope.toggleRefreshTable = function () {
+            window.location.reload();
+        };
+
+    });
+</script>

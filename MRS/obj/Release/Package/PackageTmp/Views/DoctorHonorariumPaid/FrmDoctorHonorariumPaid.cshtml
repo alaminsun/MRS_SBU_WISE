@@ -1,0 +1,3004 @@
+﻿@{
+    ViewBag.Title = "FrmDoctorHonorariumPaid";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right" tabindex="18"><i class="glyphicon glyphicon-save"></i> Save</button>
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+
+        @******** First Row *********@
+
+        <div style="padding:3px;">
+            <input type="hidden" id="HONOR_PAID_SLNO" class="txtBox" />
+            <input type="hidden" id="MGMT_CODE" class="txtBox" />
+            <input type="hidden" id="TERRITORY_CODE" class="txtBox" />
+            <input type="hidden" id="REGION_CODE" class="txtBox" />
+            <input type="hidden" id="DIVISION_CODE" class="txtBox" />
+            <input type="hidden" id="ZONE_CODE" class="txtBox" />
+            <input type="hidden" id="TERRITORY_NAME" class="txtBox" />
+            <input type="hidden" id="REGION_NAME" class="txtBox" />
+            <input type="hidden" id="DIVISION_NAME" class="txtBox" />
+            <input type="hidden" id="ZONE_NAME" class="txtBox" />
+            <input type="hidden" id="HONORARIUM_CODE" class="txtBox" />
+            <input type="hidden" id="GRP_DSIG_CODE" class="txtBox" />
+            <input type="hidden" id="CURR_APPROVED_AMT" class="txtBox" />
+            <input type="hidden" id="SUStatus" class="txtBox" />
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>Honorarium aprov. No.</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="HONOR_APROV_NO" tabindex="1" name="HONOR_APROV_NO" class="txtBox" value="" readonly="readonly" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Approved Date</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="HONOR_APROV_DATE" tabindex="2" name="HONOR_APROV_DATE" class="txtBox RequiredTextBox datePicker SetFocus" value="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Approved By</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="MGMT_NAME" name="MGMT_NAME" tabindex="3" class="txtBox RequiredTextBox" value="" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-2">
+                    <label for="a">Location</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="hidden" id="REGION_CODE1" name="REGION_CODE1" class="txtBox" />
+                    <input type="text" id="REGION_NAME1" name="REGION_NAME1" tabindex="4" class="txtBox"/>
+                    <input type="hidden" id="DIVISION_CODE1" name="DIVISION_CODE1" class="txtBox" />
+                    <input type="text" id="DIVISION_NAME1" name="DIVISION_NAME1" tabindex="4" class="txtBox" />
+                </div>
+            </div>
+        </div>
+
+        @******** Second Row *********@
+
+        <div style="padding: 3px; margin-bottom: 5px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>National</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="NATIONAL" class="txtBox" tabindex="5" style="text-align: center">
+                        <option value="N">No</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <label>Market Code</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="MARKET_CODE" name="MARKET_CODE" tabindex="7" class="txtBox" value="" placeholder="Press F9" @*onchange="GetMarket()"*@ />
+                </div>
+                <div class="col-lg-2">
+                    <label>Market</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="MARKET_NAME" name="MARKET_NAME" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+
+            </div>
+        </div>
+
+        @******** Third Row *********@
+
+        <div style="padding: 3px; margin-bottom: 5px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+
+                <div class="col-lg-2">
+                    <label>Territory</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="TERRITORY_NAME" readonly="readonly" name="TERRITORY_NAME" class="txtBox RequiredTextBox" value="" />
+                </div>
+
+
+                <div class="col-lg-2">
+                    <label>Institution Code</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="INSTI_CODE" name="INSTI_CODE" tabindex="8" class="txtBox" value="" placeholder="Press F9" />
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Institution</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="INSTI_NAME" name="INSTI_NAME" class="txtBox RequiredTextBox" readonly="readonly" />
+                </div>
+
+            </div>
+        </div>
+
+        @******** Fourth Row *********@
+
+        <div style="padding:3px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>Society Association</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="hidden" id="SOCIETY_ID" class="txtBox" />
+                    <input type="text" id="SOCITY_NAME" name="SOCITY_NAME" tabindex="9" class="txtBox RequiredTextBox" value="" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Doctor Code</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="DOCTOR_ID" name="DOCTOR_ID" tabindex="10" class="txtBox" value="" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Doctor Name</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="DOCTOR_NAME" readonly="readonly" name="DOCTOR_NAME" class="txtBox" value="" placeholder="" />
+                </div>
+            </div>
+
+        </div>
+
+        @******** Fifth Row *********@
+
+        <div style="padding:3px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+
+                <div class="col-lg-2">
+                    <label>Honorarium Type</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-2">
+                    <select id="HONORARIUM_NAME" name="HONORARIUM_NAME" class="txtBox RequiredTextBox" tabindex="9">
+                        <option value="">....Select....</option>
+                    </select>
+                </div>
+                @*<div class="col-lg-2" id="MONTHSLABELDIV">
+                    <label for="HONORARIUM_MONTH">Months</label>
+                </div>
+                <div class="col-lg-2" id="MONTHSDIV">
+                    <select id="HONORARIUM_MONTH" name="HONORARIUM_MONTH" class="txtBox RequiredTextBox" tabindex="9">
+                        <option value="">....Select....</option>
+                        <option value="S2">Starting Month + 1</option>
+                        <option value="S3">Starting Month + 2</option>
+                        <option value="S4">Starting Month + 3</option>
+                        <option value="S5">Starting Month + 4</option>
+                        <option value="S6">Starting Month + 5</option>
+                        <option value="S7">Starting Month + 6</option>
+                        <option value="S8">Starting Month + 7</option>
+                        <option value="S9">Starting Month + 8</option>
+                        <option value="S10">Starting Month + 9</option>
+                        <option value="S11">Starting Month + 10</option>
+                        <option value="S12">Starting Month + 11</option>
+                        <option value="12">12</option>
+                    </select>
+                    
+
+                </div>*@
+                
+                <div class="col-lg-2">
+                    <label>Detail Expense</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="EXPENSE_DETAILS" name="EXPENSE_DETAILS" tabindex="11" class="txtBox RequiredTextBox" value="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Other Comments</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="OTHER_REMARKS" name="OTHER_REMARKS" tabindex="12" class="txtBox" value="" />
+                </div>
+            </div>
+
+        </div>
+
+        @******** Sixth Row *********@
+
+        <div style="padding:3px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>Monthly Ceiling Amount</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="MON_CELI_AMT" name="MON_CELI_AMT" class="txtBox" value="" style="text-align: right" readonly="readonly" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Availed Amount</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="TOT_APPROVED_AMT" name="TOT_APPROVED_AMT" class="txtBox" value="" style="text-align: right" readonly="readonly" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Due Amount</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="TOT_DUE_AMT" name="TOT_DUE_AMT" class="txtBox" value="" style="text-align: right" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+
+        @******** Seventh Row *********@
+
+        <div style="padding:3px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>Amount</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="EXPENSE_AMT" tabindex="13" name="EXPENSE_AMT" class="txtBox" placeholder="0.00" style="width: 130px; text-align: right" onkeyup="calCeilAmt();" />
+                </div>
+                <div class="col-lg-1">
+                    <label style="text-align: left">Commit From</label>
+                </div>
+                <div class="col-lg-2" style="width:150px;">
+                    <input type="text" id="EXPENSE_FROM" tabindex="14" name="EXPENSE_FROM" class="txtBox datePicker" value="" onblur="calMonth1();" />
+                </div>
+                <div class="col-lg-1">
+                    <label>Commit To</label>
+                </div>
+                <div class="col-lg-2" style="width:150px;">
+                    <input type="text" id="EXPENSE_TO" tabindex="15" name="EXPENSE_TO" class="txtBox datePicker" value="" onblur="calMonth1();" />
+                </div>
+                <div class="col-lg-1">
+                    <label>Duration</label>
+                </div>
+                <div class="col-lg-1" style="width:150px;">
+                    <input type="text" id="EXPENSE_DURATION" name="EXPENSE_DURATION" class="txtBox" value="" style="width: 50px;text-align: right" readonly="readonly" /> <label> Month</label>
+                </div>
+            </div>
+        </div>
+
+        @******** Eighth Row *********@
+
+        <div style="padding:3px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>Persent Share</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="PRESC_SHARE_PCT" tabindex="16" name="PRESC_SHARE_PCT" placeholder="0.00" class="txtBox" value="" style="width: 130PX; text-align: right;" /><label> %</label>
+                </div>
+                <div class="col-lg-1">
+                    <label>From Date</label>
+                </div>
+                <div class="col-lg-2" style="width:150px;">
+                    <input type="text" id="PRESC_SHARE_FROM" tabindex="17" name="PRESC_SHARE_FROM" class="txtBox datePicker" value="" onblur="calMonth2();" onchange="GetShareData()" />
+                </div>
+                <div class="col-lg-1">
+                    <label>To Date</label>
+                </div>
+                <div class="col-lg-2" style="width:150px;">
+                    <input type="text" id="PRESC_SHARE_TO" tabindex="18" name="PRESC_SHARE_TO" class="txtBox datePicker" value="" onblur="calMonth2();" onchange="GetShareData()" />
+                </div>
+                <div class="col-lg-1">
+                    <label>Duration</label>
+                </div>
+                <div class="col-lg-1" style="width:150px;">
+                    <input type="text" id="PRESENT_SHARE_DURATION" name="PRESENT_SHARE_DURATION" class="txtBox" value="" style="width: 50px;text-align: right" readonly="readonly" /> <label> Month</label>
+                </div>
+            </div>
+        </div>
+
+        @******** Ninth Row *********@
+
+        <div style="padding:3px;" class="box-body">
+            <div style="margin-bottom: 5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>Commitment</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="COMITMENT_SHARE_PCT" tabindex="19" name="COMITMENT_SHARE_PCT" placeholder="0.00" class="txtBox RequiredTextBox" value="" style="width: 130PX; text-align: right" /><label> %</label>
+                </div>
+
+                <div class="col-lg-2">
+                    <label>Additional Commitment</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" id="ADDITIONAL_COMITMENT" tabindex="20" name="ADDITIONAL_COMITMENT" class="txtBox RequiredTextBox" value="" />
+                </div>
+                <div id="Msg" style="color:red; display:none;" class="col-lg-4">
+                    <label>No Share Data Found</label>
+                </div>
+
+            </div>
+        </div>
+
+        <div style="border: solid 1px; border-color: #006400;">
+
+            @******** Tenth Row *********@
+
+            <div style="padding:3px;" class="box-body">
+                <div style="margin-bottom: 5px;" class="form-group">
+                    <div class="col-lg-2">
+                        <label>Donation</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="DONATION" name="DONATION" class="txtBox" readonly value="" />
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label>Medicine Donation</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="MEDICINE" name="MEDICINE" class="txtBox" readonly value="" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Honorarium</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="HONORARIUM" name="HONORARIUM" class="txtBox" readonly value="" />
+                    </div>
+                </div>
+            </div>
+
+
+            @******** Eleventh Row *********@
+
+            <div style="padding:3px;" class="box-body">
+                <div style="margin-bottom: 5px;" class="form-group">
+                    <div class="col-lg-2">
+                        <label>Gift</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="GIFT" name="GIFT" class="txtBox" readonly value="" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Others</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="OTHERS" name="OTHERS" readonly class="txtBox" value="" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Commitment</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="SHARE_PCT" name="SHARE_PCT" readonly class="txtBox" value="" />
+                    </div>
+                </div>
+            </div>
+            <div style="padding:3px;" class="box-body">
+                <div style="margin-bottom: 5px;" class="form-group">
+                    <div class="col-lg-2">
+                        <label>Donation-Society</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="DONSOCIETY" name="DONSOCIETY" class="txtBox" readonly value="" />
+                    </div>
+              
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="row box">
+    <div id="PageDetailGrid" class="MainGrid"></div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DivisionWindow" style="display: none;">
+    <div id="DivisionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDivisionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDivisionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RegiInfoWindow" style="display: none;">
+    <div id="RegiInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegiInfoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegiInfoWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ZoneWindow" style="display: none;">
+    <div id="ZoneWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnZoneWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnZoneWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="MarketWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Market Name :</label>
+        <input type="text" id="txtMarketCode" placeholder="Searching by Market Name/Code" style="width: 250px;" />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="MarketGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnMarketWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnMarketWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="TerritoryWindow" style="display: none;">
+    <div id="TerritoryGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnTerritoryWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTerritoryWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DoctorWindow" style="display: none;">
+    <div id="DoctorGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDoctorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDoctorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DoctorSocietyWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Society Association Name :</label>
+        <input type="text" id="txtSocietyAssociation" placeholder="Searching by Society Association Name/Code" style="width: 250px;" />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="DoctorSocietyGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDoctorSocietyWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDoctorSocietyWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ManagementWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Group Designation Name :</label>
+        <input type="text" id="txtManagement" placeholder="Searching by Group Designation Name/Code" style="width: 250px;" />
+    </div>
+    <div id="ManagementGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManagementWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManagementWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="InstituteWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Institute Name :</label>
+        <input type="text" id="txtInstituteCode" placeholder="Searching by Institute Name/Code" style="width: 250px;" />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="InstituteGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstituteWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstituteWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DoctorSearchGridWindow" style="display: none;">
+    <input type="text" id="txtId" class="RequiredTextBox" value="" placeholder="Search By Id" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtName" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Name" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtDeg" tabindex="23" class="RequiredTextBox" placeholder="Degree" style="padding-right:100px; position:relative" />
+    <input type="button" id="btnSearchDoctor" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    <input type="button" id="btnClear" class="Button" value="Reset" style="position:absolute; margin-left:100px;" />
+    <div id="DoctorSearchGrid" class="PopUpGrid">
+    </div>
+    <div id="DoctorMarketPopupGrid" class="grdKendo"></div>
+</div>
+
+<div id="ProductWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Product Name :</label>
+        <input type="text" id="txtProductInfo" placeholder="Searching by Product Name/Code" style="width: 250px;" />
+    </div>
+    <div id="ProductWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnProductWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnProductWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">*@
+        @*<label style="margin-left: 20px;">Aprov No:</label>*@
+        
+        <input type="text" id="txtApprovNo" placeholder="Searching by Approv No" style="width: 200px; position:relative" />
+        <input type="text" id="txtIdDocHon" placeholder="Search By Doctor Id" style="padding-right:100px; position:relative" />
+        <input type="text" id="txtNameDocHon" placeholder="Search By Doctor Name" style="padding-right:100px; position:relative" />
+        <input type="text" id="txtDonAmt" placeholder="Search By Amount" style="padding-right:100px; position:relative" />
+        <input type="button" id="btnSearchHonorarium" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+        <input type="button" id="btnClearHonorarium" class="Button" value="Reset" style="position:absolute; margin-left:100px;" />
+    @*</div>*@
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+    
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+
+    .multiselect {
+        width: 200px;
+    }
+
+    .selectBox {
+        position: relative;
+    }
+
+        .selectBox select {
+            width: 100%;
+            font-weight: bold;
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+    }
+
+        #checkboxes label {
+            display: block;
+        }
+
+            #checkboxes label:hover {
+                background-color: #1e90ff;
+            }
+</style>
+
+@*<script src="~/Scripts/jquery.multi-select.js"></script>*@
+
+<script>
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    var deleteStatus = 0;
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+        //alert(new Date("dd/MM/yyyy"));
+        NumericAndDecimalValue('EXPENSE_AMT');
+        NumericAndDecimalValue('PRESC_SHARE_PCT');
+        NumericAndDecimalValue('COMITMENT_SHARE_PCT');
+        OnlyNumericValue('DOCTOR_ID');
+        OnlyNumericValue('INSTI_CODE');
+        //OnlyNumericValue('MARKET_CODE');
+        //$('#MONTHS').hide();
+        //$('label[for=MONTHS], input#MONTHS').hide();
+        //$('#MONTHSDIV').hide();
+        //$('#MONTHSLABELDIV').hide();
+        //$('#ingredients').multiselect();
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+
+
+
+        //$('#HONORARIUM_NAME').change(function () {           
+        //    var honorariumType = $("#HONORARIUM_NAME").val();
+        //    if(honorariumType == '05'){
+        //        $('#MONTHSDIV').show();
+        //        $('#MONTHSLABELDIV').show();
+        //        //$('#MONTHS').show();
+        //        //$('label[for=MONTHS], input#MONTHS').show();
+        //    }
+        //    else{
+        //        $('#MONTHSDIV').hide();
+        //        $('#MONTHSLABELDIV').hide();
+        //        //$('#MONTHS').hide();
+        //        //$('label[for=MONTHS], input#MONTHS').hide();
+        //    }
+                
+        //});
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "HONOR_PAID_SLNO",
+                    fields: {
+                        DOC_COMMI_PROD_SLNO: { editable: false },
+                        HONOR_PAID_SLNO: { editable: false },
+                        SAP_CODE: { editable: true },
+                        PROD_ID: { editable: true },
+                        PRODUCT_NAME: { editable: true, defaultValue: 'Press F9' },
+                        PRODUCT_DETAILS: { editable: true }
+                    }
+                }
+            },
+            pageSize: 5
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "PROD_ID"]').attr("readonly", true);
+                $('input[name = "PRODUCT_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Product Info.", className: "btnAddProduct", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            //height: 500,
+            columns: [
+                { field: "DOC_COMMI_PROD_SLNO", width: 130, hidden: true },
+                { field: "HONOR_PAID_SLNO", width: 130, hidden: true },
+                { field: "PRODUCT_NAME", title: "Product Name", width: 130, attributes: { "class": "ProdInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "PROD_ID", title: "Product Code", width: 130, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "SAP_CODE", title: "SAP Code", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "PRODUCT_DETAILS", title: "Product Details", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnAddProduct').click(function (e) {
+            var grid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            e.preventDefault();
+        });
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#HONOR_PAID_SLNO").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "DoctorHonorariumPaid")',
+                        type: 'POST',
+                        data: JSON.stringify({ "HONOR_PAID_SLNO": $("#HONOR_PAID_SLNO").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.DOC_COMMI_PROD_SLNO != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedDocCommitProduct", "DoctorHonorariumPaid")',
+                        type: 'POST',
+                        data: JSON.stringify({ "DOC_COMMI_PROD_SLNO": dataitem.DOC_COMMI_PROD_SLNO }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+
+        //************************* Handling NO BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //************************* Click Save Chages Window OK Button******************************//
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                location.reload();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetMasterInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#HONOR_PAID_SLNO").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "DoctorHonorariumPaid")',
+                            type: 'POST',
+                            data: JSON.stringify({ "HONOR_PAID_SLNO": $("#HONOR_PAID_SLNO").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.DOC_COMMI_PROD_SLNO != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedDocCommitProduct", "DoctorHonorariumPaid")',
+                            type: 'POST',
+                            data: JSON.stringify({ "DOC_COMMI_PROD_SLNO": dataitem.DOC_COMMI_PROD_SLNO }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //************************* END of WINDOWS LOAD Method  ******************************//
+    });
+    //*************************************** End of document.ready Function ************************************************//
+
+
+    function calMonth1() {
+        var month1 = $("#EXPENSE_FROM").val().split("/");
+        var month2 = $("#EXPENSE_TO").val().split("/");
+        var dayMon = 0;
+        var numOfDays = parseInt(parseInt(month2[0]) - parseInt(month1[0]) + 1);
+        if (numOfDays >= 28)
+            dayMon = 1;
+        else
+            dayMon = (numOfDays / 30).toFixed(2);
+        var endMonth = parseInt(parseInt(month2[2]) - parseInt(month1[2])) * 12 + parseInt(month2[1]);
+        var numOfMonth = (endMonth - parseInt(month1[1])) + parseFloat(dayMon);
+
+        $("#EXPENSE_DURATION").val(parseInt(numOfMonth));
+    }
+
+    function calMonth2() {
+        var month1 = $("#PRESC_SHARE_FROM").val().split("/");
+        var month2 = $("#PRESC_SHARE_TO").val().split("/");
+        var dayMon = 0;
+        var numOfDays = parseInt(parseInt(month2[0]) - parseInt(month1[0]) + 1);
+        if (numOfDays >= 28)
+            dayMon = 1;
+        else
+            dayMon = (numOfDays / 30).toFixed(2);
+        var endMonth = parseInt(parseInt(month2[2]) - parseInt(month1[2])) * 12 + parseInt(month2[1]);
+        var numOfMonth = (endMonth - parseInt(month1[1])) + parseFloat(dayMon);
+
+        $("#PRESENT_SHARE_DURATION").val(parseInt(numOfMonth));
+    }
+
+    function calCeilAmt() {
+        if ($("#SUStatus").val() == 1) {
+            var Amount = 0;
+            if (($("#MGMT_CODE").val() == '00000001') || ($("#MGMT_CODE").val() == '00000002') || ($("#MGMT_CODE").val() == '40000844') )
+                Amount = 1;
+            else
+                Amount = (parseInt($("#CURR_APPROVED_AMT").val()) + parseInt($("#TOT_DUE_AMT").val())) - parseInt($("#EXPENSE_AMT").val());
+            if (($("#HONORARIUM_NAME").val()) == '01' && Amount < 0) {
+                $("#EXPENSE_AMT").val("0");
+                alert("You have Entered an Amount Greater than Due Amount.");
+            }
+        }
+        else {
+            var Amount = 0;
+            if (($("#MGMT_CODE").val() == '00000001') || ($("#MGMT_CODE").val() == '00000002') || ($("#MGMT_CODE").val() == '40000844'))
+                Amount = 1;
+            else
+                Amount = parseInt($("#TOT_DUE_AMT").val()) - parseInt($("#EXPENSE_AMT").val());
+            if (($("#HONORARIUM_NAME").val()) == '01' && Amount < 0) {
+                $("#EXPENSE_AMT").val("0");
+                alert("You have Entered an Amount Greater than Due Amount.");
+            }
+        }
+    }
+
+    function GetShareData() {
+        if ($('#PRESC_SHARE_FROM').val().length > 0 && $('#PRESC_SHARE_TO').val().length > 0) {
+            var Presc_Share_From = $("#PRESC_SHARE_FROM").val();
+            var Presc_Share_To = $("#PRESC_SHARE_TO").val();
+            var Market_Code = $("#MARKET_CODE").val();
+            var Doctor_ID = $("#DOCTOR_ID").val();
+            var Insti_Code = $("#INSTI_CODE").val();
+            $.ajax({
+                url: '/DoctorHonorariumPaid/GetShareData',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ Presc_Share_From: Presc_Share_From, Presc_Share_To: Presc_Share_To, Market_Code: Market_Code, Doctor_ID: Doctor_ID, Insti_Code: Insti_Code }),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.PRESC_SHARE_PCT != "0") {
+                        $("#PRESC_SHARE_PCT").val(data.PRESC_SHARE_PCT);
+                        $("#Msg").hide();
+                    }
+                    else if (data.PRESC_SHARE_PCT == "0" && data.RowCount != "0") {
+                        $("#PRESC_SHARE_PCT").val(data.PRESC_SHARE_PCT);
+                        $("#Msg").hide();
+                    }
+                    else {
+                        $("#Msg").show();
+                    }
+                }
+            });
+        }
+        else {
+            $('#PRESC_SHARE_PCT').val("");
+        }
+    }
+
+    //*********** DEFINE Therapeutic Leve-2 Window ***************************** //
+
+    var DoctorWindow = $('#DoctorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Doctor Detail Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-2 GRID ***************************** //
+
+    $('#btnClear').click(function () {
+        $('#txtName').val('');
+        $('#txtId').val('');
+        $('#txtDeg').val('');
+        $("#DoctorSearchGrid").data("kendoGrid").dataSource.data([]);
+    });
+
+    $('#btnSearchDoctor').click(function () {
+        var userRole = @Session["roleID"];
+
+        if (userRole == 15){
+            DoctorListRSMandDSM();
+        }
+        else{
+            DoctorList();
+        }
+        
+
+
+    });
+
+
+    function DoctorListRSMandDSM() {
+        var doctorId = $('#txtId').val();
+        if (doctorId == '') {
+            doctorId = 0;
+        }
+        var doctorName = $('#txtName').val();
+        var degree = $('#txtDeg').val();
+        var regionCode = $('#REGION_CODE1').val();
+        var divisionCode = $('#DIVISION_CODE1').val();
+        var userRole = @Session["roleID"];
+        var userId = @Session["USER_ID"];
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetDoctorsDataRSMandDSM',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree, regionCode: regionCode, DivisionCode: divisionCode, userRole: userRole, userID: userId}),
+            dataType: 'json',
+            success: function (data) {
+                //$("#DoctorSearchGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length > 0) {
+                    $('#DoctorSearchGrid').data('kendoGrid').dataSource.data(data);
+                }
+                else {
+                    $("#DoctorSearchGrid").data("kendoGrid").dataSource.data([]);
+                    $("#DoctorSearchGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>No Record Found!</b></td></tr>');
+                }
+
+            }
+
+        });
+    }
+
+
+    function DoctorList() {
+        var doctorId = $('#txtId').val();
+        if (doctorId == '') {
+            doctorId = 0;
+        }
+        var doctorName = $('#txtName').val();
+        var degree = $('#txtDeg').val();
+        var regionCode = $('#REGION_CODE1').val();
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetDoctorsData',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree}),
+            dataType: 'json',
+            success: function (data) {
+                $("#DoctorSearchGrid").data("kendoGrid").dataSource.data(data);
+
+            }
+        });
+    }
+
+    //function DoctorListRSM() {
+    //    var doctorId = $('#txtId').val();
+    //    if (doctorId == '') {
+    //        doctorId = 0;
+    //    }
+    //    var doctorName = $('#txtName').val();
+    //    var degree = $('#txtDeg').val();
+    //    var regionCode = $('#REGION_CODE1').val();
+    //    $.ajax({
+    //        url: '/DoctorHonorariumPaid/GetDoctorsDataRSM',
+    //        type: 'post',
+    //        contentType: 'application/json;charset=utf-8',
+    //        data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree, regionCode: regionCode}),
+    //        dataType: 'json',
+    //        success: function (data) {
+    //            //$("#DoctorSearchGrid").data("kendoGrid").dataSource.data(data);
+    //            if (data.length > 0) {
+    //                $('#DoctorSearchGrid').data('kendoGrid').dataSource.data(data);
+    //            }
+    //            else {
+    //                $("#DoctorSearchGrid").data("kendoGrid").dataSource.data([]);
+    //                $("#DoctorSearchGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>No Record Found!</b></td></tr>');
+    //            }
+
+    //        }
+
+    //    });
+    //}
+
+    //function DoctorListDSM() {
+    //    var doctorId = $('#txtId').val();
+    //    if (doctorId == '') {
+    //        doctorId = 0;
+    //    }
+    //    var doctorName = $('#txtName').val();
+    //    var degree = $('#txtDeg').val();
+    //    var divisionCode = $('#DIVISION_CODE1').val();
+    //    $.ajax({
+    //        url: '/DoctorHonorariumPaid/GetDoctorsDataDSM',
+    //        type: 'post',
+    //        contentType: 'application/json;charset=utf-8',
+    //        data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree, DivisionCode: divisionCode }),
+    //        dataType: 'json',
+    //        success: function (data) {
+    //            //$("#DoctorSearchGrid").data("kendoGrid").dataSource.data(data);
+    //            if (data.length > 0) {
+    //                $('#DoctorSearchGrid').data('kendoGrid').dataSource.data(data);
+    //            }
+    //            else {
+    //                $("#DoctorSearchGrid").data("kendoGrid").dataSource.data([]);
+    //                $("#DoctorSearchGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>No Record Found!</b></td></tr>');
+    //            }
+
+    //        }
+
+    //    });
+    //}
+
+    $('#DOCTOR_ID').bind('input', function () {
+        if ($('#DOCTOR_ID').val().length > 0) {
+            var userRole = @Session["roleID"];
+            var regionCode = $('#REGION_CODE1').val();
+            var divisionCode = $('#DIVISION_CODE1').val();
+            //var userRole = @Session["roleID"];
+            var userId = @Session["USER_ID"];
+            var doctorId = $("#DOCTOR_ID").val();
+            $.ajax({
+                url: '/DoctorHonorariumPaid/GetDoctorInfo',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ DoctorId: doctorId, regionCode: regionCode, DivisionCode: divisionCode, roleID: userRole, userID: userId }),
+                dataType: 'json',
+                success: function (data) {
+                    if (data != "") {
+
+                        if (data.Name != "") {
+                            $("#DOCTOR_NAME").val("");
+                            $("#DOCTOR_NAME").val(data.Name);
+                        }
+                        else {
+                            //alert("Invalid ID")
+                            $('#DOCTOR_NAME').val("Invalid ID");
+                        }
+                    }
+
+                    else {
+
+                    }
+
+                }
+            });
+        }
+        else {
+            $("#DOCTOR_NAME").val("");
+        }
+    });
+
+
+
+    var userRole = @Session["roleID"];
+    if (userRole == 15) {
+        GetManagement();
+    }
+    else {
+        $("#MGMT_CODE").val("");
+        $("#MGMT_NAME").val("");
+    }
+
+    var userId = @Session["USER_ID"];
+    var groupDsigCode = @Session["GRP_DSIG_CODE"];
+    if (userRole == 15) {
+        if(groupDsigCode == 5){
+            $("#DIVISION_NAME1").show();
+            $("#REGION_NAME1").hide();
+        }
+        else
+        {
+            $("#REGION_NAME1").show();
+            $("#DIVISION_NAME1").hide();
+        }
+        //if ((userId == 1053) || (userId == 1013) || (userId == 1813) || (userId == 513) || (userId == 1488) || (userId == 743) || (userId == 663) || (userId == 1090) || (userId == 664) || (userId == 2164)){
+        //    alert('ok1')
+        //    $("#DIVISION_NAME1").show();
+        //    $("#REGION_NAME1").hide();
+        //}
+        //else{
+        //    $("#DIVISION_NAME1").hide();
+        //    $("#REGION_NAME1").show();
+        //}
+    }
+
+    else{
+        $('label[for=a], input#REGION_NAME1').hide();
+        $('label[for=a], input#DIVISION_NAME1').hide();
+        //$("#DIVISION_NAME1").hide();
+        //$("#REGION_NAME1").hide();
+    }
+
+
+    function GetManagement() {
+        var mgmCode = @Session["USER_ID"]
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetManagement',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ managementCode: mgmCode }),
+            dataType: 'json',
+            success: function (data) {
+                //$.each(data, function (i, item) {
+                //    $('#MGMT_NAME').append($({ value: item.MGMT_CODE, html: item.MGMT_NAME }))
+                //});
+
+                $("#MGMT_CODE").val(data[0].MGMT_CODE);
+                $("#MGMT_NAME").val(data[0].MGMT_NAME);
+                $("#GRP_DSIG_CODE").val(data[0].GRP_DSIG_CODE);
+                $("#REGION_CODE1").val(data[0].REGION_CODE1);
+                $("#REGION_NAME1").val(data[0].REGION_NAME1);
+                $("#DIVISION_CODE1").val(data[0].DIVISION_CODE1);
+                $("#DIVISION_NAME1").val(data[0].DIVISION_NAME1);
+            }
+        });
+    };
+
+    function GetDoctorInvestmentInfo(value) {
+
+        var doctorId = value;
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetDonationInfoByDoctorID',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ DoctorId: doctorId }),
+            dataType: 'json',
+            success: function (data) {
+                if (data != "") {
+                    $("#DONATION").val(data.Donation);
+                    $("#MEDICINE").val(data.Medicine);
+                    $("#HONORARIUM").val(data.Honorarium);
+                    $("#GIFT").val(data.Gift);
+                    $("#OTHERS").val(data.Others);
+                    $("#DONSOCIETY").val(data.DonationSociety);
+                    $("#SHARE_PCT").val(data.CommitSharePct);
+                }
+                else {
+                    $("#DONATION").val("");
+                    $("#MEDICINE").val("");
+                    $("#HONORARIUM").val("");
+                    $("#GIFT").val("");
+                    $("#OTHERS").val("");
+                    $("#DONSOCIETY").val("");
+                    $("#SHARE_PCT").val("");
+                }
+            }
+        });
+    }
+
+    $('#DOCTOR_ID').change('input', function () {
+        if ($('#DOCTOR_ID').val().length > 0) {
+            GetDoctorInvestmentInfo($('#DOCTOR_ID').val());
+        }
+        else {
+            $("#DOCTOR_NAME").val("");
+        }
+    });
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#DOCTOR_ID").is(":focus")) {
+            if (e.keyCode == 120) {
+
+                openSearchDoctorWindow.open();
+            }
+        }
+    });
+
+    //Function For Specialization Grid
+    var openSearchDoctorWindow = $('#DoctorSearchGridWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "90%",
+        height: "65%",
+        title: "List Of Doctor Data.",
+        position: { top: 150, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    // Doctor Grid Search Window
+    var DoctorRelationGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DoctorId",
+                fields: {
+                    DoctorId: { editable: true },
+                    DoctorName: { editable: true }
+                }
+            }
+        }
+        //,
+        //pageSize: 5
+    });
+
+    var DoctorInfoGrid = $("#DoctorSearchGrid").kendoGrid({
+        dataSource: DoctorRelationGridDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 200,
+        filterable: {
+            extra: true,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    endswith: "Ends with",
+                    contains: "Contains",
+                    isequalto: "Is equal to"
+                }
+            }
+        },
+        columns: [
+                  { field: "DoctorId", title: "Doctor Id", width: "80px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "DoctorName", title: "Doctor Name", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "Degree", title: "Degree", width: "80px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "Address1", title: "Address1", width: "150px", filterable: true, hidden: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "Address2", title: "Address2", width: "150px", filterable: true, hidden: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "MarketCode", title: "Market Code", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "MarketName", title: "Market Name", width: "150px", filterable: true, hidden: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  
+                  { field: "Designation", title: "Designation", width: "120px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "SpeciFirstName", title: "Specialization1", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+        ]
+    });
+
+    $("#DoctorSearchGrid").dblclick(function () {
+        var gridData = $("#DoctorSearchGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $('#DOCTOR_ID').val(selectedItem.DoctorId);
+        $('#DOCTOR_NAME').val(selectedItem.DoctorName);
+        GetDoctorInvestmentInfo(selectedItem.DoctorId);
+        openSearchDoctorWindow.close();
+        $('#INSTI_CODE').focus();
+    });
+
+    $("#DoctorSearchGrid").click(function () {
+        var gridData = $("#DoctorSearchGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+        loadMarketPopUp(selectedItem.DoctorId);
+    });
+
+    function loadMarketPopUp(doctorId) {
+        $.ajax({
+            url: '/DoctorPracticeMarketInfo/GetSearchPopUpMktData',
+            method: 'post',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ doctorId: doctorId }),
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $('#DoctorMarketPopupGrid').data('kendoGrid').dataSource.data(data);
+                }
+                else {
+                    $("#DoctorMarketPopupGrid").data("kendoGrid").dataSource.data([]);
+                    $("#DoctorMarketPopupGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>No Record Found!</b></td></tr>');
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+
+    //********************************************** END of Therapeutic Leve-2 POP UP Window ****************************************************//
+
+    //**************************************************** START OF MARKET POP UP *******************************************
+
+    //*********** DEFINE Market Window ***************************** //
+
+    var MarketWindow = $('#MarketWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        //width: "1352px",
+        width: "100%",
+        height: "auto",
+        title: "List of Market Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    //*********** DEFINE Market GRID ***************************** //
+
+    var MarketDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MARKET_CODE",
+                fields: {
+                    MARKET_CODE: { editable: false, hidden: true },
+                    MARKET_NAME: { editable: false },
+                    TERRITORY_CODE: { editable: false },
+                    TERRITORY_NAME: { editable: false },
+                    ZONE_CODE: { editable: false },
+                    ZONE_NAME: { editable: false },
+                    DIVISION_CODE: { editable: false },
+                    DIVISION_NAME: { editable: false },
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var MarketGrid = $("#MarketGrid").kendoGrid({
+        dataSource: MarketDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        columns: [
+                    { field: "MARKET_CODE", title: "Market Code", width: "150px", filterable: true, hidden: false },
+                    { field: "MARKET_NAME", title: "Market Name", width: "150px", filterable: true },
+                    { field: "TERRITORY_CODE", title: "Territory Code", width: "150px", filterable: false, hidden: false },
+                    { field: "TERRITORY_NAME", title: "Territory Name", width: "150px", filterable: false },
+                    { field: "ZONE_CODE", title: "Zone Code", width: "150px", filterable: false, hidden: false },
+                    { field: "ZONE_NAME", title: "Zone Name", width: "150px", filterable: false },
+                    { field: "DIVISION_CODE", title: "Division Code", width: "150px", filterable: false, hidden: false },
+                    { field: "DIVISION_NAME", title: "Division Name", width: "150px", filterable: false },
+                    { field: "REGION_CODE", title: "Region Code", width: "150px", filterable: false, hidden: false },
+                    { field: "REGION_NAME", title: "Region Name", width: "150px", filterable: false }
+        ]
+    });
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#MARKET_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                if ($("#NATIONAL").val() == "N") {
+                    $("#divLoading").show();
+                        var userId = @Session["USER_ID"];
+                        var userRole = @Session["roleID"];
+                        var regionCode = $("#REGION_CODE1").val();
+                        var divisionCode = $("#DIVISION_CODE1").val();
+                    $.ajax({
+                        url: '@Url.Action("GetHonarariumPaidLocationList", "DoctorHonorariumPaid")',
+                        //type: "GET",
+                        //dataType: "JSON",
+                        //url: '/DoctorHonorariumPaid/GetDoctorsData',
+                        type: 'post',
+                        contentType: 'application/json;charset=utf-8',
+                        data: JSON.stringify({ userID: userId, roleID: userRole, DivisionCode: divisionCode, regionCode: regionCode }),
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#divLoading").hide();
+                            $("#MarketGrid").data("kendoGrid").dataSource.data(data);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('MarketGrid');
+                    MarketWindow.open();
+                    MarketWindow.center();
+                }
+            }
+        }
+    });
+
+    //function GetMarket() {
+    //    if ($('#MARKET_CODE').val().length > 0) {
+    //        var marketCode = $("#MARKET_CODE").val();
+    //        $.ajax({
+    //            url: '/DoctorHonorariumPaid/GetMarketID',
+    //            type: 'post',
+    //            contentType: 'application/json;charset=utf-8',
+    //            data: JSON.stringify({ marketCode: marketCode }),
+    //            dataType: 'json',
+    //            success: function (data) {
+    //                if (data.Name != "") {
+
+    //                    $("#MARKET_CODE").val(data.MARKET_CODE);
+    //                    $("#MARKET_NAME").val(data.MARKET_NAME);
+    //                    $("#TERRITORY_CODE").val(data.TERRITORY_CODE);
+    //                    $("#TERRITORY_NAME").val(data.TERRITORY_NAME);
+    //                    $("#ZONE_CODE").val(data.ZONE_CODE);
+    //                    $("#ZONE_NAME").val(data.ZONE_NAME);
+    //                    $("#DIVISION_CODE").val(data.DIVISION_CODE);
+    //                    $("#DIVISION_NAME").val(data.DIVISION_NAME);
+    //                    $("#REGION_CODE").val(data.REGION_CODE);
+    //                    $("#REGION_NAME").val(data.REGION_NAME);
+    //                }
+    //                else {
+    //                    $('#MARKET_NAME').val("Invalid Code");
+    //                    $("#TERRITORY_NAME").val("");
+    //                }
+    //            }
+    //        });
+    //    }
+    //    else {
+    //        $('#MARKET_NAME').val("");
+    //        $("#TERRITORY_NAME").val("");
+    //    }
+    //};
+
+
+    $('#MARKET_CODE').bind('input', function () {
+        if ($('#MARKET_CODE').val().length > 0) {
+            var userRole = @Session["roleID"];
+            var regionCode = $('#REGION_CODE1').val();
+            var divisionCode = $('#DIVISION_CODE1').val();
+            //var userRole = @Session["roleID"];
+            var userId = @Session["USER_ID"];
+            var marketCode = $("#MARKET_CODE").val();
+            $.ajax({
+                url: '/DoctorHonorariumPaid/GetMarketID',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ marketCode: marketCode, regionCode: regionCode, DivisionCode: divisionCode, roleID: userRole, userID: userId }),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.MARKET_NAME != null) {
+                        $("#MARKET_CODE").val(data.MARKET_CODE);
+                        $("#MARKET_NAME").val(data.MARKET_NAME);
+                        $("#TERRITORY_CODE").val(data.TERRITORY_CODE);
+                        $("#TERRITORY_NAME").val(data.TERRITORY_NAME);
+                        $("#ZONE_CODE").val(data.ZONE_CODE);
+                        $("#ZONE_NAME").val(data.ZONE_NAME);
+                        $("#DIVISION_CODE").val(data.DIVISION_CODE);
+                        $("#DIVISION_NAME").val(data.DIVISION_NAME);
+                        $("#REGION_CODE").val(data.REGION_CODE);
+                        $("#REGION_NAME").val(data.REGION_NAME);
+                    }
+                    else {
+                        $('#MARKET_NAME').val("Invalid Code");
+                        $("#TERRITORY_NAME").val("");
+                    }
+                }
+            });
+        }
+        else {
+            $('#MARKET_NAME').val("");
+            $("#TERRITORY_NAME").val("");
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnMarketWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent();
+        MarketWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnMarketWindowCancel').click(function () {
+        MarketWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#MarketWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent();
+        MarketWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#MarketWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent();
+            MarketWindow.close();
+        }
+        else if (keycode == '27') {
+            MarketWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent() {
+        var gridData = $("#MarketGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $("#MARKET_CODE").val(selectedItem.MARKET_CODE);
+        $("#MARKET_NAME").val(selectedItem.MARKET_NAME);
+        $("#TERRITORY_CODE").val(selectedItem.TERRITORY_CODE);
+        $("#TERRITORY_NAME").val(selectedItem.TERRITORY_NAME);
+        $("#ZONE_CODE").val(selectedItem.ZONE_CODE);
+        $("#ZONE_NAME").val(selectedItem.ZONE_NAME);
+        $("#DIVISION_CODE").val(selectedItem.DIVISION_CODE);
+        $("#DIVISION_NAME").val(selectedItem.DIVISION_NAME);
+        $("#REGION_CODE").val(selectedItem.REGION_CODE);
+        $("#REGION_NAME").val(selectedItem.REGION_NAME);
+
+        $("#SOCITY_NAME").focus();
+
+        changeStatus = 1;
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //*************************************************************** END OF MARKET POP UP ******************************************//
+
+
+
+    //*********** DEFINE Doctor Society Window ***************************** //
+
+    var DoctorSocietyWindow = $('#DoctorSocietyWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        //width: "1352px",
+        width: "100%",
+        height: "auto",
+        title: "List of DoctorSociety Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    //*********** DEFINE DoctorSociety GRID ***************************** //
+
+    var DoctorSocietyDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SOCITY_ID",
+                fields: {
+                    SOCITY_ID: { editable: false, hidden: true },
+                    SOCITY_NAME: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 10
+    });
+
+    var DoctorSocietyGrid = $("#DoctorSocietyGrid").kendoGrid({
+        dataSource: DoctorSocietyDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        columns: [
+
+                    { field: "SOCITY_NAME", title: "Society Association Name", width: "150px", filterable: true },
+                    { field: "SOCITY_ID", title: "Society Association Code", width: "150px", filterable: true }
+        ]
+    });
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#SOCITY_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetSocietyAssociationList", "DoctorHonorariumPaid")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#DoctorSocietyGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('DoctorSocietyGrid');
+                DoctorSocietyWindow.open();
+                DoctorSocietyWindow.center();
+            }
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnDoctorSocietyWindowOK').click(function () {
+        ListOfValueSocietyAssociationGridEvent();
+        DoctorSocietyWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnDoctorSocietyWindowCancel').click(function () {
+        DoctorSocietyWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#DoctorSocietyWindow").dblclick(function () {
+        ListOfValueSocietyAssociationGridEvent();
+        DoctorSocietyWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#DoctorSocietyWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueSocietyAssociationGridEvent();
+            DoctorSocietyWindow.close();
+        }
+        else if (keycode == '27') {
+            DoctorSocietyWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueSocietyAssociationGridEvent() {
+        var gridData = $("#DoctorSocietyGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $("#SOCIETY_ID").val(selectedItem.SOCIETY_ID);
+        $("#SOCITY_NAME").val(selectedItem.SOCITY_NAME);
+
+        $("#DOCTOR_ID").focus();
+        changeStatus = 1;
+    }
+
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //*************************************************************** END OF MARKET POP UP ******************************************//
+
+    //********************************************** START of MANAGEMENT POP UP Window ****************************************************//
+
+    //*********** DEFINE Therapeutic Leve-1 Window ***************************** //
+
+    var ManagementWindow = $('#ManagementWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        //width: "1352px",
+        width: "100%",
+        height: "auto",
+        title: "List of Management Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    //*********** DEFINE District GRID ***************************** //
+
+    var ManagementDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MGMT_CODE",
+                fields: {
+                    MGMT_CODE: { editable: false, hidden: true },
+                    MGMT_NAME: { editable: false },
+                    GRP_DSIG_CODE: { editable: false, hidden: true },
+                    GRP_DSIG_NAME: { editable: false }
+
+                }
+            }
+        }
+    });
+
+    var ManagementGrid = $("#ManagementGrid").kendoGrid({
+        dataSource: ManagementDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+                  { field: "MGMT_CODE", hidden: true, title: "Management Code", width: "100px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "MGMT_NAME", title: "Personnel Name", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "GRP_DSIG_CODE", hidden: true, title: "Management Code", width: "100px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "GRP_DSIG_NAME", title: "Management Name", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "REGION_CODE", hidden:true, title: "Region Code", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "REGION_NAME", title: "Location", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "DIVISION_CODE", hidden:true, title: "Division Code", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                  { field: "DIVISION_NAME",hidden:true, title: "Division Name", width: "100px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+
+
+        ]
+    });
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+
+        var userRole = @Session["roleID"];
+        if (userRole == 15) {
+
+            GetManagement();
+        }else{
+            //$("#MGMT_CODE").val("");
+            //$("#MGMT_NAME").val("");
+            if ($("#MGMT_NAME").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#divLoading").show();
+                    $.ajax({
+                        url: '@Url.Action("GetManagementList", "DoctorHonorariumPaid")',
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data) {
+                            $("#divLoading").hide();
+
+                            $("#ManagementGrid").data("kendoGrid").dataSource.data(data);
+
+
+                            //$("#REGION_CODE1").val(data.REGION_CODE);
+                            //$("#REGION_NAME1").val(data.REGION_NAME);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('ManagementGrid');
+                    ManagementWindow.open();
+                    ManagementWindow.center();
+                }
+            }
+        }
+
+    });
+
+    ////To Bring Data from List of Value Grid to Main Page
+    //function ListOfValueRegiInfoWindowGridEvent() {
+
+    //    var gridData = $("#RegiInfoWindowGrid").data("kendoGrid");
+    //    var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+    //    $("#REGION_CODE").val(selectedItem.REGION_CODE);
+    //    $("#REGION_NAME").val(selectedItem.REGION_NAME);
+    //    changeStatus = 1;
+
+    //}
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnManagementWindowOK').click(function () {
+        ListOfValueManagementGridEvent();
+        ManagementWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnManagementWindowCancel').click(function () {
+        ManagementWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#ManagementWindow").dblclick(function () {
+        ListOfValueManagementGridEvent();
+        ManagementWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#ManagementWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueManagementGridEvent();
+            ManagementWindow.close();
+        }
+        else if (keycode == '27') {
+            ManagementWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueManagementGridEvent() {
+
+        var gridData = $("#ManagementGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $("#GRP_DSIG_CODE").val(selectedItem.GRP_DSIG_CODE);
+        $("#MGMT_CODE").val(selectedItem.MGMT_CODE);
+        $("#MGMT_NAME").val(selectedItem.MGMT_NAME);
+        $("#REGION_CODE1").val(selectedItem.REGION_CODE);
+        $("#REGION_NAME1").val(selectedItem.REGION_NAME);
+        $("#DIVISION_CODE1").val(selectedItem.DIVISION_CODE);
+        $("#DIVISION_NAME1").val(selectedItem.DIVISION_NAME);
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetHonarariumTypeList',
+            method: 'get',
+            //data: { "GRP_DSIG_CODE": selectedItem.GRP_DSIG_CODE },
+            dataType: 'json',
+            success: function (data) {
+                if (data != '') {
+
+                        $("#HONORARIUM_NAME").html("");
+
+                    $('#HONORARIUM_NAME').append($('<option>', { value: "", html: "....Select...." }, '<option/>'))
+                    $.each(data, function (i, item) {
+                        $('#HONORARIUM_NAME').append($('<option>', { value: item.HONORARIUM_CODE, html: item.HONORARIUM_NAME }, '<option/>'))
+                    });
+                }
+                else {
+                    $("#HONORARIUM_NAME").html("");
+                    $('#HONORARIUM_NAME').append($('<option>', { value: "", html: "....Select...." }, '<option/>'))
+                }
+            }
+        });
+
+
+
+        $("#MARKET_CODE").focus();
+        changeStatus = 1;
+    }
+
+    if(userRole == 15){
+        honorariumType();
+    }
+    
+
+    function honorariumType() {
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetHonarariumTypeList',
+            method: 'get',
+            //data: { "GRP_DSIG_CODE": selectedItem.GRP_DSIG_CODE },
+            dataType: 'json',
+            success: function (data) {
+                if (data != '') {
+
+                    $("#HONORARIUM_NAME").html("");
+
+                    $('#HONORARIUM_NAME').append($('<option>', { value: "", html: "....Select...." }, '<option/>'))
+                    $.each(data, function (i, item) {
+                        $('#HONORARIUM_NAME').append($('<option>', { value: item.HONORARIUM_CODE, html: item.HONORARIUM_NAME }, '<option/>'))
+                    });
+                }
+                else {
+                    $("#HONORARIUM_NAME").html("");
+                    $('#HONORARIUM_NAME').append($('<option>', { value: "", html: "....Select...." }, '<option/>'))
+                }
+            }
+        });
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of MANAGEMENT POP UP Window ****************************************************//
+
+    //************************************************* STRAT OF INSTITUTE POP UP WINDOW ***********************************************//
+
+
+    //*********** DEFINE Institute Window ***************************** //
+
+    var InstituteWindow = $('#InstituteWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        //width: "1352px",
+        width: "100%",
+        height: "auto",
+        title: "List of Institute Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+    //*********** DEFINE District GRID ***************************** //
+
+    var InstituteDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "INSTI_CODE",
+                fields: {
+                    INSTI_CODE: { editable: false, hidden: true },
+                    INSTI_NAME: { editable: false }
+                }
+            }
+        }
+    });
+
+    var InstituteGrid = $("#InstituteGrid").kendoGrid({
+        dataSource: InstituteDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        columns: [
+                  { field: "INSTI_CODE", title: "Institute Code", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                  { field: "INSTI_NAME", title: "Institute Name", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+        ]
+    });
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#INSTI_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                var userId = @Session["USER_ID"];
+                var userRole = @Session["roleID"];
+                var regionCode = $("#REGION_CODE1").val();
+                var divisionCode = $("#DIVISION_CODE1").val();
+                $.ajax({
+                    @*url: '@Url.Action("GetInstitutionList", "DoctorHonorariumPaid")',
+                    type: "GET",
+                    dataType: "JSON",*@
+                    url: '/DoctorHonorariumPaid/GetInstitutionList',
+                    type: 'post',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify({userID: userId, roleID: userRole, regionCode: regionCode, DivisionCode: divisionCode }),
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#InstituteGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('InstituteGrid');
+                InstituteWindow.open();
+                InstituteWindow.center();
+            }
+        }
+    });
+
+
+    $('#INSTI_CODE').bind('input', function () {
+        if ($('#INSTI_CODE').val().length > 0) {
+            var instCode = $("#INSTI_CODE").val();
+            var userRole = @Session["roleID"];
+            var regionCode = $('#REGION_CODE1').val();
+            var divisionCode = $('#DIVISION_CODE1').val();
+            //var userRole = @Session["roleID"];
+            var userId = @Session["USER_ID"];
+            $.ajax({
+                url: '/DoctorHonorariumPaid/GetInstiID',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ instCode: instCode,roleID:userRole,regionCode:regionCode,DivisionCode:divisionCode, userID:userId }),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Name != "") {
+                        $("#INSTI_NAME").val("");
+                        $("#INSTI_NAME").val(data.Name);
+                    }
+                    else {
+                        $('#INSTI_NAME').val("Invalid Code");
+                    }
+                }
+            });
+        }
+        else {
+            $("#INSTI_NAME").val("");
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnInstituteWindowOK').click(function () {
+        ListOfValueOpeningInstituteGridEvent();
+        InstituteWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnInstituteWindowCancel').click(function () {
+        InstituteWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#InstituteWindow").dblclick(function () {
+        ListOfValueOpeningInstituteGridEvent();
+        InstituteWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#InstituteWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningInstituteGridEvent();
+            InstituteWindow.close();
+        }
+        else if (keycode == '27') {
+            InstituteWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningInstituteGridEvent() {
+        var grid = $('#InstituteGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+        $("#INSTI_CODE").val(selectedItem.INSTI_CODE);
+        $("#INSTI_NAME").val(selectedItem.INSTI_NAME);
+
+        $("#HONORARIUM_NAME").focus();
+
+        changeStatus = 1;
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //************************************************* END OF INSTITUTE POP UP WINDOW *************************************************//
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#Status").val("Active");
+            $("#HONOR_PAID_SLNO").removeAttr("disabled");
+            location.reload();
+        }
+    });
+
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+    var honarariumPaidInfoViewModel = {
+        "HONOR_PAID_SLNO": "", "HONOR_APROV_NO": "", "HONOR_APROV_DATE": "", "NATIONAL": "", "SOCIETY_ID": "", "SOCIETY_NAME": ""
+        , "EXPENSE_DETAILS": "", "EXPENSE_AMT": "", "EXPENSE_FROM": "", "EXPENSE_TO": "", "PRESC_SHARE_PCT": ""
+        , "PRESC_SHARE_FROM": "", "PRESC_SHARE_TO": "", "COMITMENT_SHARE_PCT": "", "PRESENT_SHARE_DURATION": "", "DURATION_FROM": ""
+        , "DURATION_TO": "", "MGMT_CODE": "", "LOCATION_CODE": "", "REGION_CODE1": "","DIVISION_CODE1": "", "DOCTOR_ID": "", "HONORARIUM_CODE": "","HONORARIUM_MONTH": "", "INSTI_CODE": ""
+        , "ZONE_CODE": "", "ZONE_NAME": "", "DIVISION_CODE": "", "DIVISION_NAME": "", "REGION_CODE": "", "REGION_NAME": ""
+        , "TERRITORY_CODE": "", "TERRITORY_NAME": "", "MARKET_CODE": "", "MARKET_NAME": "", "OTHER_REMARKS": "", "ADDITIONAL_COMITMENT": ""
+    };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        var mngmtName = $("#MGMT_NAME").val()
+
+        CheckRequiredTextBoxMaxLength('HONOR_APROV_DATE', 10);
+        CheckRequiredTextBoxMaxLength('MGMT_NAME', 50);
+        CheckRequiredTextBoxMaxLength('HONORARIUM_NAME', 10);
+        CheckRequiredTextBoxMaxLength('EXPENSE_DETAILS', 200);
+
+
+
+        if ($("#SUStatus").val() == 1) {
+            var Amount = 0;
+            if (($("#MGMT_CODE").val() == '00000001') || ($("#MGMT_CODE").val() == '00000002') || ($("#MGMT_CODE").val() == '40000844'))
+                Amount = 1;
+            else
+                Amount = (parseInt($("#CURR_APPROVED_AMT").val()) + parseInt($("#TOT_DUE_AMT").val())) - parseInt($("#EXPENSE_AMT").val());
+            if (($("#HONORARIUM_NAME").val()) == '01' && Amount < 0)
+                alert("You have Entered an Amount Greater than Due Amount.");
+            else {
+                // Check Save Proper Data
+                if (saveStatus == 1) {
+                    honarariumPaidInfoViewModel.HONOR_PAID_SLNO = $("#HONOR_PAID_SLNO").val();
+                    honarariumPaidInfoViewModel.HONOR_APROV_NO = $("#HONOR_APROV_NO").val();
+                    honarariumPaidInfoViewModel.HONOR_APROV_DATE = $("#HONOR_APROV_DATE").val();
+                    honarariumPaidInfoViewModel.NATIONAL = $("#NATIONAL").val();
+                    honarariumPaidInfoViewModel.SOCIETY_ID = $("#SOCIETY_ID").val();
+                    honarariumPaidInfoViewModel.EXPENSE_DETAILS = $("#EXPENSE_DETAILS").val();
+                    honarariumPaidInfoViewModel.EXPENSE_AMT = $("#EXPENSE_AMT").val();
+                    honarariumPaidInfoViewModel.EXPENSE_FROM = $("#EXPENSE_FROM").val();
+                    honarariumPaidInfoViewModel.EXPENSE_TO = $("#EXPENSE_TO").val();
+                    honarariumPaidInfoViewModel.PRESC_SHARE_PCT = $("#PRESC_SHARE_PCT").val();
+                    honarariumPaidInfoViewModel.PRESC_SHARE_FROM = $("#PRESC_SHARE_FROM").val();
+                    honarariumPaidInfoViewModel.PRESC_SHARE_TO = $("#PRESC_SHARE_TO").val();
+                    honarariumPaidInfoViewModel.COMITMENT_SHARE_PCT = $("#COMITMENT_SHARE_PCT").val();
+                    honarariumPaidInfoViewModel.PRESENT_SHARE_DURATION = $("#PRESENT_SHARE_DURATION").val();
+                    honarariumPaidInfoViewModel.DURATION_FROM = $("#DURATION_FROM").val();
+                    honarariumPaidInfoViewModel.DURATION_TO = $("#DURATION_TO").val();
+                    honarariumPaidInfoViewModel.MGMT_CODE = $("#MGMT_CODE").val();
+                    honarariumPaidInfoViewModel.LOCATION_CODE = $("#REGION_CODE1").val();
+                    honarariumPaidInfoViewModel.LOCATION_CODE = $("#DIVISION_CODE1").val();
+
+                    honarariumPaidInfoViewModel.GRP_DSIG_CODE = $("#GRP_DSIG_CODE").val();
+                    honarariumPaidInfoViewModel.MGMT_NAME = $("#MGMT_NAME").val();
+                    honarariumPaidInfoViewModel.DOCTOR_ID = $("#DOCTOR_ID").val();
+                    honarariumPaidInfoViewModel.HONORARIUM_CODE = $("#HONORARIUM_NAME").val();
+                    honarariumPaidInfoViewModel.INSTI_CODE = $("#INSTI_CODE").val();
+                    honarariumPaidInfoViewModel.ZONE_CODE = $("#ZONE_CODE").val();
+                    honarariumPaidInfoViewModel.ZONE_NAME = $("#ZONE_NAME").val();
+                    honarariumPaidInfoViewModel.DIVISION_CODE = $("#DIVISION_CODE").val();
+                    honarariumPaidInfoViewModel.DIVISION_NAME = $("#DIVISION_NAME").val();
+                    honarariumPaidInfoViewModel.REGION_CODE = $("#REGION_CODE").val();
+                    honarariumPaidInfoViewModel.REGION_NAME = $("#REGION_NAME").val();
+                    honarariumPaidInfoViewModel.TERRITORY_CODE = $("#TERRITORY_CODE").val();
+                    honarariumPaidInfoViewModel.TERRITORY_NAME = $("#TERRITORY_NAME").val();
+                    honarariumPaidInfoViewModel.MARKET_CODE = $("#MARKET_CODE").val();
+                    honarariumPaidInfoViewModel.MARKET_NAME = $("#MARKET_NAME").val();
+                    honarariumPaidInfoViewModel.MON_CELI_AMT = $("#MON_CELI_AMT").val();
+                    honarariumPaidInfoViewModel.TOT_APPROVED_AMT = $("#EXPENSE_AMT").val();
+                    honarariumPaidInfoViewModel.TOT_DUE_AMT = parseInt($("#MON_CELI_AMT").val()) - (parseInt($("#TOT_APPROVED_AMT").val()) + parseInt($("#EXPENSE_AMT").val())); //parseInt($("#TOT_DUE_AMT").val()) + parseInt($("#EXPENSE_AMT").val());// $("#TOT_DUE_AMT").val();
+                    honarariumPaidInfoViewModel.EXPENSE_DURATION = $("#EXPENSE_DURATION").val();
+                    honarariumPaidInfoViewModel.PRESENT_SHARE_DURATION = $("#PRESENT_SHARE_DURATION").val();
+                    honarariumPaidInfoViewModel.ADDITIONAL_COMITMENT = $("#ADDITIONAL_COMITMENT").val();
+                    honarariumPaidInfoViewModel.OTHER_REMARKS = $("#OTHER_REMARKS").val();
+                    honarariumPaidInfoViewModel.SUStatus = $("#SUStatus").val();
+
+                    honarariumPaidInfoViewModel.DoctorCommitProductList = [];
+                    var detailDataSource = $('#PageDetailGrid').data("kendoGrid").dataSource;
+                    var detailData = detailDataSource.data();
+
+                    for (var i = 0; i < detailData.length; i++) {
+                        var detailModel = {};
+                        detailModel.DOC_COMMI_PROD_SLNO = detailData[i].DOC_COMMI_PROD_SLNO;
+                        detailModel.PROD_ID = detailData[i].PROD_ID;
+                        detailModel.PRODUCT_DETAILS = detailData[i].PRODUCT_DETAILS;
+                        honarariumPaidInfoViewModel.DoctorCommitProductList.push(detailModel);
+                    }
+
+                    if (changeStatus == 1) {
+                        $("#divLoading").show();
+                        $.ajax({
+                            url: '@Url.Action("SaveAndUpdateData", "DoctorHonorariumPaid")',
+                            data: JSON.stringify(honarariumPaidInfoViewModel),
+                            type: 'POST',
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.msg.Type == 2) {
+                                    changeStatus = 0;
+                                    $('#HONOR_PAID_SLNO').val(response.Code);
+                                    $('#HONOR_APROV_NO').val(response.AprovNo);
+                                    $("#SUStatus").val(1);
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $.ajax({
+                                        url: '@Url.Action("GetSaveDocCommitProductList", "DoctorHonorariumPaid")',
+                                        type: 'GET',
+                                        data: { HONOR_PAID_SLNO: $("#HONOR_PAID_SLNO").val() },
+                                        success: function (data33) {
+                                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                        }
+                                    });
+                                }
+                                else if (response.msg.Type == 3) {
+                                    changeStatus = 0;
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $.ajax({
+                                        url: '@Url.Action("GetSaveDocCommitProductList", "DoctorHonorariumPaid")',
+                                        type: 'GET',
+                                        data: { HONOR_PAID_SLNO: $("#HONOR_PAID_SLNO").val() },
+                                        success: function (data33) {
+                                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                        }
+                                    });
+                                }
+                                else {
+                                    changeStatus = 0;
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            },
+                            complete: function (data) {
+                                $("#divLoading").hide();
+                            }
+                        });
+                    }
+                        // No Changes Exiting Data
+                    else {
+                        $("#MessageText").html("No Changes to Save.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#HONOR_PAID_SLNO").focus();
+                    }
+                }
+            }
+        }
+        else {
+            var Amount = 0;
+            if (($("#MGMT_CODE").val() == '00000001') || ($("#MGMT_CODE").val() == '00000002') || ($("#MGMT_CODE").val() == '40000844'))
+                Amount = 1;
+            else
+                Amount = parseInt($("#TOT_DUE_AMT").val()) - parseInt($("#EXPENSE_AMT").val());
+            if (($("#HONORARIUM_NAME").val()) == '01' && Amount < 0)
+                alert("You have Entered an Amount Greater than Due Amount.");
+            else {
+                // Check Save Proper Data
+                if (saveStatus == 1) {
+                    honarariumPaidInfoViewModel.HONOR_PAID_SLNO = $("#HONOR_PAID_SLNO").val();
+                    honarariumPaidInfoViewModel.HONOR_APROV_NO = $("#HONOR_APROV_NO").val();
+                    honarariumPaidInfoViewModel.HONOR_APROV_DATE = $("#HONOR_APROV_DATE").val();
+                    honarariumPaidInfoViewModel.NATIONAL = $("#NATIONAL").val();
+                    honarariumPaidInfoViewModel.SOCIETY_ID = $("#SOCIETY_ID").val();
+                    honarariumPaidInfoViewModel.EXPENSE_DETAILS = $("#EXPENSE_DETAILS").val();
+                    honarariumPaidInfoViewModel.EXPENSE_AMT = $("#EXPENSE_AMT").val();
+                    honarariumPaidInfoViewModel.EXPENSE_FROM = $("#EXPENSE_FROM").val();
+                    honarariumPaidInfoViewModel.EXPENSE_TO = $("#EXPENSE_TO").val();
+                    honarariumPaidInfoViewModel.PRESC_SHARE_PCT = $("#PRESC_SHARE_PCT").val();
+                    honarariumPaidInfoViewModel.PRESC_SHARE_FROM = $("#PRESC_SHARE_FROM").val();
+                    honarariumPaidInfoViewModel.PRESC_SHARE_TO = $("#PRESC_SHARE_TO").val();
+                    honarariumPaidInfoViewModel.COMITMENT_SHARE_PCT = $("#COMITMENT_SHARE_PCT").val();
+                    honarariumPaidInfoViewModel.PRESENT_SHARE_DURATION = $("#PRESENT_SHARE_DURATION").val();
+                    honarariumPaidInfoViewModel.DURATION_FROM = $("#DURATION_FROM").val();
+                    honarariumPaidInfoViewModel.DURATION_TO = $("#DURATION_TO").val();
+                    honarariumPaidInfoViewModel.MGMT_CODE = $("#MGMT_CODE").val();
+                    honarariumPaidInfoViewModel.LOCATION_CODE = $("#REGION_CODE1").val();
+                    honarariumPaidInfoViewModel.LOCATION_CODE = $("#DIVISION_CODE1").val();
+                    honarariumPaidInfoViewModel.GRP_DSIG_CODE = $("#GRP_DSIG_CODE").val();
+                    honarariumPaidInfoViewModel.MGMT_NAME = $("#MGMT_NAME").val();
+                    honarariumPaidInfoViewModel.DOCTOR_ID = $("#DOCTOR_ID").val();
+                    honarariumPaidInfoViewModel.HONORARIUM_CODE = $("#HONORARIUM_NAME").val();
+                    honarariumPaidInfoViewModel.INSTI_CODE = $("#INSTI_CODE").val();
+                    honarariumPaidInfoViewModel.ZONE_CODE = $("#ZONE_CODE").val();
+                    honarariumPaidInfoViewModel.ZONE_NAME = $("#ZONE_NAME").val();
+                    honarariumPaidInfoViewModel.DIVISION_CODE = $("#DIVISION_CODE").val();
+                    honarariumPaidInfoViewModel.DIVISION_NAME = $("#DIVISION_NAME").val();
+                    honarariumPaidInfoViewModel.REGION_CODE = $("#REGION_CODE").val();
+                    honarariumPaidInfoViewModel.REGION_NAME = $("#REGION_NAME").val();
+                    honarariumPaidInfoViewModel.TERRITORY_CODE = $("#TERRITORY_CODE").val();
+                    honarariumPaidInfoViewModel.TERRITORY_NAME = $("#TERRITORY_NAME").val();
+                    honarariumPaidInfoViewModel.MARKET_CODE = $("#MARKET_CODE").val();
+                    honarariumPaidInfoViewModel.MARKET_NAME = $("#MARKET_NAME").val();
+                    honarariumPaidInfoViewModel.ADDITIONAL_COMITMENT = $("#ADDITIONAL_COMITMENT").val();
+                    honarariumPaidInfoViewModel.OTHER_REMARKS = $("#OTHER_REMARKS").val();
+                    honarariumPaidInfoViewModel.MON_CELI_AMT = $("#MON_CELI_AMT").val();
+                    honarariumPaidInfoViewModel.TOT_APPROVED_AMT = parseInt($("#TOT_APPROVED_AMT").val()) + parseInt($("#EXPENSE_AMT").val());//$("#TOT_APPROVED_AMT").val();
+                    honarariumPaidInfoViewModel.TOT_DUE_AMT = parseInt($("#MON_CELI_AMT").val()) - (parseInt($("#TOT_APPROVED_AMT").val()) + parseInt($("#EXPENSE_AMT").val())); //parseInt($("#TOT_DUE_AMT").val()) + parseInt($("#EXPENSE_AMT").val());// $("#TOT_DUE_AMT").val();
+                    honarariumPaidInfoViewModel.EXPENSE_DURATION = $("#EXPENSE_DURATION").val();
+                    honarariumPaidInfoViewModel.PRESENT_SHARE_DURATION = $("#PRESENT_SHARE_DURATION").val();
+                    honarariumPaidInfoViewModel.SUStatus = $("#SUStatus").val();
+
+                    honarariumPaidInfoViewModel.DoctorCommitProductList = [];
+                    var detailDataSource = $('#PageDetailGrid').data("kendoGrid").dataSource;
+                    var detailData = detailDataSource.data();
+
+                    for (var i = 0; i < detailData.length; i++) {
+                        var detailModel = {};
+                        detailModel.DOC_COMMI_PROD_SLNO = detailData[i].DOC_COMMI_PROD_SLNO;
+                        detailModel.PROD_ID = detailData[i].PROD_ID;
+                        detailModel.PRODUCT_DETAILS = detailData[i].PRODUCT_DETAILS;
+
+                        honarariumPaidInfoViewModel.DoctorCommitProductList.push(detailModel);
+                    }
+
+                    if (changeStatus == 1) {
+                        $("#divLoading").show();
+                        $.ajax({
+                            url: '@Url.Action("SaveAndUpdateData", "DoctorHonorariumPaid")',
+                            data: JSON.stringify(honarariumPaidInfoViewModel),
+                            type: 'POST',
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.msg.Type == 2) {
+                                    changeStatus = 0;
+                                    $('#HONOR_PAID_SLNO').val(response.Code);
+                                    $('#HONOR_APROV_NO').val(response.AprovNo);
+                                    $("#SUStatus").val(1);
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $.ajax({
+                                        url: '@Url.Action("GetSaveDocCommitProductList", "DoctorHonorariumPaid")',
+                                        type: 'GET',
+                                        data: { HONOR_PAID_SLNO: $("#HONOR_PAID_SLNO").val() },
+                                        success: function (data33) {
+                                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                        }
+                                    });
+                                }
+                                else if (response.msg.Type == 3) {
+                                    changeStatus = 0;
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $.ajax({
+                                        url: '@Url.Action("GetSaveDocCommitProductList", "DoctorHonorariumPaid")',
+                                        type: 'GET',
+                                        data: { HONOR_PAID_SLNO: $("#HONOR_PAID_SLNO").val() },
+                                        success: function (data33) {
+                                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                        }
+                                    });
+                                }
+                                else {
+                                    changeStatus = 0;
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            },
+                            complete: function (data) {
+                                $("#divLoading").hide();
+                            }
+                        });
+                    }
+                        // No Changes Exiting Data
+                    else {
+                        $("#MessageText").html("No Changes to Save.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#HONOR_PAID_SLNO").focus();
+                    }
+                }
+            }
+        }
+    };
+    //************************* END of SAVE Function *******************************************//
+
+    //******************************************** SEARCH DistrictUpazila DATA **********************************************************//
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "90%",
+        height: "auto",
+        title: "Search Doctor Paid Honararium Data",
+        position: { top: 150, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    $("#btnSearch").click(function () {
+        //resetEditDeleteStatus = 2;
+        //// When Chages Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Chages Data
+        //else {
+        //    ClearOperationalMessage();
+        //    $(".RequiredTextBox").css("border-color", "");
+        //    //GetMasterInformation();
+        //    SelectedItemOfListOfValue('SearchWindowGrid');
+        //    SearchWindow.open();
+        //    $("#txtAprovNo").focus();
+        //    document.getElementById('txtAprovNo').focus();
+        //}
+        SearchWindow.open();
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "HONOR_PAID_SLNO",
+                fields: {
+                    HONOR_PAID_SLNO: { editable: false },
+                    HONOR_APROV_NO: { editable: false },
+                    MARKET_CODE: { editable: false },
+                    MARKET_NAME: { editable: false },
+                    DOCTOR_ID: { editable: false },
+                    DOCTOR_NAME: { editable: false },
+                    INSTI_NAME: { editable: false },
+                    SOCITY_NAME: { editable: false },
+                    ENTERED_BY: { editable: false },
+                    MGMT_CODE: { editable: false },
+                    MGMT_NAME: { editable: false }
+                }
+            }
+        },
+
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "HONOR_PAID_SLNO", hidden: true },
+            { field: "HONOR_APROV_NO", title: "Honorarium Approve No.", filterable: true, width: "90px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "MGMT_NAME", title: "Management Name", width: "80px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "DOCTOR_ID", title: "Doctor Code", filterable: true, width: "55px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "DOCTOR_NAME", title: "Doctor Name", filterable: true, width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "MARKET_CODE", title: "Market Code", filterable: true, width: "55px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "MARKET_NAME", title: "Market Name", filterable: true, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "INSTI_NAME", title: "Institute Name", filterable: true, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "SOCITY_NAME", title: "Society Name", filterable: true, width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "ENTERED_BY", title: "ENTERED BY", filterable: true, width: "55px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+            { field: "MGMT_CODE", hidden: true }
+        ]
+    });
+
+
+    $('#btnClearHonorarium').click(function () {
+        $('#txtNameDocHon').val('');
+        $('#txtIdDocHon').val('');
+        $('#txtApprovNo').val('');
+        $('#txtDonAmt').val('');
+        $("#SearchWindowGrid").data("kendoGrid").dataSource.data([]);
+    });
+
+    $('#btnSearchHonorarium').click(function () {
+        
+        GetMasterInformation();
+
+    });
+
+    function GetMasterInformation() {
+
+        var roleId = @Session["roleID"];
+        var userId = @Session["USER_ID"];
+        var doctorId = $('#txtIdDocHon').val();
+        if (doctorId == '') {
+            doctorId = 0;
+        }
+        var doctorName = $('#txtNameDocHon').val();
+        var approvNo = $('#txtApprovNo').val();
+        var donAmount = $('#txtDonAmt').val();
+        if (donAmount == '') {
+            donAmount = 0;
+        }
+
+        
+        $("#divLoading").show();
+
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetSearchList',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({ roleID: roleId, userID: userId, doctorId: doctorId, doctorName: doctorName, approvNo: approvNo, donAmount: donAmount }),
+            dataType: 'json',
+            //url: '@Url.Action("GetSearchList", "DoctorHonorariumPaid")',
+            //type: 'GET',
+            success: function (data) {
+                //$("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                if (data.length > 0) {
+                    $('#SearchWindowGrid').data('kendoGrid').dataSource.data(data);
+                }
+                else {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data([]);
+                    $("#SearchWindowGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>No Record Found!</b></td></tr>');
+                }
+            },
+            complete: function (data) {
+                $("#divLoading").hide();
+            }
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+
+        $("#HONOR_PAID_SLNO").val(selectedItem.HONOR_PAID_SLNO);
+        $("#HONOR_APROV_NO").val(selectedItem.HONOR_APROV_NO);
+        $("#HONOR_APROV_DATE").val(selectedItem.HONOR_APROV_DATE);
+        $("#NATIONAL").val(selectedItem.NATIONAL);
+        $("#SOCIETY_ID").val(selectedItem.SOCIETY_ID);
+        $("#HONORARIUM_CODE").val(selectedItem.HONORARIUM_CODE);
+        $("#SOCITY_NAME").val(selectedItem.SOCITY_NAME);
+        $("#EXPENSE_DETAILS").val(selectedItem.EXPENSE_DETAILS);
+        $("#EXPENSE_AMT").val(selectedItem.EXPENSE_AMT);
+        $("#EXPENSE_FROM").val(selectedItem.EXPENSE_FROM);
+        $("#EXPENSE_TO").val(selectedItem.EXPENSE_TO);
+        $("#PRESC_SHARE_PCT").val(selectedItem.PRESC_SHARE_PCT);
+        $("#PRESC_SHARE_FROM").val(selectedItem.PRESC_SHARE_FROM);
+        $("#PRESC_SHARE_TO").val(selectedItem.PRESC_SHARE_TO);
+        $("#COMITMENT_SHARE_PCT").val(selectedItem.COMITMENT_SHARE_PCT);
+        $("#PRESENT_SHARE_DURATION").val(selectedItem.PRESENT_SHARE_DURATION);
+        $("#DURATION_FROM").val(selectedItem.DURATION_FROM);
+        $("#DURATION_TO").val(selectedItem.DURATION_TO);
+        $("#MGMT_CODE").val(selectedItem.MGMT_CODE);
+        $("#MGMT_NAME").val(selectedItem.MGMT_NAME);//
+        $("#DOCTOR_ID").val(selectedItem.DOCTOR_ID);
+        $("#DOCTOR_NAME").val(selectedItem.DOCTOR_NAME);
+        $("#OTHER_REMARKS").val(selectedItem.OTHER_REMARKS);
+        $("#ADDITIONAL_COMITMENT").val(selectedItem.ADDITIONAL_COMITMENT);
+
+        $("#INSTI_CODE").val(selectedItem.INSTI_CODE);
+        $("#INSTI_NAME").val(selectedItem.INSTI_NAME);
+        $("#ZONE_CODE").val(selectedItem.ZONE_CODE);
+        $("#ZONE_NAME").val(selectedItem.ZONE_NAME);
+        $("#DIVISION_CODE").val(selectedItem.DIVISION_CODE);
+        $("#DIVISION_NAME").val(selectedItem.DIVISION_NAME);
+        $("#REGION_CODE").val(selectedItem.REGION_CODE);
+        $("#REGION_NAME").val(selectedItem.REGION_NAME);
+        $("#TERRITORY_CODE").val(selectedItem.TERRITORY_CODE);
+        $("#TERRITORY_NAME").val(selectedItem.TERRITORY_NAME);
+        $("#MARKET_CODE").val(selectedItem.MARKET_CODE);
+        $("#MARKET_NAME").val(selectedItem.MARKET_NAME);
+        $("#CURR_APPROVED_AMT").val(selectedItem.TOT_APPROVED_AMT);
+        $("#GRP_DSIG_CODE").val(selectedItem.GRP_DSIG_CODE);
+
+        GetDoctorInvestmentInfo(selectedItem.DOCTOR_ID);
+
+        $.ajax({
+            url: '/DoctorHonorariumPaid/GetHonarariumTypeList',
+            method: 'get',
+            //data: { "MGMT_CODE": selectedItem.MGMT_CODE },
+            data: { "GRP_DSIG_CODE": selectedItem.GRP_DSIG_CODE },
+            dataType: 'json',
+            success: function (data) {
+                if (data != '') {
+                    $("#HONORARIUM_NAME").html("");
+                    $('#HONORARIUM_NAME').append($('<option>', { value: "", html: "....Select...." }, '<option/>'))
+                    $.each(data, function (i, item) {
+                        $('#HONORARIUM_NAME').append($('<option>', { value: item.HONORARIUM_CODE, html: item.HONORARIUM_NAME }, '<option/>'))
+                    });
+                    $("#HONORARIUM_NAME").val(selectedItem.HONORARIUM_CODE);//
+                }
+                else {
+                    $("#HONORARIUM_NAME").html("");
+                    $('#HONORARIUM_NAME').append($('<option>', { value: "", html: "....Select...." }, '<option/>'))
+                }
+            }
+        });
+
+        var yearMonth = $("#HONOR_APROV_DATE").val().split("/");
+        $.ajax({
+            url: '@Url.Action("GetCeilingAmount", "DoctorHonorariumPaid")',
+            type: "GET",
+            data: { "MGMT_CODE": selectedItem.MGMT_CODE, "HONORARIUM_NAME": selectedItem.HONORARIUM_CODE, "GRP_DSIG_CODE": selectedItem.GRP_DSIG_CODE, month: yearMonth[1], year: yearMonth[2] },
+            dataType: "JSON",
+            success: function (data) {
+                var amount = data.split("/");
+                //$("#EXPENSE_AMT").val("0");
+                $("#MON_CELI_AMT").val(amount[0]);
+                $("#TOT_APPROVED_AMT").val(amount[1]);
+                $("#TOT_DUE_AMT").val(amount[2]);
+            }
+        });
+        $("#EXPENSE_DURATION").val(selectedItem.EXPENSE_DURATION);
+        $("#PRESENT_SHARE_DURATION").val(selectedItem.PRESENT_SHARE_DURATION);;
+        $("#SUStatus").val(1);
+        $("#SUStatus").slideUp(300).delay(5000).fadeIn(400);
+
+        $.ajax({
+            url: '@Url.Action("GetSaveDocCommitProductList", "DoctorHonorariumPaid")',
+            type: 'GET',
+            data: { HONOR_PAID_SLNO: $("#HONOR_PAID_SLNO").val() },
+            success: function (data33) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+
+        changeStatus = 1;
+    }
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    ////////////////////
+
+    //Market Name twise Filter table row
+    $("#txtMarketCode").keyup(function () {
+        $("#MarketGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#MarketGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtManagement").keyup(function () {
+        $("#ManagementGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#ManagementGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Market Name twise Filter table row
+    $("#txtSocietyAssociation").keyup(function () {
+        $("#DoctorSocietyGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#DoctorSocietyGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+
+    //Institute Name twise Filter table row
+    $("#txtInstituteCode").keyup(function () {
+        $("#InstituteGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#InstituteGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Institute Name twise Filter table row
+    $("#txtProductInfo").keyup(function () {
+        $("#ProductWindowGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#ProductWindowGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Institute Name twise Filter table row
+    $("#txtAprovNo").keyup(function () {
+        $("#SearchWindowGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#SearchWindowGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //////////////////////////
+    ///////////////////////////
+
+    var dataSourceMktPop = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MarketCode",
+                fields: {
+                    MarketCode: { editable: false },
+                    MarketName: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    //To Define Columns for Color Kendo Grid
+    var gridMktPop = $('#DoctorMarketPopupGrid').kendoGrid({
+        dataSource: dataSourceMktPop,
+        width: 430,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "MarketName", title: "Market Name", width: 60, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "MarketCode", title: "Market Code", width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    }).data('kendoGrid');
+
+    //////////////////////////
+
+
+    ///////////////////Product Info/////////////////////////
+
+    $(document).on('keyup', '.ProdInfo', function (e) {
+        if (e.keyCode == 120) {
+            GetProductList();
+            SelectedItemOfListOfValue('ProductWindowGrid');
+            ProductWindow.open();
+        }
+    });
+
+    function GetProductList() {
+        $.ajax({
+            url: '@Url.Action("GetProductList", "DoctorHonorariumPaid")',
+            type: 'GET',
+            success: function (data) {
+                $("#ProductWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var ProductWindow = $('#ProductWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Division Information",
+        position: { top: 400, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ProductGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "PROD_ID",
+                fields: {
+                    PRODUCT_NAME: { editable: false },
+                    SAP_CODE: { editable: false },
+                    PROD_ID: { editable: false },
+                    PRODUCT_DETAILS: { editable: false }
+                }
+            }
+        }
+    });
+
+    var ProductGrid = $("#ProductWindowGrid").kendoGrid({
+        dataSource: ProductGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "PRODUCT_NAME", title: "Product Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "PROD_ID", title: "Product Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SAP_CODE", title: "SAP Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "PRODUCT_DETAILS", title: "Product Details", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+    var isDuplicate = 0;
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventProduct() {
+        var grid = $('#ProductWindowGrid').data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var dataSourceBillRef = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var dataBillRef = dataSourceBillRef.data(); // Get Detail Grid Data
+        for (var j = 0; j <= dataBillRef.length - 1; j++) {
+            if (dataBillRef[j].PROD_ID == selectedItem.PROD_ID) {
+                isDuplicate = 1;
+                break;
+            }
+        }
+        if (isDuplicate == 0) {
+            var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+            var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+            pageGridItem.set("SAP_CODE", selectedItem.SAP_CODE);
+            pageGridItem.set("PROD_ID", selectedItem.PROD_ID);
+            pageGridItem.set("PRODUCT_NAME", selectedItem.PRODUCT_NAME);
+            pageGridItem.set("PRODUCT_DETAILS", selectedItem.PRODUCT_DETAILS);
+
+            changeStatus = 1;
+        } else {
+            isDuplicate = 0;
+            alert("Duplicate Product.");
+        }
+    }
+
+    //Handling button click for Product window grid
+    $('#btnProductWindowOK').click(function () {
+        ListOfValueGridEventProduct();
+        ProductWindow.close();
+    });
+    $('#btnProductWindowCancel').click(function () {
+        ProductWindow.close();
+    });
+    $("#ProductWindow").dblclick(function () {
+        ListOfValueGridEventProduct();
+        ProductWindow.close();
+    });
+    $("#ProductWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventProduct();
+            ProductWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ProductWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ///////////////////////////////////////////////////////
+
+    $('#HONORARIUM_NAME').change(function () {
+        if (($("#MGMT_NAME").val() == '01') || ($("#MGMT_NAME").val() == '02') || ($("#MGMT_NAME").val() == '08')) {
+        }
+        else {
+            var yearMonth = $("#HONOR_APROV_DATE").val().split("/");
+            $.ajax({
+                url: '@Url.Action("GetCeilingAmount", "DoctorHonorariumPaid")',
+                type: "GET",
+                data: { "MGMT_CODE": $("#MGMT_CODE").val(), "HONORARIUM_NAME": $("#HONORARIUM_NAME").val(), "GRP_DSIG_CODE": $("#GRP_DSIG_CODE").val(), month: yearMonth[1], year: yearMonth[2] },
+                dataType: "JSON",
+                success: function (data) {
+                    var amount = data.split("/");
+                    $("#EXPENSE_AMT").val("0");
+                    $("#MON_CELI_AMT").val(amount[0]);
+                    $("#TOT_APPROVED_AMT").val(amount[1]);
+                    $("#TOT_DUE_AMT").val(amount[2]);
+                }
+            });
+        }
+    }
+);
+
+</script>
+

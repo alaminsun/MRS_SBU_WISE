@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmProductInfo", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Generate Report</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // create DatePicker from input HTML element
+        $(".datePicker").kendoDatePicker({
+            format: "dd/MM/yyyy",
+            value: new Date(),
+            //max: new Date()
+            editable: false,
+            change: function () {
+                changeStatus = 1;
+            }
+        });
+
+        //End of Document.Ready()
+        $("#btnReset").click(function () {
+            $('#MessageText').html('');
+            $(".txtBox").val("");
+            location.reload();
+        });
+    </script>
+}
+
+

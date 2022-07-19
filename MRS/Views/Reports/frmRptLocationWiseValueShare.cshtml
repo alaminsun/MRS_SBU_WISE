@@ -1,0 +1,290 @@
+﻿@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("frmRptLocationWiseValueShare", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: A4, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style="">National Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="NationalValueShare" name="ReportName" value="NationalValueShare" checked="checked" />
+                    </div><br />
+                    <label style="">National Value Share by Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="NationalValueShareValue" name="ReportName" value="NationalValueShareValue" />
+                    </div><br />
+                    @*<label style="">Zone Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ZoneValueSharePersent" name="ReportName" value="ZoneValueSharePersent" />
+                    </div><br />
+                    <label style="">Zone Value Share by Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ZoneValueShareValue" name="ReportName" value="ZoneValueShareValue" />
+                    </div><br />*@
+                    <label style="">Division/Zone Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="DivisionValueSharePersent" name="ReportName" value="DivisionValueSharePersent" />
+                    </div><br />
+                    <label style="">Division/Zone Value Share by Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="DivisionValueShareValue" name="ReportName" value="DivisionValueShareValue" />
+                    </div><br />
+                    <label style="">Region Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="RegionValueShare" name="ReportName" value="RegionValueSharePersent" />
+                    </div><br />
+                    <label style="">Region Value Share by Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="RegionValueShareValue" name="ReportName" value="RegionValueShareValue" />
+                    </div><br />
+                    <label style="">Territory Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="TerritoryValueShare" name="ReportName" value="TerritoryValueSharePersent" />
+                    </div><br />
+                    <label style="">Territory Value Share by Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="TerritoryValueShareValue" name="ReportName" value="TerritoryValueShareValue" />
+                    </div><br />
+                    <label style="">Market Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MarketValueShare" name="ReportName" value="MarketValueSharePersent" />
+                    </div><br />
+                    <label style="">Market Value Share Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MarketValueShareValue" name="ReportName" value="MarketValueShareValue" />
+                    </div><br />
+                    <label style="">Market Value Share Value (PMS)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MarketValueShareValuePMS" name="ReportName" value="MarketValueShareValuePMS" />
+                    </div><br />
+                    <label class="pull-left">  Paper : Legal,Lanadscape (Below Reports)</label>
+                    <label style="">Zone/Division,Region,Territory,Market Value Share by (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="DivisionRegionTerritoryMarketValueShare" name="ReportName" value="DivisionRegionTerritoryMarketValueShare" />
+                    </div><br />
+                    <label style="">Zone/Division,Region,Market,Territory Value Share by Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="DivisionRegionTerritoryMarketValueSharebyValue" name="ReportName" value="DivisionRegionTerritoryMarketValueSharebyValue" />
+                    </div><br />
+
+                </div>
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="col-lg-3">
+                        <label>From Date</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox RequiredTextBox datePickerold" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-3">
+                        <label>To Date</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="2" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-3">
+                        <label>Type</label>
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.DropDownList("PRESC_CATE_CODE", new SelectList(ViewBag.PrescriptionDropDownList, "PRESC_CATE_CODE", "PRESC_CATE_NAME"), new { @class = "txtBox", @style = "text-align: center", @tabindex = "3" }) 
+                    </div><br /><br />
+
+                    <div class="col-lg-3" >
+                        <label>Data Source</label>;
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.DropDownList("SURVEY_COMP_CODE",  new SelectList(ViewBag.DataSourceDropDownList, "SURVEY_COMP_CODE", "SURVEY_COMP_NAME"), new { @class = "txtBox", @style = "text-align: center", @tabindex = "4" })
+                    </div><br /><br />
+                        @*<div class="col-lg-3">
+                            <label>Region :</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <input type="hidden" id="REGION_CODE" name="REGION_CODE" class="txtBox RequiredTextBox" />
+                            <input type="text" id="REGION_NAME" name="REGION_NAME" tabindex="5" style="width:250px" class="txtBox RequiredTextBox" required="required" readonly="readonly" placeholder="(Press F9)">
+                        </div>*@
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+
+<div id="RegionWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="RegionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+    $(".datePickerold").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: "01/01/2000",
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "REGION_CODE",
+                fields: {
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetRegion", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "REGION_CODE", title: "Region Code", filterable: true, hidden: false, sortable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "REGION_NAME", title: "Region Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#REGION_CODE").val(WindowGridItem.REGION_CODE);
+        $("#REGION_NAME").val(WindowGridItem.REGION_NAME);
+        changeStatus = 1;
+    };
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+                RegionWindow.center();
+
+            }
+        }
+    });
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        //$(".txtBox").val("");
+        //location.reload();
+    });
+</script>

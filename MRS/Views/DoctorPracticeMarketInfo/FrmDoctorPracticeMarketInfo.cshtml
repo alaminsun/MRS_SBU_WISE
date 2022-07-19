@@ -1,0 +1,1130 @@
+﻿@{
+    ViewBag.Title = "Doctor Practice Market Information.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Doctor ID</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    <input type="hidden" id="DoctorMstSl" class="txtBox" />
+                    <input type="text" id="txtDoctorId" name="DoctorId" tabindex="1" class="txtBox RequiredTextBox" value="" placeholder="Press(f9)" readonly="readonly" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Registration No</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtRegistrationNo" tabindex="2" name="RegistrationNo" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Honorarium</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtHonorium" name="Honorium" tabindex="3" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Potential Category</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtPotentialCategory" name="PotentialCategory" tabindex="4" class="txtBox RequiredTextBox" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Name</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtDoctorName" name="DoctorName" tabindex="5" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Degree</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtDegree" tabindex="6" name="Degree" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*<div class="col-lg-3">
+                <label>Degree Category</label><label style="color: red">*</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtDegreeCategory" name="DegreeCategory" tabindex="7" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>*@
+
+                <div class="col-lg-3">
+                    <label>Designation</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtDesignation" tabindex="8" name="Designation" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*<div class="col-lg-3">
+                <label>Designation Category</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtDesignationCategory" name="DesignationCategory" tabindex="9" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>*@
+
+                <div class="col-lg-3">
+                    <label>Specialization</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtSpeciFirstName" tabindex="10" name="SpeciFirstName" readonly="readonly" class="txtBox RequiredTextBox" value="" />
+                </div>
+                <div class="col-lg-3">
+                    <label>2nd Specialization</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtSpeciSecondName" name="SpeciSecondName" tabindex="11" readonly="readonly" class="txtBox RequiredTextBox" value="" />
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Doctor Address-1</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtAddress1" name="Address1" tabindex="20" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Address-2</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtAddress2" tabindex="21" name="Address2" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Address-3</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtAddress3" name="Address3" tabindex="22" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+                <div class="col-lg-3">
+                    <label>Address-4</label><label style="color: red"></label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="txtAddress4" tabindex="23" name="Address4" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<div id="LocationInfoFormWindow" style="display: none;">
+    <div id="LocationInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="ELocationInfoFormWindow" style="display: none;">
+    <div id="EveningLocationInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="UpazilaInfoFormWindow" style="display: none;">
+    <div id="UpazilaInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="InstituteInfoFormWindow" style="display: none;">
+    <div id="InstituteInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+
+<div id="DoctorInfoFormWindow" style="display: none;">
+    <input type="text" id="txtId" class="RequiredTextBox" value="" placeholder="Search By Id" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtName" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Name" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtDegree" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Degree" style="padding-right:100px; position:relative" />
+    <input type="button" id="btnSearchDoctor" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    <input type="button" id="btnClear" class="Button" value="Clear" style="position:absolute; margin-left:100px;" />
+    <div id="DoctorInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="DoctorSearchInfoFormWindow" style="display: none;">
+    <input type="text" id="txtSId" class="RequiredTextBox" value="" placeholder="Search By Id" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtSName" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Name" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtSDegree" tabindex="22" class="RequiredTextBox" value="" placeholder="Search By Degree" style="padding-right:100px; position:relative" />
+    <input type="button" id="btnDoctor" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    <input type="button" id="btnSClear" class="Button" value="Clear" style="position:absolute; margin-left:100px;" />
+
+    <div id="DoctorSearchInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="MarketsGridWindow" style="display: none;">
+    <div id="PracticeMarketGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+@*<div class="row">
+    <div class="FormBody" style="">
+        <div id="DoctorMarketInfoGrid" class="MainGrid">
+        </div>
+    </div>
+</div>*@
+<div class="row box box-success">
+    <div id="DoctorMarketInfoGrid" class="grdKendo"></div>
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+    /*.ddlPotentialCategory {
+        width: 30%;
+    }*/
+</style>
+
+<script type="text/javascript">
+
+    
+    //if (btnDisable == "MRS_9") {
+    //    $('#btnSubmit').attr('disabled', true);
+    //    $('#btnDuplicate').attr('disabled', true);
+    //}
+    $(document).ready(function () {
+        //Function For Doctors Information Grid
+        var openDoctorInfoWindow = $('#DoctorInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "75%",
+            height: "auto",
+            title: "Doctors Information.",
+            position: { top: 300, left: 190 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //Function For Doctors Information Grid
+        var openSearchDoctorInfoWindow = $('#DoctorSearchInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "75%",
+            height: "auto",
+            title: "Doctors Search Information.",
+            position: { top: 300, left: 190 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //Popup Doctor Grid
+        $('#txtDoctorId').keyup(function (e) {
+            if (e.keyCode == 120) {
+                openDoctorInfoWindow.open();
+                $('#DoctorInfoGrid').data('kendoGrid').dataSource.data([]);
+                $('#txtId').val('');
+                $('#txtName').val();
+                spcializationStatus = 1;
+            }
+            else {
+
+            }
+        });
+
+        $('#btnSearchDoctor').click(function () {
+            var doctorId = $('#txtId').val();
+            if (doctorId == '') {
+                doctorId = 0;
+            }
+            var doctorName = $('#txtName').val();
+            var degree = $('#txtDegree').val();
+            $.ajax({
+                url: '/DoctorInformation/GetDoctorsData',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree }),
+                dataType: 'json',
+                success: function (data) {
+                    $("#DoctorInfoGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        });
+        $('#btnClear').click(function () {
+            $("#DoctorInfoGrid").data("kendoGrid").dataSource.data([]);
+            $('#txtName').val('');
+            $('#txtId').val('');
+            $('#txtDegree').val('');
+        });
+        // Doctor Grid Search Window
+        var DoctorInfoGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "DoctorId"
+                }
+            },
+            pageSize: 10
+        });
+
+        var DoctorInformationGrid = $("#DoctorInfoGrid").kendoGrid({
+            dataSource: DoctorInfoGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "DoctorId", title: "Doctor Id", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "RegistrationNo", title: "Registration No", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Honorium", title: "Honorium", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "PotentialCategory", title: "Potential Category", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DoctorName", title: "Doctor Name", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Degree", title: "Degree", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DegreeCategory", title: "Degree Category", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Designation", title: "Designation", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DesignationCategory", title: "Designation Category", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciFirstCode", title: "1st Specialization", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciFirstName", title: "Specialization1", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciSecondCode", title: "2nd Specialization", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciSecondName", title: "Specialization2", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address1", title: "Address1", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address2", title: "Address2", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address3", title: "Address3", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address4", title: "Address4", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Fill kendo grid row from popup grid
+        $("#DoctorInfoGrid").dblclick(function () {
+            var gridData = $("#DoctorInfoGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            $('#txtDoctorId').val(selectedItem.DoctorId);
+            $('#txtRegistrationNo').val(selectedItem.RegistrationNo);
+            $('#txtHonorium').val(selectedItem.Honorium);
+            $('#txtPotentialCategory').val(selectedItem.PotentialCategory);
+            $('#txtDoctorName').val(selectedItem.DoctorName);
+            $('#txtDegree').val(selectedItem.Degree);
+            $('#txtDoctorId').val(selectedItem.DoctorId);
+            $('#txtDesignation').val(selectedItem.Designation);
+            $('#txtSpeciFirstName').val(selectedItem.SpeciFirstName);
+            $('#txtSpeciSecondName').val(selectedItem.SpeciSecondName);
+            $('#txtAddress1').val(selectedItem.Address1);
+            $('#txtAddress2').val(selectedItem.Address2);
+            $('#txtAddress3').val(selectedItem.Address3);
+            $('#txtAddress4').val(selectedItem.Address4);
+
+            openDoctorInfoWindow.close();
+        });
+
+        // Doctor Grid Search Window
+        var DoctorSearchInfoGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "DoctorId"
+                }
+            },
+            pageSize: 10
+        });
+
+        var DoctorSearchInformationGrid = $("#DoctorSearchInfoGrid").kendoGrid({
+            dataSource: DoctorSearchInfoGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "DoctorId", title: "Doctor Id", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "RegistrationNo", title: "Registration No", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Honorium", title: "Honorium", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "PotentialCategory", title: "Potential Category", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DoctorName", title: "Doctor Name", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Degree", title: "Degree", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DegreeCategory", title: "Degree Category", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Designation", title: "Designation", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DesignationCategory", title: "Designation Category", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciFirstCode", title: "1st Specialization", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciFirstName", title: "Specialization1", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciSecondCode", title: "2nd Specialization", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "SpeciSecondName", title: "Specialization2", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address1", title: "Address1", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address2", title: "Address2", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address3", title: "Address3", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Address4", title: "Address4", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        // Doctor Grid Search Window
+        var DoctorMarketDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "DoctorDetailSl",
+                    fields: {
+                        DoctorDetailSl: { editable: true },
+                        MarketCode: { editable: true },
+                        MarketName: { editable: true, defaultValue: "Press (F9)" },
+                        InstituteName: { editable: true, defaultValue: "Press (F9)" },
+                        UpazilaName: { editable: true, defaultValue: "Press (F9)" },
+                        MorningLocName: { editable: true, defaultValue: "Press (F9)" },
+                        EveningLocName: { editable: true, defaultValue: "Press (F9)" }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var DoctorMarketGrid = $("#DoctorMarketInfoGrid").kendoGrid({
+            dataSource: DoctorMarketDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            scrollX: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            toolbar: [{
+                text: "Add Items",
+                className: "btnAddContainer",
+                imageClass: "k-icon k-add"
+            }],
+            edit: function (e) {
+                $("[name='MarketName']", e.container).keyup(function (event) {
+                    if (event.keyCode == 120) {
+                        MarketList("/DoctorPracticeMarketInfo/GetMarket");
+                        openMarketInfoWindow.open();
+                        openMarketInfoWindow.center();
+                    }
+                });
+
+                $("[name='InstituteName']", e.container).keyup(function (event) {
+                    if (event.keyCode == 120) {
+                        $.ajax({
+                            url: "/DoctorPracticeMarketInfo/InstitutionList",
+                            type: 'GET',
+                            dataType: "JSON",
+                            success: function (data) {
+                                $("#InstituteInfoGrid").data("kendoGrid").dataSource.data(data);
+                            }
+                        });
+
+                        openInstituteInfoWindow.open();
+                        openInstituteInfoWindow.center();
+                    }
+                });
+
+                $("[name='UpazilaName']", e.container).keyup(function (event) {
+                    if (event.keyCode == 120) {
+                        $.ajax({
+                            url: "/DoctorPracticeMarketInfo/UpazilaDistrictList",
+                            type: 'GET',
+                            dataType: "JSON",
+                            success: function (data) {
+                                $("#UpazilaInfoGrid").data("kendoGrid").dataSource.data(data);
+                            }
+                        });
+
+                        openUpazilaInfoWindow.open();
+                        openUpazilaInfoWindow.center();
+                    }
+                });
+                $("[name='MorningLocName']", e.container).keyup(function (event) {
+
+                    var gridData = $("#DoctorMarketInfoGrid").data("kendoGrid");
+                    var selectedItem = (gridData.dataItem(gridData.select()));
+
+                    if (event.keyCode == 120) {
+                        $.ajax({
+                            url: "/DoctorPracticeMarketInfo/GetLoactionList",
+                            type: 'post',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify({ marketCode: selectedItem.MarketCode }),
+                            dataType: "JSON",
+                            success: function (data) {
+                                $("#LocationInfoGrid").data("kendoGrid").dataSource.data(data);
+                            }
+                        });
+
+                        openLocationInfoWindow.open();
+                        openLocationInfoWindow.center();
+                    }
+                });
+                $("[name='EveningLocName']", e.container).keyup(function (event) {
+                    var gridData = $("#DoctorMarketInfoGrid").data("kendoGrid");
+                    var selectedItem = (gridData.dataItem(gridData.select()));
+                    if (event.keyCode == 120) {
+                        $.ajax({
+                            url: "/DoctorPracticeMarketInfo/GetLoactionList",
+                            type: 'post',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify({ marketCode: selectedItem.MarketCode }),
+                            dataType: "JSON",
+                            success: function (data) {
+                                $("#EveningLocationInfoGrid").data("kendoGrid").dataSource.data(data);
+                            }
+                        });
+
+                        openELocationInfoWindow.open();
+                        openELocationInfoWindow.center();
+                    }
+                });
+            },
+            columns: [
+                      { field: "DoctorDetailSl", title: "Doctor Detail Sl", width: "150px", filterable: true, hidden: true },
+                      { field: "DoctorMstSl", title: "Doctor Mst Sl", width: "150px", filterable: false, hidden: true },
+                      { field: "MarketCode", title: "Market Code", width: "150px", filterable: false, hidden: true },
+                      { field: "MarketName", title: "Market Name", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "InstituteCode", title: "Institute Code", width: "150px", filterable: false, hidden: true },
+                      { field: "InstituteName", title: "Institute", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "ChamberAddress1", title: "Address1", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "ChamberAddress2", title: "Address2", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "ChamberAddress3", title: "Address3", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "ChamberAddress4", title: "Address4", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "Phone", title: "Chamber Phone", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "UpazilaCode", title: "Upazila Code", width: "150px", filterable: false, hidden: true },
+                      { field: "UpazilaName", title: "Upazila", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "DistrictCode", title: "District Code", width: "150px", filterable: false, hidden: true },
+                      { field: "DistrictName", title: "District", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "MorningLocCode", title: "Morning Location", width: "150px", filterable: false, hidden: true },
+                      { field: "MorningLocName", title: "Morning Location", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { field: "EveningLocCode", title: "Evening Location", width: "150px", filterable: false, hidden: true },
+                      { field: "EveningLocName", title: "Evening Location", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                      { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: eDelete }], title: "Remove", width: "90px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        });
+
+        var btnDisable = '@ViewBag.USER_ID';
+
+        function eDelete(event) {
+            if (btnDisable == "MRS_9") {
+                alert("Your are not authorized to edit");
+            }
+            else {
+                OpenConfirmationDialog();
+            }
+            
+        }
+        $('#btnConfirmationOK').click(function () {
+            
+                var grid = $("#DoctorMarketInfoGrid").data('kendoGrid');
+                var selectedRow = grid.dataItem(grid.select());
+
+                if (selectedRow.DoctorDetailSl == 0 || selectedRow.DoctorDetailSl == null) {
+                    grid.dataSource.remove(selectedRow);
+                }
+                else {
+                    $.ajax({
+                        url: '/DoctorPracticeMarketInfo/Delete',
+                        method: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ slNo: selectedRow.DoctorDetailSl }),
+                        success: function () {
+                            grid.dataSource.remove(selectedRow);
+                            CloseConfirmationDialog();
+                        },
+                        error: function () {
+
+                        }
+                    });
+                }
+            
+
+            
+        })
+        $('#btnConfirmationCancel').click(function () {
+            CloseConfirmationDialog();
+        });
+        //adding new row
+        $('.btnAddContainer').click(function () {
+            var addflag = 1; // For Row Add in Detail Grid using enter Key Press
+            var parentFlag = 1;
+            if (parentFlag == 1) {
+                var grid = $("#DoctorMarketInfoGrid").data("kendoGrid");
+
+                $("#DoctorMarketInfoGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                var dataSource = $("#DoctorMarketInfoGrid").data("kendoGrid").dataSource;
+                var addData = dataSource.data();
+                if (addData != null) { // For Add row when Exiting Data in Grid
+                    for (var i = 0; i < addData.length; i++) {
+                        if (addData[i].MarketCode == "") {
+                            addflag = 0;
+                        }
+                    }
+                }
+                if (addflag == 1) {
+                    grid.addRow();
+                }
+            }
+
+        });
+
+        //Function For Morning Location Information Grid
+        var openLocationInfoWindow = $('#LocationInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "90%",
+            height: "auto",
+            title: "Location List.",
+            position: { top: 300, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //Function For Morning Location Information Grid
+        var openELocationInfoWindow = $('#ELocationInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "90%",
+            height: "auto",
+            title: "Location List.",
+            position: { top: 300, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //Function For Doctors Information Grid
+        var openMarketInfoWindow = $('#MarketsGridWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "50%",
+            height: "auto",
+            title: "Market List.",
+            position: { top: 300, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        ///Populate Market Informations
+        function MarketList(RequestedURL) {
+            $.ajax({
+                url: RequestedURL,
+                type: 'GET',
+                dataType: "JSON",
+                success: function (data) {
+                    $("#PracticeMarketGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+
+        // Doctor Grid Search Window
+        var MarketDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "MarketCode",
+                    fields: {
+                        MarketCode: { editable: false },
+                        MarketName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var MarketGrid = $("#PracticeMarketGrid").kendoGrid({
+            dataSource: MarketDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            columns: [
+               { field: "MarketName", title: "Market", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+               { field: "MarketCode", title: "Market Code", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        // Doctor Practice Location Search Window
+        var LocationDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LocationCode",
+                    fields: {
+                        LocCode: { editable: false },
+                        LocName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var MorningLocationGrid = $("#LocationInfoGrid").kendoGrid({
+            dataSource: LocationDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            columns: [
+              { field: "LocName", title: "Location", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "LocCode", title: "Location Code", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        // Doctor Practice Location Search Window
+        var EveningLocationDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "LocationCode",
+                    fields: {
+                        LocCode: { editable: false },
+                        LocName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+        //Body Of Evening Location grid information
+        var MorningLocationGrid = $("#EveningLocationInfoGrid").kendoGrid({
+            dataSource: EveningLocationDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            columns: [
+              { field: "LocName", title: "Location", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+              { field: "LocCode", title: "Location Code", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Populate Morning Location Grid Information
+        $("#LocationInfoGrid").dblclick(function () {
+            var gridData = $("#LocationInfoGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            var gridCiItem = $("#DoctorMarketInfoGrid").data("kendoGrid");
+            var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+            selectedCiigItem.set("MorningLocCode", selectedItem.LocCode);
+            selectedCiigItem.set("MorningLocName", selectedItem.LocName);
+
+            openLocationInfoWindow.close();
+        });
+
+        //Populate Evening Location Grid Information
+        $("#EveningLocationInfoGrid").dblclick(function () {
+            var gridData = $("#EveningLocationInfoGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            var gridCiItem = $("#DoctorMarketInfoGrid").data("kendoGrid");
+            var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+            selectedCiigItem.set("EveningLocCode", selectedItem.LocCode);
+            selectedCiigItem.set("EveningLocName", selectedItem.LocName);
+
+            openELocationInfoWindow.close();
+        });
+
+
+        //Fill kendo grid row from popup grid
+        $("#PracticeMarketGrid").dblclick(function () {
+            var gridData = $("#PracticeMarketGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            var gridCiItem = $("#DoctorMarketInfoGrid").data("kendoGrid");
+            var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+            selectedCiigItem.set("MarketCode", selectedItem.MarketCode);
+            selectedCiigItem.set("MarketName", selectedItem.MarketName);
+
+            openMarketInfoWindow.close();
+        });
+
+        //Function For Institute Information Grid
+        var openInstituteInfoWindow = $('#InstituteInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "60%",
+            height: "auto",
+            title: "Institute List.",
+            position: { top: 500, left: 190 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        // Doctor Grid Search Window
+        var InstituteDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "InstituteCode",
+                    fields: {
+                        InstituteCode: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var InstituteGrid = $("#InstituteInfoGrid").kendoGrid({
+            dataSource: InstituteDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            columns: [
+                          { field: "InstituteName", title: "Institute", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                          { field: "InstituteCode", title: "Institute Code", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+            ]
+        });
+
+        //Fill kendo grid row from popup grid
+        $("#InstituteInfoGrid").dblclick(function () {
+            var gridData = $("#InstituteInfoGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            var gridCiItem = $("#DoctorMarketInfoGrid").data("kendoGrid");
+            var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+            selectedCiigItem.set("InstituteCode", selectedItem.InstituteCode);
+            selectedCiigItem.set("InstituteName", selectedItem.InstituteName);
+
+            openInstituteInfoWindow.close();
+        });
+
+
+        //Function For Upazila Information Grid
+        var openUpazilaInfoWindow = $('#UpazilaInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "50%",
+            height: "auto",
+            title: "Institute List.",
+            position: { top: 300, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        // Doctor Grid Search Window
+        var UpazilaDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "UpazilaCode",
+                    fields: {
+                        UpazilaCode: { editable: false },
+                        UpazilaName: { editable: false },
+                        DistrictCode: { editable: false },
+                        DistrictName: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var MarketGrid = $("#UpazilaInfoGrid").kendoGrid({
+            dataSource: UpazilaDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            columns: [
+                          { field: "UpazilaCode", title: "Upazila Code", width: "150px", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                          { field: "UpazilaName", title: "Upazila", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                          { field: "DistrictCode", title: "DistrictCode", width: "150px", filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                          { field: "DistrictName", title: "District", width: "150px", filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Fill kendo grid row from popup grid
+        $("#UpazilaInfoGrid").dblclick(function () {
+            var gridData = $("#UpazilaInfoGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+            var gridCiItem = $("#DoctorMarketInfoGrid").data("kendoGrid");
+            var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+            selectedCiigItem.set("UpazilaCode", selectedItem.UpazilaCode);
+            selectedCiigItem.set("UpazilaName", selectedItem.UpazilaName);
+            selectedCiigItem.set("DistrictCode", selectedItem.DistrictCode);
+            selectedCiigItem.set("DistrictName", selectedItem.DistrictName);
+
+            openUpazilaInfoWindow.close();
+        });
+
+        var saveStatus = 1;
+        $('#btnSubmit').click(function () {
+            saveStatus = 1;
+            var mstModel = {};
+            mstModel.DoctorMstSl = $('#DoctorMstSl').val();
+            mstModel.DoctorId = $('#txtDoctorId').val();
+            mstModel.SUStatus = $("#SUStatus").val();
+            mstModel.DoctorMarketDetailsModels = [];
+            CheckRequiredTextBoxMaxLength('txtDoctorId', 100);
+            var detailDataSource = $('#DoctorMarketInfoGrid').data("kendoGrid").dataSource;
+            var detailData = detailDataSource.data();
+            if (saveStatus == 1) {
+                if (detailData.length > 0) {
+                    for (var i = 0; i < detailData.length; i++) {
+                        var detailModel = {};
+                        detailModel.DoctorDetailSl = detailData[i].DoctorDetailSl;
+                        detailData.DoctorMstSl = detailData[i].DoctorMstSl;
+                        detailModel.MarketCode = detailData[i].MarketCode;
+                        detailModel.InstituteCode = detailData[i].InstituteCode;
+                        detailModel.ChamberAddress1 = detailData[i].ChamberAddress1;
+                        detailModel.ChamberAddress2 = detailData[i].ChamberAddress2;
+                        detailModel.ChamberAddress3 = detailData[i].ChamberAddress3;
+                        detailModel.ChamberAddress4 = detailData[i].ChamberAddress4;
+                        detailModel.Phone = detailData[i].Phone;
+                        detailModel.UpazilaCode = detailData[i].UpazilaCode;
+                        detailModel.MorningLocCode = detailData[i].MorningLocCode;
+                        detailModel.EveningLocCode = detailData[i].EveningLocCode;
+
+                        mstModel.DoctorMarketDetailsModels.push(detailModel);
+                    }
+
+                    $.ajax({
+                        url: '/DoctorPracticeMarketInfo/DoctorPractice',
+                        method: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ model: mstModel }),
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.msg.Type == 2) {
+                                $('#ddlMarket').empty();
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+                            }
+                            else if (response.msg.Type == 3) {
+
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                            else if (response.msg.Type == 1) {
+
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                            else {
+
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                else {
+                    $("#DoctorMarketInfoGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>Required Details Information !</b></td></tr>');
+                }
+            }
+        });
+
+
+        $("#btnReset").click(function () {
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+
+            $("#DoctorMarketInfoGrid").data("kendoGrid").dataSource.data([]);
+            $('#ddlMarket').empty();
+            $('#SUStatus').val(0);
+
+        });
+
+
+
+        $('#btnSearch').click(function () {
+            $('#txtSId').val('');
+            $('#txtSName').val('');
+            $('#txtSDegree').val('');
+            $('#DoctorSearchInfoGrid').data('kendoGrid').dataSource.data([]);
+            openSearchDoctorInfoWindow.open();
+        });
+        $('#btnDoctor').click(function () {
+            var doctorId = $('#txtSId').val();
+            if (doctorId == '') {
+                doctorId = 0;
+            }
+            var doctorName = $('#txtSName').val();
+            var degree = $('#txtSDegree').val();
+            $.ajax({
+                url: '/DoctorInformation/GetDoctorsData',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName, degree: degree }),
+                dataType: 'json',
+                success: function (data) {
+                    $("#DoctorSearchInfoGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+
+            $('#btnSClear').click(function () {
+                $('#txtSId').val('');
+                $('#txtSName').val('');
+                $('#txtSDegree').val('');
+                $('#DoctorSearchInfoGrid').data('kendoGrid').dataSource.data([]);
+            });
+        });
+
+        //Fill kendo grid row from popup grid
+        $("#DoctorSearchInfoGrid").dblclick(function () {
+            var gridData = $(this).data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            $('#txtDoctorId').val(selectedItem.DoctorId);
+            $('#txtRegistrationNo').val(selectedItem.RegistrationNo);
+            $('#txtHonorium').val(selectedItem.Honorium);
+            $('#txtPotentialCategory').val(selectedItem.PotentialCategory);
+            $('#txtDoctorName').val(selectedItem.DoctorName);
+            $('#txtDegree').val(selectedItem.Degree);
+            $('#txtDoctorId').val(selectedItem.DoctorId);
+            $('#txtDesignation').val(selectedItem.Designation);
+            $('#txtSpeciFirstName').val(selectedItem.SpeciFirstName);
+            $('#txtSpeciSecondName').val(selectedItem.SpeciSecondName);
+            $('#txtAddress1').val(selectedItem.Address1);
+            $('#txtAddress2').val(selectedItem.Address2);
+            $('#txtAddress3').val(selectedItem.Address3);
+            $('#txtAddress4').val(selectedItem.Address4);
+
+            openSearchDoctorInfoWindow.close();
+
+            loadMarketDetail(selectedItem.DoctorId);
+        });
+
+        function loadMarketDetail(doctorId) {
+            $.ajax({
+                url: '/DoctorPracticeMarketInfo/Search',
+                method: 'post',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ doctorId: doctorId }),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#DoctorMarketInfoGrid').data('kendoGrid').dataSource.data(data);
+                        $('#SUStatus').val(1);
+                    }
+                    else {
+                        $("#DoctorMarketInfoGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>No Record Found For The Doctor !</b></td></tr>');
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        //function
+
+    });
+
+</script>
+

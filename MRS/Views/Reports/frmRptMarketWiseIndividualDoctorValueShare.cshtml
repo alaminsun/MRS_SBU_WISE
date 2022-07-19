@@ -1,0 +1,276 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptMarketWiseIndividualDoctorValueShare", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: A4, Landscape</label>
+        </div>
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style="">Market wise Individual Doctor Value Share(By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Market Wise Individual Doctor Value Share Percentage" name="ReportName" value="Market Wise Individual Doctor Value Share Percentage" checked="checked" />
+                    </div><br />
+                    <label style="">Market wise Individual Doctor Value Share(By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Market Wise Individual Doctor Value Share" name="ReportName" value="Market Wise Individual Doctor Value Share"  />
+                    </div><br />
+                 
+                    @*<label style="">Individual Doctor Value Share(By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Individual Doctor Value Share" name="ReportName" value="Individual Doctor Value Share" />
+                    </div><br />*@
+                    @*<label style="">Individual Doctor Value Share(By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Individual Doctor Value Share Percentage" name="ReportName" value="Individual Doctor Value Share Percentage" />
+                    </div><br />*@
+                </div>
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">From Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox datePicker" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">To Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="ToDate" name="ToDate" tabindex="2" class="txtBox datePicker" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Doctor ID:</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="DOCTOR_ID" placeholder="Doctor/Press F9" required="required" name="DOCTOR_ID" class="txtBox" tabindex="3" />
+                            @*<input type="text" id="DOCTOR_ID" placeholder="Doctor/Press F9" required="required" readonly="readonly" name="DOCTOR_ID" class="txtBox" tabindex="1" />*@
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Doctor Name:</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="DOCTOR_NAME" placeholder="Doctor Name" required="required" readonly="readonly" name="DOCTOR_NAME" class="txtBox" tabindex="4" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            <label class="pull-right">Degree:</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" id="DEGREE" placeholder="Degree" required="required" readonly="readonly" name="DEGREE" class="txtBox" tabindex="5" />
+                            <input type="hidden" id="DESIGNATION" name="DESIGNATION" />
+                            <input type="hidden" id="DocAddress" name="DocAddress" />
+                        </div>
+                    </div><br />
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<div id="DoctorWindow" style="display: none;">
+    <div id="DoctorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDoctorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDoctorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    @*var btnDisable = '@ViewBag.USER_ID';
+    if (btnDisable === "MRS_9") {
+        $('#Market Wise Individual Doctor Value Share').hide();
+    }*@
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+    }); //End of Document.Ready()
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+
+    //////////////////Doctor///////////////////////////
+
+    var DoctorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DoctorCode",
+                fields: {
+                    DoctorCode: { editable: false },
+                    DoctorName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDoctorList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var DoctorPageGrid = $("#DoctorWindowGrid").kendoGrid({
+        dataSource: DoctorGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DoctorName", title: "Doctor Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "Degree", title: "Degree", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DoctorId", title: "Doctor ID", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var DoctorWindow = $('#DoctorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Doctor Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function DoctorWindowEvent() {
+        var WindowGrid = $("#DoctorWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DOCTOR_ID").val(WindowGridItem.DoctorId);
+        $("#DOCTOR_NAME").val(WindowGridItem.DoctorName);
+        $("#DEGREE").val(WindowGridItem.Degree);
+        $("#DESIGNATION").val(WindowGridItem.Designation);
+        $("#DocAddress").val(WindowGridItem.Address);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnDoctorWindowOK').click(function () {
+        DoctorWindowEvent();
+        DoctorWindow.close();
+    });
+
+    $('#btnDoctorWindowCancel').click(function () {
+        DoctorWindow.close();
+    });
+
+    $("#DoctorWindowGrid").dblclick(function () {
+        DoctorWindowEvent();
+        DoctorWindow.close();
+    });
+
+    $("#DoctorWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            DoctorWindowEvent();
+            DoctorWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DoctorWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DOCTOR_ID").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('DoctorWindowGrid');
+                DoctorWindow.open();
+            }
+        }
+    });
+
+    //$("#DOCTOR_ID").change(function () {
+    //    //$("#ddlSubMenu").empty();
+    //    //$("#ddlSubMenu").html("");
+    //    var doctorId = $('#DOCTOR_ID').val();
+    //    alert(doctorId);
+    //    $.ajax({
+    //        url: '/Reports/GetDoctorList',
+    //        //method: 'get',
+    //        //dataType: 'json',
+    //        data: JSON.stringify({ doctorId : doctorId }),
+    //        type: 'POST',
+    //        contentType: 'application/json;',
+    //        dataType: 'json',
+    //        success: function (data) {
+    //            $.each(data, function (i, item) {
+    //                //$('#ddlSubMenu').append($('<option>', { value: item.SubMenuId, html: item.SubMenuName }, '<option/>'))
+    //                $("#DOCTOR_NAME").val(item.DoctorName);
+    //                $("#DEGREE").val(item.Degree);
+    //            });
+    //            //alert(data.DoctorName);
+    //            //$("#DOCTOR_NAME").val(data.DoctorName);
+    //        }
+    //    })
+    //})
+
+    /////////////////////////////////////////////////
+</script>

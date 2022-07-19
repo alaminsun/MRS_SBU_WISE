@@ -1,0 +1,260 @@
+﻿@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("frmMarketWiseIndividualInstitutionValueReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: List of 1st is Legal, Landscape and All are A4, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style="">Market wise Individual Institution Value Share(By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Market wise Individual Institution Value Share by Value" name="ReportName" value="Market wise Individual Institution Value Share by Value" checked="checked" />
+                    </div><br />
+                    <label style="">Market wise Individual Institution Value Share(By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Market wise Individual Institution Value Share by Perc" name="ReportName" value="Market wise Individual Institution Value Share by Perc" />
+                    </div><br />
+                    <label style="">Individual Institution Value Share(By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Individual Institution Value Share By Value" name="ReportName" value="Individual Institution Value Share By Value" />
+                    </div><br />
+                    <label style="">Individual Institution Value Share(By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Individual Institution Value Share By Perc" name="ReportName" value="Individual Institution Value Share By Perc" />
+                    </div><br />
+                </div>
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="col-lg-4">
+                        <label class="pull-right">From Date:</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox datePicker" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-4">
+                        <label class="pull-right">To Date:</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="1" class="txtBox datePicker" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-4">
+                        <label class="pull-right">Institution Code:</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="INSTI_CODE" placeholder="Press F9" required="required" name="INSTI_CODE" class="txtBox" tabindex="1" />
+                    </div><br /><br />
+                    <div class="col-lg-4">
+                        <label class="pull-right">Institution Name:</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="INSTI_NAME" required="required" readonly="readonly" name="INSTI_NAME" class="txtBox" tabindex="1" />
+                    </div><br /><br />
+                    <div class="col-lg-4">
+                        <label class="pull-right">Address:</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="Address" required="required" readonly="readonly" name="Address" class="txtBox" tabindex="1" />
+                    </div><br /><br />
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<div id="InstitutionWindow" style="display: none;">
+    <div id="InstitutionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstitutionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstitutionWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+
+    //<script type="text/javascript">
+    // To Declare Global Variable
+
+    ///*************Start Documnet Ready*************************//
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+
+        });
+
+    });
+
+    var InstitutionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "INSTI_CODE",
+                fields: {
+                    INSTI_CODE: { editable: false },
+                    INSTI_NAME: { editable: false },
+                    Address: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetInstitute", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var InstitutionPageGrid = $("#InstitutionWindowGrid").kendoGrid({
+        dataSource: InstitutionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "INSTI_CODE", title: "Institution Code", filterable: true, hidden: false, sortable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_NAME", title: "Institution Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "Address", title: "Address", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+        ]
+    });
+
+    var InstitutionWindow = $('#InstitutionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnInstitutionWindowOK').click(function () {
+        InstitutionWindowEvent();
+        InstitutionWindow.close();
+    });
+
+
+    $('#btnInstitutionWindowCancel').click(function () {
+        InstitutionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#InstitutionWindowGrid").dblclick(function () {
+        InstitutionWindowEvent();
+        InstitutionWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function InstitutionWindowEvent() {
+        var WindowGrid = $("#InstitutionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#INSTI_CODE").val(WindowGridItem.INSTI_CODE);
+        $("#INSTI_NAME").val(WindowGridItem.INSTI_NAME);
+        $("#Address").val(WindowGridItem.Address);
+
+        changeStatus = 1;
+    };
+
+    function displayReport() {
+
+        if ($("#INSTI_CODE").val() != "") {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('INSTI_CODE', 10);
+            return false;
+        }
+    }
+
+    $("#InstitutionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            InstitutionWindowEvent();
+            InstitutionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            InstitutionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#INSTI_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('InstitutionWindowGrid');
+                InstitutionWindow.open();
+                InstitutionWindow.center();
+
+            }
+        }
+    });
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    ClearOperationalMessage();
+    ClearOperationMsgTextBoxRedColor();
+    ClearRequiredTextBoxRedColor();
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+</script>

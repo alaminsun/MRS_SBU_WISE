@@ -1,0 +1,276 @@
+﻿@{
+    <title>@ViewBag.formTitle</title>
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row box box-danger">
+    <div class="col-lg-4">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right" value=""><i class="glyphicon glyphicon-save"></i> Refresh</button>
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="pull-right">From Date:</label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox datePicker" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="pull-right">To Date:</label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" id="ToDate" name="ToDate" tabindex="2" class="txtBox datePicker" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label class="pull-right">Honorarium Type</label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="hidden" id="HONORARIUM_CODE" name="HONORARIUM_CODE" />
+                    <input type="text" id="HONORARIUM_NAME" name="HONORARIUM_NAME" tabindex="2" class="txtBox RequiredTextBox" readonly="readonly" required="required" placeholder="Press F9" value="" style="text-align: center" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>
+
+<div id="HonorWindow" style="display: none;">
+    <div id="HonorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnHonorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnHonorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "GRP_DSIG_CODE",
+                    fields: {
+                        GRP_DSIG_CODE: { editable: false },
+                        GRP_DSIG_NAME: { editable: false },
+                        TOT_CEILING_AMOUNT: { editable: false },
+                        TOT_GRP_EXP: { editable: false },
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetDesignationWiseSummery", "DashboardSales")",
+                type: "GET"
+            }
+            }
+        });
+
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                { field: "GRP_DSIG_CODE", title: "Designation Code", width: 150, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "GRP_DSIG_NAME", title: "Designation Name", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TOT_CEILING_AMOUNT", title: "Total Ceiling Amount", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TOT_GRP_EXP", title: "Total Expense", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                //{ command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                //{ command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+
+
+        var HonorGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "HONORARIUM_CODE",
+                    fields: {
+                        HONORARIUM_CODE: { editable: false },
+                        HONORARIUM_NAME: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetHonorariumList", "Reports")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 30
+
+        });
+
+        var HonorGrid = $("#HonorWindowGrid").kendoGrid({
+            dataSource: HonorGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                { field: "HONORARIUM_CODE", title: "Honorarium Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "HONORARIUM_NAME", title: "Honorarium Type", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Handling button click for Honorarium window grid
+        function HonorWindowEvent() {
+            var WindowGrid = $("#HonorWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $("#HONORARIUM_CODE").val(WindowGridItem.HONORARIUM_CODE);
+            $("#HONORARIUM_NAME").val(WindowGridItem.HONORARIUM_NAME);
+            changeStatus = 1;
+            $(".RequiredTextBox").css("border-color", "");
+            $('#MessageText').html('');
+        };
+
+
+        $("#HonorWindowGrid").dblclick(function () {
+            HonorWindowEvent();
+            HonorWindow.close();
+        });
+
+        $("#HonorWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                HonorWindowEvent();
+                HonorWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                HonorWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $('#btnHonorWindowOK').click(function () {
+            HonorWindowEvent();
+            HonorWindow.close();
+        });
+
+        $('#btnHonorWindowCancel').click(function () {
+            HonorWindow.close();
+        });
+
+    });
+
+    var HonorWindow = $('#HonorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Honorarium Type",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    $(document.body).keyup(function (e) {
+        if ($("#HONORARIUM_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                HonorWindow.open();
+                HonorWindow.center();
+            }
+        }
+    });
+
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+
+    $("#btnShowReport").click(function () {
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var DashBoardSalesModel = { "FromDate": "", "ToDate": "", "HONORARIUM_CODE": "", "Data_Type" : "" };
+
+        DashBoardSalesModel.FromDate = $("#FromDate").val();
+        DashBoardSalesModel.ToDate = $("#ToDate").val();
+        DashBoardSalesModel.HONORARIUM_CODE = $("#HONORARIUM_CODE").val();
+        DashBoardSalesModel.Data_Type = "POST";
+        
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "GRP_DSIG_CODE",
+                    fields: {
+                        GRP_DSIG_CODE: { editable: false },
+                        GRP_DSIG_NAME: { editable: false },
+                        TOT_CEILING_AMOUNT: { editable: false },
+                        TOT_GRP_EXP: { editable: false },
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("DashBoardSalesPOST", "DashboardSales")",
+                    data: DashBoardSalesModel,
+                    type: 'POST',
+                    dataType: 'json'
+                }
+            }
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                { field: "GRP_DSIG_CODE", title: "Designation Code", width: 150, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "GRP_DSIG_NAME", title: "Designation Name", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TOT_CEILING_AMOUNT", title: "Total Ceiling Amount", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "TOT_GRP_EXP", title: "Total Expense", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                //{ command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                //{ command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+    });
+</script>

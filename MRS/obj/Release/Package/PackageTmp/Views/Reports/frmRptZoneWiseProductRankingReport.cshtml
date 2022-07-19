@@ -1,0 +1,461 @@
+﻿
+@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("frmRptZoneWiseProductRankingReport", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style=""> Zone Wise Product Share Ranking (%)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ZoneProductShareRankingPersent" name="ReportName" value="ZoneProductShareRankingPersent" checked="checked" />
+                    </div><br />
+                    <label style=""> Zone Wise Product Share Ranking By Value</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ZoneProductShareRankingValue" name="ReportName" value="ZoneProductShareRankingValue" />
+                    </div><br />
+                </div>
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="col-lg-3">
+                        <label>Generic Name</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" style="display: none" name="GENERIC_CODE" id="GENERIC_CODE" class="txtBox" />
+                        <input type="text" id="GENERIC_NAME" name="GENERIC_NAME" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-3">
+                        <label>Zone Name</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" style="display: none" name="ZONE_CODE" id="ZONE_CODE" class="txtBox" />
+                        <input type="text" id="ZONE_NAME" name="ZONE_NAME" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" style="text-align: center" />
+                    </div><br /><br />
+
+                    <div class="col-lg-3">
+                        <label>Type</label>
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.DropDownList("PRESC_CATE_CODE", new SelectList(ViewBag.PrescriptionDropDownList, "PRESC_CATE_CODE", "PRESC_CATE_NAME"),  new { @class = "txtBox", @style = "text-align: center" })
+                    </div><br /><br />
+
+                    <div class="col-lg-3">
+                        <label>From Date</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox RequiredTextBox datePickerold" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-3">
+                        <label>To Date</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="1" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+<div id="GenericIDWindow" style="display: none;">
+    <div id="GenericGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGenericIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGenericIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="ZONEIDWindow" style="display: none;">
+    <div id="ZONEGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnZONEIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnZONEIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function() {
+            changeStatus = 1;
+        }
+    });
+    $(".datePickerold").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: "01/01/2000",
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+    $("#btnReset").click(function() {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        //$(".txtBox").val("");
+        $("#GENERIC_CODE").val("");
+        $("#GENERIC_NAME").val("");
+        $("#ZONE_CODE").val("");
+        $("#ZONE_NAME").val("");
+    });
+    function displayReport() {
+
+        if ($("#GENERIC_CODE").val() != "" && $("#ZONE_CODE").val() != "" && $("#PRESC_CATE_CODE").val() != "") {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('GENERIC_CODE', 10);
+            CheckRequiredTextBoxMaxLength('GENERIC_NAME', 60);
+
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('ZONE_CODE', 10);
+            CheckRequiredTextBoxMaxLength('ZONE_NAME', 60);
+
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('PRESC_CATE_CODE', 10);
+            return false;
+        }
+    }
+
+    //************************* Clear Operational Message after Operational Message ******************************//
+    ClearOperationalMessage();
+
+    //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+    ClearRequiredTextBoxRedColor();
+
+    //************************* To Chech UNSAVED Data in Details GRID ******************************//
+    CheckUnSavedMasterData();
+
+    //********************************************** GENERIC POP UP Window ****************************************************
+
+    //*********** DEFINE GENERIC Window ***************************** //
+
+    var GenericIDWindow = $('#GenericIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Generic Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE GENERIC GRID ***************************** //
+
+    var GenericGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GENERIC_CODE",
+                fields: {
+                    GENERIC_CODE: { editable: false, hidden: true },
+                    GENERIC_NAME: { editable: false },
+                    GEN_ORD_SLNO: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var GenericGrid = $("#GenericGrid").kendoGrid({
+        dataSource: GenericGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "GENERIC_NAME", title: "Generic Name", width: "150px", filterable: true },
+                  { field: "GENERIC_CODE", title: "Generic Code", width: "150px", filterable: true }
+                  //{ field: "GEN_ORD_SLNO", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#GENERIC_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GenericListForProductShareRanking", "Reports")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#GenericGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('GenericGrid');
+                GenericIDWindow.open();
+                GenericIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnGenericIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent('GenericGrid');
+        GenericIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnGenericIDWindowCancel').click(function () {
+        GenericIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#GenericIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent('GenericGrid');
+        GenericIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#GenericIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent('GenericGrid');
+            GenericIDWindow.close();
+        }
+        else if (keycode == '27') {
+            GenericIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#GENERIC_CODE").val(selectedItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(selectedItem.GENERIC_NAME);
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of GENERIC POP UP Window ****************************************************//
+
+
+
+
+
+    //********************************************** ZONE POP UP Window ****************************************************
+
+    //*********** DEFINE ZONE Window ***************************** //
+
+    var ZONEIDWindow = $('#ZONEIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Zone Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE ZONE GRID ***************************** //
+
+    var ZONEGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ZONE_CODE",
+                fields: {
+                    ZONE_CODE: { editable: false, hidden: true },
+                    ZONE_NAME: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var ZONEGrid = $("#ZONEGrid").kendoGrid({
+        dataSource: ZONEGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "ZONE_NAME", title: "Zone Name", width: "150px", filterable: true },
+                  { field: "ZONE_CODE", title: "Zone Code", width: "150px", filterable: true }
+                  //{ field: "GEN_ORD_SLNO", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#ZONE_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("ZoneWiseProductShareRanking", "Reports")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#ZONEGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('ZONEGrid');
+                ZONEIDWindow.open();
+                ZONEIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnZONEIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent('ZONEGrid');
+        ZONEIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnZONEIDWindowCancel').click(function () {
+        ZONEIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#ZONEIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent('ZONEGrid');
+        ZONEIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#ZONEIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent('ZONEGrid');
+            ZONEIDWindow.close();
+        }
+        else if (keycode == '27') {
+            ZONEIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#ZONE_CODE").val(selectedItem.ZONE_CODE);
+        $("#ZONE_NAME").val(selectedItem.ZONE_NAME);
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of ZONE POP UP Window ****************************************************//
+
+
+</script>
+

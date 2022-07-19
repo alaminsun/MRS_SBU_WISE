@@ -1,0 +1,2062 @@
+﻿@{
+    ViewBag.Title = "SpecCamDocInsConfig";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>@ViewBag.formTitle</title>
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+    </div>
+</div>
+<div class="row box box-primary">
+    <form class="form-horizontal form-group">
+        <div style="" class="box-body">
+
+            <div class="col-lg-6">
+                <div style="margin-bottom:10px;" class="form-group">
+                    <div class="col-lg-3">
+                        <label>SCP Code</label> <label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="hidden" id="SDIC_ID" name="SDIC_ID" class="txtBox" />
+                        <input type="text" id="SCP_CODE" name="SCP_CODE" tabindex="" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" />
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                </div>
+
+                <div style="margin-bottom:10px;" class="form-group">
+                    <div class="col-lg-3">
+                        <label>SCP Name</label><label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="SCP_NAME" name="SCP_NAME" tabindex="" readonly="readonly" class="txtBox" value="" placeholder="SCP Name" />
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row box">
+                    <div id="PageSCPGroupGrid" class="MainGrid"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box">
+    <div id="PageDoctorGrid" class="MainGrid"></div>
+</div>
+<div class="row box">
+    <div id="PageInstituteGrid" class="MainGrid"></div>
+</div>
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+<div id="SpecialCamWindow" style="display: none;">
+    <div id="SpecialCamWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSpecialCamWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSpecialCamWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="HBTerritoryWindow" style="display: none;">
+    <div id="HBTerritoryWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnHBTerritoryWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnHBTerritoryWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DoctorWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Doctor Code :</label>
+        <input type="text" id="txtDoctorName" class="" placeholder="Search by Doctor Code" style="width: 250px;" autofocus /><input type="button" class="button" id="btnDoctorGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div id="DoctorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDoctorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDoctorWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="MarketWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+            <label style="margin-left: 20px;">Market Name :</label>
+            <input type="text" id="txtMarketCode" placeholder="Searching by Market Name" style="width: 250px;" autofocus />
+        </div>*@
+    <div id="MarketWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnMarketWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnMarketWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="InstituteWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Institute Code :</label>
+        <input type="text" id="txtInstituteName" class="" placeholder="Search by Institute Code" style="width: 250px;" autofocus /><input type="button" class="button" id="btnInstituteGridSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div id="InstituteWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstituteWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstituteWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="InstMarketWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+            <label style="margin-left: 20px;">Market Name :</label>
+            <input type="text" id="txtMarketCode" placeholder="Searching by Market Name" style="width: 250px;" autofocus />
+        </div>*@
+    <div id="InstMarketWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstMarketWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstMarketWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+            <label style="margin-left: 20px;">Aprov No:</label>
+            <input type="text" id="txtAprovNo" placeholder="Searching by Aprov No" style="width: 250px;" autofocus />
+        </div>*@
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var checkGridData = 1;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    var deleteStatus = 0;
+
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+        //Handling Delete event for PageSCPGroupGrid row
+        function handleGroupDelete() {
+            deleteStatus = 4;
+            var grid1 = $("#PageSCPGroupGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+
+        //Handling Delete event for PageDoctorGrid row
+        function handleDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDoctorGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Delete event for PageInstituteGrid row
+        function handleInstDelete() {
+            deleteStatus = 3;
+            var grid1 = $("#PageInstituteGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3;
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //************************* DEFINE SCP GROUP DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "SDICG_ID",
+                    fields: {
+                        SDICG_ID: { editable: true },
+                        GROUP_NAME: { editable: true },
+                        HBTERRITORY_CODE : { editable: true },
+                        HBTERRITORY_NAME: { editable: true, defaultValue: 'Press F9' },
+
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageSCPGroupGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 500,
+            height: 250,
+            pageable: {
+                pageSizes: [5, 10, 20, 40, 50, 60, 80, 100, 200]
+            },
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "SDICG_ID"]').attr("readonly", true);
+                //$('input[name = "DOSAGE_FORM_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Group Information", className: "btnPageSCPGroupGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //filterable: {
+            //    extra: false,
+            //    operators: {
+            //        string: {
+            //            startswith: "Starts with",
+            //            contains: "Contains"
+            //        }
+            //    }
+            //},
+            sortable: true,
+            //height: 500,
+            columns: [
+                 { field: "GROUP_NAME", title: "Group Name", width: 160, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                 { field: "SDICG_ID", title: "Code", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                 //{ field: "TERRITORY_NAME", title: "Territory", width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                 { field: "HBTERRITORY_NAME", title: "Territory Name", width: 100, attributes: { "class": "TERRITORY_NAME", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                 { field: "HBTERRITORY_CODE", title: "Territory code", hidden:true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+
+                //{ field: "MP", title: "Group", editor: groupDropDownEditor, attributes: { "class": "GroupClass" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleGroupDelete }], title: "Delete", width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnPageSCPGroupGrid').click(function (e) {
+            var grid = $("#PageSCPGroupGrid").data("kendoGrid");
+            $("#PageSCPGroupGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            //e.preventDefault();
+            $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+            changeStatus = 1;
+
+        });
+
+        //var dtReviewStatus = [{ text: "No", value: "No" }, { text: "Yes", value: "Yes" }];
+        ////Setting Kendo drop down with above mentioned data
+        //function ddlReviewStatus(container, options) {
+        //    $('<input id="ReviewStatus"  data-text-field="text" data-value-field="value" data-bind="value:' + options.field + '"/>')
+        //            .appendTo(container)
+        //            .kendoDropDownList({
+        //                autoBind: true,
+        //                //suggest: true,
+        //                dataTextField: "text",
+        //                dataValueField: "value",
+        //                dataSource: dtReviewStatus
+        //            });
+        //};
+
+        //***************group dropdown list*************
+        //function territoryDropDownEditor(container, options) {
+        //    //var MktGroup = options.model.MktGroup;
+        //    //var MktCode = options.model.MktCode;
+        //    //var MP = options.model.MP;
+        //    //$('<input  name="' + options.field + '"/>')
+        //    $('<input  id="TERRITORY_NAME" name="TERRITORY_NAME"/>')
+        //         .appendTo(container)
+        //         .kendoDropDownList({
+        //             autoBind: false,
+        //             dataTextField: "TERRITORY_NAME",
+        //             dataValueField: "TERRITORY_CODE",
+        //             dataSource: {
+        //                 type: "json",
+        //                 transport: {
+        //                     read: "/SpecCamDocInsConfig/GetAllTerritoryList"
+
+        //                 }
+
+        //             },
+        //             change: function (data) {
+        //                 //var mpGroup = options.model.Territory.TerritoryCode ;
+        //                 var gridCiItem = $("#PageSCPGroupGrid").data("kendoGrid");
+        //                 var selectedCiigItem = (gridCiItem.dataItem(gridCiItem.select()));
+        //                 selectedCiigItem.set("TERRITORY_NAME", options.model.TERRITORY_NAME);
+        //                 selectedCiigItem.set("TERRITORY_CODE", options.model.TERRITORY_CODE);
+        //                 //selectedCiigItem.MPGroup = "dsd";
+
+
+        //             },
+        //             error: function (xhr, error) {
+        //                 console.debug(xhr); console.debug(error);
+        //             }
+
+
+        //         });
+
+        //}
+
+
+
+
+        $("#PageSCPGroupGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#PageSCPGroupGrid").data("kendoGrid");
+                $("#PageSCPGroupGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 1;
+            }
+        });
+
+        //To face child data into another grid for a grid row on click
+        $("#PageSCPGroupGrid").on("click", "tr", function () {
+            //$("#divLoading").show();
+            var parentGrid = $("#PageSCPGroupGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            if (parentGridItem.SDICG_ID != "") {
+                $.ajax({
+                    url: '@Url.Action("GetDoctorAndInstituteList", "SpecCamDocInsConfig")',
+                    type: 'GET',
+                    data: { SDICG_ID: parentGridItem.SDICG_ID },
+                    success: function (response) {
+                        $("#PageDoctorGrid").data("kendoGrid").dataSource.data(response.DoctorData);
+                        $("#PageInstituteGrid").data("kendoGrid").dataSource.data(response.InstiData);
+                        //$("#divLoading").hide();
+                    } //End of Success Call
+                });
+            }
+            else {
+                $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+
+            }
+
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "SDI_ID",
+                    fields: {
+                        SDI_ID: { editable: true },
+                        DoctorId: { editable: true, defaultValue: 'Press F9' },
+                        DoctorName: { editable: true },
+                        Degree: { editable: true },
+                        SpeciFirstName: { editable: true },
+                        Address: { editable: true },
+                        MarketCode: { editable: true },
+                        MarketName: { editable: true, defaultValue: 'Press F9' }
+                    }
+                }
+            },
+            pageSize: 20
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDoctorGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            height: 200,
+            pageable: {
+                pageSizes: [5, 10, 20, 40, 50, 60, 80, 100, 200]
+            },
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                // $('input[name = "DOSAGE_FORM_CODE"]').attr("readonly", true);
+                //$('input[name = "DOSAGE_FORM_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Doctor Information", className: "btnPageDoctorGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //filterable: {
+            //    extra: false,
+            //    operators: {
+            //        string: {
+            //            startswith: "Starts with",
+            //            contains: "Contains"
+            //        }
+            //    }
+            //},
+            sortable: true,
+            //height: 500,
+            columns: [
+                { field: "SDI_ID", hidden: true },
+                { field: "DoctorId", title: "Code", filterable: true, width: 60, attributes: { "class": "DoctorId", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "DoctorName", title: "Doctor Name", filterable: true, width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "Degree", title: "Doctor Degree", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "SpeciFirstName", title: "Specialization", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "Address", title: "Address", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "MarketCode", hidden: true },
+                { field: "MarketName", title: "Market", width: 100, attributes: { "class": "MarketName", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "Delete", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnPageDoctorGrid').click(function (e) {
+            var grid = $("#PageDoctorGrid").data("kendoGrid");
+            $("#PageDoctorGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            //e.preventDefault();
+
+
+        });
+
+
+        $("#PageDoctorGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#PageDoctorGrid").data("kendoGrid");
+                $("#PageDoctorGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+
+            }
+        });
+
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "SDII_ID",
+                    fields: {
+                        SDII_ID: { editable: true },
+                        INSTI_CODE: { editable: true, defaultValue: 'Press F9' },
+                        InstitutionName: { editable: true },
+                        Type: { editable: true },
+                        Address: { editable: true },
+                        MarketName: { editable: true, defaultValue: 'Press F9' },
+                        MarketCode: { editable: true }
+                    }
+                }
+            },
+            pageSize: 20
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageInstituteGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            height: 200,
+            pageable: {
+                pageSizes: [5, 10, 20, 40, 50, 60, 80, 100, 200]
+            },
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                //  $('input[name = "DSG_STRENGTH_CODE"]').attr("readonly", true);
+                // $('input[name = "DSG_STRENGTH_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Institution Information", className: "btnPageInstituteGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //filterable: {
+            //    extra: false,
+            //    operators: {
+            //        string: {
+            //            startswith: "Starts with",
+            //            contains: "Contains"
+            //        }
+            //    }
+            //},
+            sortable: true,
+            //height: 500,
+            columns: [
+                { field: "SDII_ID", hidden: true },
+                { field: "INSTI_CODE", title: "Code", filterable: true, width: 60, attributes: { "class": "InstiCode", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "InstitutionName", title: "Institution Name", filterable: true, width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "Type", title: "Type", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "Address", title: "Address", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "MarketCode", hidden: true },
+                { field: "MarketName", title: "Market", width: 100, attributes: { "class": "InstMarketName", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleInstDelete }], title: "Delete", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnPageInstituteGrid').click(function (e) {
+            var grid = $("#PageInstituteGrid").data("kendoGrid");
+            $("#PageInstituteGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            e.preventDefault();
+        });
+
+
+        $("#PageInstituteGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#PageInstituteGrid").data("kendoGrid");
+                $("#PageInstituteGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+            }
+        });
+
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#SDIC_ID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "SpecCamDocInsConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SDIC_ID": $("#SDIC_ID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                //$("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.SDI_ID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedDoctorGrid", "SpecCamDocInsConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SDI_ID": dataitem.SDI_ID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDoctorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+
+                } else {
+                    $('#MessageText').html("Deleted Successfully.");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    $("#PageDoctorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 3) {
+                if (dataitem.SDII_ID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedInstiGrid", "SpecCamDocInsConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SDII_ID": dataitem.SDII_ID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageInstituteGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+
+                } else {
+                    $('#MessageText').html("Deleted Successfully.");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    $("#PageInstituteGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 4) {
+                if (dataitem.SDICG_ID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeleteGroupGrid", "SpecCamDocInsConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SDICG_ID": dataitem.SDICG_ID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageSCPGroupGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                else {
+                    $('#MessageText').html("Deleted Successfully.");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    $("#PageSCPGroupGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                //changeStatus = 0;
+                dataitem = {};
+                CloseConfirmationDialog();
+            }
+        });
+
+
+        //************************* Handling NO BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //************************* Click Save Chages Window OK Button******************************//
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                location.reload();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                //SelectedItemOfListOfValue('SearchWindowGrid');
+                //SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#SDIC_ID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "SpecCamDocInsConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SDIC_ID": $("#SDIC_ID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageSCPGroupGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                                    $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.SDI_ID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedDoctorGrid", "SpecCamDocInsConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SDI_ID": dataitem.SDI_ID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDoctorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDoctorGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 3) {
+                    if (dataitem.SDII_ID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedInstiGrid", "SpecCamDocInsConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SDII_ID": dataitem.SDII_ID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageInstituteGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+
+                    }
+
+                    else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageInstituteGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 4) {
+                    if (dataitem.SDICG_ID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeleteGroupGrid", "SpecCamDocInsConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SDICG_ID": dataitem.SDICG_ID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageSCPGroupGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageSCPGroupGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //************************* END of WINDOWS LOAD Method  ******************************//
+    });
+    //*************************************** End of document.ready Function ************************************************//
+    //**************************************************** START OF Special Cam POP UP *******************************************
+
+    var specialCamWindow = $('#SpecialCamWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "List of Special Campaign",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Start SCP_CODE For Search
+    $(document.body).keyup(function (e) {
+        if ($("#SCP_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SpecialCamWindowGrid');
+                specialCamWindow.open();
+                specialCamWindow.center();
+                changeStatus = 1;
+            }
+        }
+    });
+
+    //Opp search window definition
+    var SpecialCamGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SCP_CODE",
+                fields: {
+                    SCP_CODE: { editable: false },
+                    SCP_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: '@Url.Action("GetSCPList", "ScpInfo")',
+            type: 'GET',
+            data: 'JSON'
+        },
+        pageSize: 50
+    });
+    var SpecialCamGrid = $("#SpecialCamWindowGrid").kendoGrid({
+        dataSource: SpecialCamGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //height: 150,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+             { field: "SCP_CODE", title: "SCP Code", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+             { field: "SCP_NAME", title: "SCP Name", width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+
+    $("#btnSpecialCamWindowOK").click(function () {
+        ListOfValueGridEvent('SpecialCamWindowGrid');
+        specialCamWindow.close();
+    });
+    $("#SpecialCamWindowGrid").dblclick(function () {
+        ListOfValueGridEvent('SpecialCamWindowGrid');
+        specialCamWindow.close();
+    });
+    $("#SpecialCamWindowGrid").keyup(function (e) {
+        var gridSearch = $("#SpecialCamWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        if (selected != null) {
+            if (e.keyCode == 13) {
+                ListOfValueGridEvent('SpecialCamWindowGrid');
+                specialCamWindow.close();
+            }
+        }
+    });
+    $("#btnSpecialCamWindowCancel").click(function () {
+        specialCamWindow.close();
+    });
+    $("#SpecialCamWindow").keyup(function (e) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SelectedItemOfListOfValue('SpecialCamWindowGrid');
+            specialCamWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            specialCamWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //**************************************************** End OF Spceial Cam POP UP *******************************************
+
+    //************Start Doctor Popup*******************
+    //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+    var doctorWindow = $('#DoctorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List of Doctor Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.DoctorId', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('DoctorWindowGrid');
+
+            $("#txtDoctorName").val('');
+            doctorWindow.open(); //Open Popup
+            changeStatus = 1;
+        }
+
+    });
+
+    //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+    //Handling button click for Supplier window grid
+    $('#btnDoctorWindowOK').click(function () {
+        listOfDoctorValueGridEvent();
+        doctorWindow.close();
+    });
+
+    $('#btnDoctorWindowCancel').click(function () {
+        doctorWindow.close();
+    });
+
+    $("#DoctorWindowGrid").dblclick(function () {
+        listOfDoctorValueGridEvent();
+        doctorWindow.close();
+    });
+
+    $("#DoctorWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfDoctorValueGridEvent();
+            doctorWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            doctorWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfDoctorValueGridEvent() {
+        var windowGrid = $("#DoctorWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageDoctorGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("DoctorId ", windowGridItem.DoctorId);
+        pageGridItem.set("DoctorName", windowGridItem.DoctorName);
+        pageGridItem.set("Degree", windowGridItem.Degree);
+
+        pageGridItem.set("SpeciFirstName ", windowGridItem.SpeciFirstName);
+        pageGridItem.set("Address", windowGridItem.Address);
+
+
+        //pageGridItem.set("MARKET_CODE", windowGridItem.MARKET_CODE);
+        //pageGridItem.set("MARKET_NAME", windowGridItem.MARKET_NAME);
+
+        $("#PageDoctorGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+
+    }
+    //--------------------------------------Start of Defining Datasource & Dropdown--------------------------------------------
+
+    var doctorGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DoctorId",
+                fields: {
+                    DoctorId: { editable: false },
+                    DoctorName: { editable: false },
+                    Degree: { editable: false },
+                    SpeciFirstName: { editable: false },
+                    Address: { editable: false }
+
+                }
+            }
+        },
+        @*transport: {
+            read: {
+                url: '@Url.Action("GetAllDoctorInfo", "SpecCamDocInsConfig")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },*@
+        pageSize: 50
+
+    });
+
+    var doctorGrid = $("#DoctorWindowGrid").kendoGrid({
+        dataSource: doctorGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "DoctorId", title: "Doctor Code", width: "100px" },
+              { field: "DoctorName", title: "Doctor Name", width: "120px" },
+              { field: "Degree", title: "Doctor Degree", width: "100px" },
+              { field: "SpeciFirstName", title: "Specilalization", width: "100px" },
+              { field: "Address", title: "Address", width: "200px" }
+
+        ]
+
+    });
+
+    // ######################################## Auto-Complete Events ######################################## //
+
+    // ************ Doctor Search Window Auto Complete Event ************ //
+
+    @*var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetDoctorListForSearch", "SpecCamDocInsConfig")',
+                type: "GET"
+            }
+        }
+    });
+    $("#txtDoctorName").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith",
+        //filter: "contains",
+        placeholder: "Search By Doctor Name..."
+    });*@
+
+    function GetDoctorForSearch() {
+        $.ajax({
+            url: '@Url.Action("GetDoctorBySearch", "SpecCamDocInsConfig")',
+            type: 'GET',
+            data: { doctorCode: $("#txtDoctorName").val() },
+            success: function (data) {
+                $("#DoctorWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    $("#btnDoctorGridSearch").click(function () {
+        GetDoctorForSearch();
+    });
+
+    $("#txtDoctorName").keyup(function (event) {
+        if ($("#txtDoctorName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode === '13') {
+                GetDoctorForSearch();
+            }
+        }
+    });
+
+    //auto Search end
+
+    //**************end Doctor Popup**********************
+
+
+    //************Start Institute Popup*******************
+    //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+    var instituteWindow = $('#InstituteWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List of Institute Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.InstiCode', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('InstituteWindowGrid');
+
+            $("#txtInstituteName").val('');
+            instituteWindow.open(); //Open Popup
+            changeStatus = 1;
+        }
+
+    });
+
+    //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+    //Handling button click for Supplier window grid
+    $('#btnInstituteWindowOK').click(function () {
+        listOfInstituteValueGridEvent();
+        instituteWindow.close();
+    });
+
+    $('#btnInstituteWindowCancel').click(function () {
+        instituteWindow.close();
+    });
+
+    $("#InstituteWindowGrid").dblclick(function () {
+        listOfInstituteValueGridEvent();
+        instituteWindow.close();
+    });
+
+    $("#InstituteWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfInstituteValueGridEvent();
+            instituteWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            instituteWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfInstituteValueGridEvent() {
+        var windowGrid = $("#InstituteWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageInstituteGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("INSTI_CODE ", windowGridItem.INSTI_CODE);
+        pageGridItem.set("InstitutionName", windowGridItem.InstitutionName);
+        pageGridItem.set("Type", windowGridItem.Type);
+
+        pageGridItem.set("Address", windowGridItem.Address);
+
+        $("#PageInstituteGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource & Dropdown--------------------------------------------
+
+    var instituteGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "INSTI_CODE",
+                fields: {
+                    INSTI_CODE: { editable: false },
+                    InstitutionName: { editable: false },
+                    Type: { editable: false },
+                    Address: { editable: false },
+                    MarketCode: { editable: false },
+                    MarketName: { editable: false }
+                }
+            }
+        },
+        @*transport: {
+            read: {
+                url: '@Url.Action("GetAllInstituteInfo", "SpecCamDocInsConfig")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },*@
+        pageSize: 50
+
+    });
+
+    var instituteGrid = $("#InstituteWindowGrid").kendoGrid({
+        dataSource: instituteGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "INSTI_CODE", title: "Code", width: "100px" },
+              { field: "InstitutionName", title: "Institution Name", width: "150px" },
+              { field: "Type", title: "Type", width: "100px" },
+              { field: "Address", title: "Address", width: "200px" }
+        ]
+
+    });
+    function GetInstituteForSearch() {
+        $.ajax({
+            url: '@Url.Action("GetInstituteBySearch", "SpecCamDocInsConfig")',
+            type: 'GET',
+            data: { instituteCode: $("#txtInstituteName").val() },
+            success: function (data) {
+                $("#InstituteWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    $("#btnInstituteGridSearch").click(function () {
+        GetInstituteForSearch();
+    });
+
+    $("#txtInstituteName").keyup(function (event) {
+        if ($("#txtInstituteName").is(':focus')) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode === '13') {
+                GetInstituteForSearch();
+            }
+        }
+    });
+
+    //**************end Institute Popup**********************
+
+    //************Start Market Popup*******************
+    //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+    var HBTerritoryWindow = $('#HBTerritoryWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List of Territory Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.TERRITORY_NAME', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('HBTerritoryWindowGrid');
+            HBTerritoryWindow.open(); //Open Popup
+            changeStatus = 1;
+        }
+
+    });
+
+    //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+    //Handling button click for popup window grid
+    $('#btnHBTerritoryWindowOK').click(function () {
+        listOfMarketValueGridEvent();
+        HBTerritoryWindow.close();
+    });
+
+    $('#btnHBTerritoryWindowCancel').click(function () {
+        HBTerritoryWindow.close();
+    });
+
+    $("#HBTerritoryWindowGrid").dblclick(function () {
+        listOfTerritoryValueGridEvent();
+        HBTerritoryWindow.close();
+    });
+
+    $("#HBTerritoryWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfTerritoryValueGridEvent();
+            HBTerritoryWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            HBTerritoryWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfTerritoryValueGridEvent() {
+        var windowGrid = $("#HBTerritoryWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageSCPGroupGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+
+        pageGridItem.set("HBTERRITORY_CODE", windowGridItem.HBTERRITORY_CODE);
+        pageGridItem.set("HBTERRITORY_NAME", windowGridItem.HBTERRITORY_NAME);
+
+        $("#PageSCPGroupGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource & Dropdown--------------------------------------------
+
+    var territoryGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "HBTERRITORY_CODE",
+                fields: {
+                    HBTERRITORY_CODE: { editable: false },
+                    HBTERRITORY_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllTerritoryList", "SpecCamDocInsConfig")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var territoryGrid = $("#HBTerritoryWindowGrid").kendoGrid({
+        dataSource: territoryGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "HBTERRITORY_CODE", title: "Territory Code", width: "80px" },
+              { field: "HBTERRITORY_NAME", title: "Territory", width: "120px" }
+        ]
+
+    });
+
+    //**************end Market Popup**********************
+    //************Start Market Popup*******************
+    //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+    var marketWindow = $('#MarketWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List of Market Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.MarketName', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('MarketWindowGrid');
+            marketWindow.open(); //Open Popup
+            changeStatus = 1;
+        }
+
+    });
+
+    //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+    //Handling button click for popup window grid
+    $('#btnMarketWindowOK').click(function () {
+        listOfMarketValueGridEvent();
+        marketWindow.close();
+    });
+
+    $('#btnMarketWindowCancel').click(function () {
+        marketWindow.close();
+    });
+
+    $("#MarketWindowGrid").dblclick(function () {
+        listOfMarketValueGridEvent();
+        marketWindow.close();
+    });
+
+    $("#MarketWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfMarketValueGridEvent();
+            marketWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            marketWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfMarketValueGridEvent() {
+        var windowGrid = $("#MarketWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageDoctorGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+
+        pageGridItem.set("MarketCode", windowGridItem.MarketCode);
+        pageGridItem.set("MarketName", windowGridItem.MarketName);
+
+        $("#PageDoctorGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource & Dropdown--------------------------------------------
+
+    var marketGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MarketCode",
+                fields: {
+                    MarketCode: { editable: false },
+                    MarketName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllMarketList", "Market")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var marketGrid = $("#MarketWindowGrid").kendoGrid({
+        dataSource: marketGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "MarketCode", title: "Market Code", width: "80px" },
+              { field: "MarketName", title: "Market", width: "120px" }
+        ]
+
+    });
+
+    //**************end Market Popup**********************
+
+
+    //************Start Institute Market Popup*******************
+    //----------------------------------------To open all the pop up windows--------------------------------------------------------------------
+    var instMarketWindow = $('#InstMarketWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "List of Market Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.InstMarketName', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('InstMarketWindowGrid');
+            instMarketWindow.open(); //Open Popup
+            changeStatus = 1;
+        }
+
+    });
+
+    //----------------------------------------End of opening all the pop up windows--------------------------------------------------------------------
+
+    //Handling button click for popup window grid
+    $('#btnInstMarketWindowOK').click(function () {
+        listOfInstMarketValueGridEvent();
+        instMarketWindow.close();
+    });
+
+    $('#btnInstMarketWindowCancel').click(function () {
+        instMarketWindow.close();
+    });
+
+    $("#InstMarketWindowGrid").dblclick(function () {
+        listOfInstMarketValueGridEvent();
+        instMarketWindow.close();
+    });
+
+    $("#InstMarketWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfInstMarketValueGridEvent();
+            instMarketWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            instMarketWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfInstMarketValueGridEvent() {
+        var windowGrid = $("#InstMarketWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageInstituteGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+
+        pageGridItem.set("MarketCode", windowGridItem.MarketCode);
+        pageGridItem.set("MarketName", windowGridItem.MarketName);
+
+        $("#PageInstituteGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource & Dropdown--------------------------------------------
+
+    var instMarketGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MarketCode",
+                fields: {
+                    MarketCode: { editable: false },
+                    MarketName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllMarketList", "Market")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var instMarketGrid = $("#InstMarketWindowGrid").kendoGrid({
+        dataSource: instMarketGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "MarketCode", title: "Market Code", width: "80px" },
+            { field: "MarketName", title: "Market", width: "120px" }
+        ]
+
+    });
+
+    //**************end Institute Market Popup**********************
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function() {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Chages Data
+        //else {
+        //    ClearOperationalMessage();
+        //    ResetOnlyMasterPageData();
+        //    $(".RequiredTextBox").css("border-color", "");
+        //    $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+        //    $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+
+        //    $("#Status").val("Active");
+        //    location.reload();
+        //}
+        ClearOperationalMessage();
+        ResetOnlyMasterPageData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageSCPGroupGrid").data("kendoGrid").dataSource.data([]);
+        $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+        $("#PageInstituteGrid").data("kendoGrid").dataSource.data([]);
+
+        $("#Status").val("Active");
+        location.reload();
+    });
+
+    $("#PageSCPGroupGrid").on('input',
+        function() {
+            changeStatus = 1;
+        });
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+
+    // Declare Object
+
+
+    var InstituteModel = { " SDII_ID": "", "INSTI_CODE": "", "MarketCode": "" };
+    var DoctorModel = { "SDI_ID": "", "DoctorId": "", "MarketCode": "" };
+    var ScpGroupModel = { "SDICG_ID": "", "GROUP_NAME": "", "HBTERRITORY_CODE": "", "HBTERRITORY_NAME": "" };
+    var Model = {
+        "SDIC_ID": "",
+        "SCP_CODE": "",
+        "ScpGroupInfoList": [],
+        "DoctorInfoList": [],
+        "InstitutionInfoList": []
+    };
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('SCP_CODE', 10);
+        if (saveStatus == 1) {
+            //Model.SDIC_ID = $('#SDIC_ID').val();
+            //Model.SCP_CODE = $('#SCP_CODE').val();
+
+            ////var scpGroupGrid = $("#PageSCPGroupGrid").data("kendoGrid");
+            ////var scpGroupGridRow = scpGroupGrid.select();
+            ////var scpGroupGridItem = scpGroupGrid.dataItem(scpGroupGridRow);
+
+            ////if (scpGroupGridItem != null) {
+            //var dataSource = $("#PageSCPGroupGrid").data("kendoGrid").dataSource;
+            //var data = dataSource.data(); // Get Detail Grid Data
+
+            //Model.ScpGroupInfoList = [];
+            ////ScpGroupModel.SDICG_ID = scpGroupGridItem.SDICG_ID;
+
+
+            //if (data.length > 0) {
+            //    //for (var i = 0; i <= data.length - 1; i++) {
+            //    for (var i = 0; i < data.length; i++) {
+            //        //var detail = {};
+            //        ScpGroupModel.SDICG_ID = data[i].SDICG_ID;
+            //        ScpGroupModel.GROUP_NAME = data[i].GROUP_NAME;
+            //        ScpGroupModel.HBTERRITORY_CODE = data[i].HBTERRITORY_CODE;
+            //        ScpGroupModel.HBTERRITORY_NAME = data[i].HBTERRITORY_NAME;
+
+            //        //model.DoctorGroupDtlList.push(detail);
+            //        Model.ScpGroupInfoList.push(ScpGroupModel);
+            //        ScpGroupModel = { "SDICG_ID": "", "GROUP_NAME": "", "HBTERRITORY_CODE": "", "HBTERRITORY_NAME": "" };
+            //        //}
+            //    }
+            Model.SDIC_ID = $('#SDIC_ID').val();
+            Model.SCP_CODE = $('#SCP_CODE').val();
+
+            var scpGroupGrid = $("#PageSCPGroupGrid").data("kendoGrid");
+            var scpGroupGridRow = scpGroupGrid.select();
+            var scpGroupGridItem = scpGroupGrid.dataItem(scpGroupGridRow);
+
+            if (scpGroupGridItem != null) {
+
+                Model.ScpGroupInfoList = [];
+                ScpGroupModel.SDICG_ID = scpGroupGridItem.SDICG_ID;
+                // ScpGroupModel.SDIC_ID = $('#SDIC_ID').val();
+                ScpGroupModel.GROUP_NAME = scpGroupGridItem.GROUP_NAME;
+                ScpGroupModel.HBTERRITORY_CODE = scpGroupGridItem.HBTERRITORY_CODE;
+                ScpGroupModel.HBTERRITORY_NAME = scpGroupGridItem.HBTERRITORY_NAME;
+
+                Model.ScpGroupInfoList.push(ScpGroupModel);
+//                ScpGroupModel = { "SDICG_ID": "", "GROUP_NAME": "" };
+                ScpGroupModel = { "SDICG_ID": "", "GROUP_NAME": "", "HBTERRITORY_CODE": "", "HBTERRITORY_NAME": "" };
+
+                //Doctor source
+                var doctorSource = $("#PageDoctorGrid").data("kendoGrid").dataSource;
+                var doctorData = doctorSource.data(); // Get Detail Grid Data
+                Model.DoctorInfoList = [];
+                if (doctorData.length > 0) {
+                    for (var i = 0; i < doctorData.length; i++) {
+                        //DoctorModel={};
+                        if (doctorData[i].dirty) {
+                        DoctorModel.SDI_ID = doctorData[i].SDI_ID;
+                        DoctorModel.DoctorId = doctorData[i].DoctorId;
+                        DoctorModel.MarketCode = doctorData[i].MarketCode;
+
+                        Model.DoctorInfoList.push(DoctorModel);
+                        DoctorModel = { "SDI_ID": "", "DoctorId": "", "MarketCode": "" };
+                        }
+                    }
+                }
+
+                //Institution source
+                var instituteSource = $("#PageInstituteGrid").data("kendoGrid").dataSource;
+                var instituteData = instituteSource.data(); // Get Detail Grid Data
+                Model.InstitutionInfoList = [];
+                if (instituteSource.hasChanges) {
+                    for (var i = 0; i <= instituteData.length - 1; i++) {
+
+                        if (instituteData[i].dirty) {
+                            InstituteModel.SDII_ID = instituteData[i].SDII_ID;
+                            InstituteModel.INSTI_CODE = instituteData[i].INSTI_CODE;
+                            InstituteModel.MarketCode = instituteData[i].MarketCode;
+
+                            Model.InstitutionInfoList.push(InstituteModel);
+                            InstituteModel = { " SDII_ID": "", "INSTI_CODE": "", "MarketCode": "" };
+                        }
+                    }
+                }
+                //}
+                //else {
+                //    $("#divLoading").hide();
+                //    $("#MessageText").html("Please first select a group for adding doctor or institute.");
+                //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                //    return;
+                //}
+
+
+                $("#divLoading").show();
+                if (changeStatus == 1) {
+                    if (checkGridData == 1) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("SpecCamDocInsConfig", "SpecCamDocInsConfig")',
+                            data: JSON.stringify(Model),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            cache: false,
+                            success: function(response) {
+                                $("#divLoading").hide();
+                                if (response.msg.Type == "2") {
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#SDIC_ID").val(response.msg.ReturnId);
+                                    GetRefreshData();
+                                    changeStatus = 0;
+
+                                } else if (response.msg.Type == 3) {
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    GetRefreshData();
+                                    changeStatus = 0;
+                                } else {
+                                    $('#MessageText').html(response.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                        Model = {
+                            "SDIC_ID": "",
+                            "SCP_CODE": "",
+                            "ScpGroupInfoList": [],
+                            "DoctorInfoList": [],
+                            "InstitutionInfoList": []
+                        };
+                    }
+                    // Wrong Grid Data
+                    else {
+                        $("#divLoading").hide();
+                        $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        checkGridData = 1;
+                    }
+                }
+                // No Changes Exiting Data
+                else {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("No Changes to Save.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+            }
+        }
+
+    }
+
+    function GetRefreshData() {
+        $.ajax({
+            url: '@Url.Action("GetAllItemListBySCId", "SpecCamDocInsConfig")',
+                type: 'GET',
+                data: { SDIC_ID: $("#SDIC_ID").val() },
+                success: function (datasc) {
+                    $("#PageSCPGroupGrid").data("kendoGrid").dataSource.data(datasc.ScpGroup);
+                    $("#PageDoctorGrid").data("kendoGrid").dataSource.data(datasc.DoctorData);
+                    $("#PageInstituteGrid").data("kendoGrid").dataSource.data(datasc.InstiData);
+                }
+            });
+        }
+
+        //************************* END of SAVE Function *******************************************//
+
+
+
+
+        //To select the first row as default & to clear the filter while loading the grid
+        function SelectedItemOfListOfValue(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            //Reload Grid
+            grid.dataSource.read();
+            //Clear Filter
+            $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+            //Select First Row
+            $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            changeStatus = 1;
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+        }
+        ////////////////////
+        // For Search button work
+
+        $("#btnSearch").click(function () {
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            //if (changeStatus == 1)
+            //    OpenSaveChangesDialog();
+            //    // When no Changes Data
+            //else {
+            //    ClearOperationalMessage();
+            //    $(".RequiredTextBox").css("border-color", "");
+            //    LoadSearchGrid();
+            //    SelectedItemOfListOfValue('SearchWindowGrid');
+            //    SearchWindow.open();
+            //}
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            LoadSearchGrid();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        });
+        var SearchGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SDIC_ID",
+                    fields: {
+                        SDIC_ID: { editable: false },
+                        SCP_CODE: { editable: false },
+                        SCP_NAME: { editable: false }
+                    }
+                }
+            },
+            pageSize: 30
+        });
+
+        var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+            dataSource: SearchGridDataSource,
+            pageable: true,
+            //groupable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+            sortable: true,
+            height: 320,
+            columns: [
+                { field: "SDIC_ID", hidden: true },
+                { field: "SCP_CODE", title: "SCP Code", width: "100px" },
+                { field: "SCP_NAME", title: "SCP Name", width: "200px" }
+            ]
+        });
+
+        var SearchWindow = $('#SearchWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List of Record",
+            position: { top: 50, left: 200 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        function LoadSearchGrid() {
+            $.ajax({
+                url: '@Url.Action("GetAll", "SpecCamDocInsConfig")',
+                type: 'GET',
+                success: function (data) {
+                    $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+
+        function SearchWindowEvents() {
+            var grid = $("#SearchWindowGrid").data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+            ResetOnlyMasterPageData();
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+            GetRefreshData();
+            @* $.ajax({
+            url: '@Url.Action("GetDocItemList", "SpecCamDocInsConfig")',
+            type: 'GET',
+            data: { SDIC_ID: $("#SDIC_ID").val() },
+            success: function (datasc) {
+                $("#PageDoctorGrid").data("kendoGrid").dataSource.data(datasc.DoctorData);
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data(datasc.InstiData);
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetInstiItemList", "SpecCamDocInsConfig")',
+            type: 'GET',
+            data: { SDIC_ID: $("#SDIC_ID").val() },
+            success: function (datasc) {
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data(datasc);
+            }
+        });*@
+        }
+
+        $('#btnSearchWindowOK').click(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+
+        });
+        $('#btnSearchWindowCancel').click(function () {
+            SearchWindow.close();
+        });
+        $("#SearchWindow").dblclick(function () {
+            SearchWindowEvents();
+            SearchWindow.close();
+
+        });
+        $("#SearchWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                SearchWindowEvents();
+                SearchWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                SearchWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        //------------------------------------End of Search Event----------------------------------------
+
+
+</script>
+
+
+

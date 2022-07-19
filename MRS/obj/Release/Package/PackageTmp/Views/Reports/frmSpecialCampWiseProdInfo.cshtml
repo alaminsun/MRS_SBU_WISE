@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("frmSpecialCampWiseProdInfo", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;"/>
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="pull-right">Special Campaign Program</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="hidden" id="SCP_CODE" name="SCP_CODE" />
+                            <input type="text" id="SCP_NAME" name="SCP_NAME" tabindex="2" class="txtBox RequiredTextBox" readonly="readonly" required="required" placeholder="Press F9" value="" style="text-align: center" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="grdKendo" tabindex="3"></div>
+</div>
+
+<div id="HonorWindow" style="display: none;">
+    <div id="HonorWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnHonorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnHonorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var deleteStatus = 0;
+    var dataitem = {};
+
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+
+        var HonorGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SCP_CODE",
+                    fields: {
+                        SCP_CODE: { editable: false },
+                        SCP_NAME: { editable: false }
+                    }
+                }
+            },
+            transport: {
+                read: {
+                    url: '@Url.Action("GetSCPList", "Reports")',
+                    type: "GET",
+                    dataType: "JSON"
+                }
+            },
+            pageSize: 30
+
+        });
+
+        var HonorGrid = $("#HonorWindowGrid").kendoGrid({
+            dataSource: HonorGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                { field: "SCP_CODE", title: "Special Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SCP_NAME", title: "Special Type", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        });
+
+        //Handling button click for Honorarium window grid
+        function HonorWindowEvent() {
+            var WindowGrid = $("#HonorWindowGrid").data("kendoGrid");
+            var WindowGridRow = WindowGrid.select();
+            var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+            $("#SCP_CODE").val(WindowGridItem.SCP_CODE);
+            $("#SCP_NAME").val(WindowGridItem.SCP_NAME);
+            changeStatus = 1;
+            $(".RequiredTextBox").css("border-color", "");
+            $('#MessageText').html('');
+        };
+
+        $("#HonorWindowGrid").dblclick(function () {
+            HonorWindowEvent();
+            HonorWindow.close();
+        });
+
+        $("#HonorWindowGrid").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                HonorWindowEvent();
+                HonorWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                HonorWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+        $('#btnHonorWindowOK').click(function () {
+            HonorWindowEvent();
+            HonorWindow.close();
+        });
+
+        $('#btnHonorWindowCancel').click(function () {
+            HonorWindow.close();
+        });
+    });
+
+    var HonorWindow = $('#HonorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Honorarium Type",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    $(document.body).keyup(function (e) {
+        if ($("#SCP_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                HonorWindow.open();
+                HonorWindow.center();
+            }
+        }
+    });
+
+    //End of Document.Ready()
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+
+</script>

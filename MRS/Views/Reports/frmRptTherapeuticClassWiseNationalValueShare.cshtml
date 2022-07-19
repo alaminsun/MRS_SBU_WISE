@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptTherapeuticClassWiseNationalValueShare", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            @*<button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>*@
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+
+                <div class="form-group col-lg-6">
+                    <label style="">Therapeutic Class Wise National Value Share (By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Therapeutic Class Wise National Value Share (By %)" name="ReportName" value="Therapeutic Class Wise National Value Share (By %)" checked="checked" />
+                    </div><br />
+                    <label style="">Therapeutic Class Wise National Value Share (By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Therapeutic Class Wise National Value Share (By Value)" name="ReportName" value="Therapeutic Class Wise National Value Share (By Value)" />
+                    </div><br />
+                </div>
+                <div class="form-group col-lg-6">
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Selection:</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select id="ddlTherapeutic" name="ddlTherapeutic" class="txtBox" tabindex="1">
+                                <option value="All Therapeutic">All Therapeutic</option>
+                                <option value="Selected Therapeutic">Selected Therapeutic</option>
+                            </select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Type:</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select id="ddlPresCategory" name="ddlPresCategory" class="txtBox" style="width: 100%;" tabindex="2"></select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Therapeutic Class Level:</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select id="ddlTheraClassLevel" name="ddlTheraClassLevel" class="txtBox" tabindex="3">
+                                <option value="THERAPEUTIC CLASS LEVEL-1">Therapeutic Class Level-1</option>
+                                <option value="THERAPEUTIC CLASS LEVEL-2">Therapeutic Class Level-2</option>
+                                <option value="THERAPEUTIC CLASS LEVEL-3">Therapeutic Class Level-3</option>
+                                <option value="THERAPEUTIC CLASS LEVEL-4">Therapeutic Class Level-4</option>
+                            </select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">From Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="FromDate" name="FromDate" style="width:100%" tabindex="4" class="txtBox datePicker" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">To Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="ToDate" name="ToDate" style="width:100%" tabindex="5" class="txtBox datePicker" />
+                        </div>
+                    </div><br />
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+        LoadPrescription();
+    }); //End of Document.Ready()
+
+    function LoadPrescription() {
+        $.ajax({
+            url: '@Url.Action("GetPrescriptionCategory", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    $('#ddlPresCategory').append($('<option>', { value: item.PRESC_CATE_CODE, html: item.PRESC_CATE_NAME }, '<option/>'));
+                });
+            },
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }
+
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+    function displayReport() {
+
+        if ($("#MANUFACTURER_NAME").val() != "") {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('MANUFACTURER_NAME', 10);
+            return false;
+        }
+    }
+</script>

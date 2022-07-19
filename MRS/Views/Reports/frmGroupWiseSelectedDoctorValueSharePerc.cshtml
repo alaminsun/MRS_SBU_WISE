@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmGroupWiseSelectedDoctorValueSharePerc", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-6">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 50px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+    <input type="hidden" id="ReportName" name="ReportName" value="Group Wise Selected Doctor Value Share Perc" />
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">From Date:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="6" class="txtBox datePicker" />
+                    </div>
+                </div><br />
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">To Date:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="7" class="txtBox datePicker" />
+                    </div>
+                </div><br />
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">Doctor Group:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <select id="GROUP_ID" name="GROUP_ID" tabindex="7" class="txtBox"></select>
+                    </div>
+                </div><br />
+            </div>
+        </form>
+    </div>
+}
+
+<script type="text/javascript">
+
+    ///*************Start Documnet Ready*************************//
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+
+        });
+
+        getDegreeInfo();
+        function getDegreeInfo() {
+            $.ajax({
+                url: '/Reports/GetDoctorGroup',
+                method: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        $('#GROUP_ID').append($('<option>', { value: item.GROUP_ID, html: item.GROUP_ID }, '<option/>'))
+                    });
+                }
+            })
+        }
+    });
+
+
+    // ------- End Of Ready Function --------
+
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+</script>

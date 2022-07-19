@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmReports", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box">
+        <div id="MessageText" class="col-lg-6">
+        </div>
+        <div class="col-lg-2" style="">
+            <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+        </div>
+        <div class="col-lg-6">
+            <button type="submit" id="btnShowReport" value="Report">Report</button>
+            <button type="button" id="btnReset" value="Reset" onclick="Reset();">Reset</button>
+        </div>
+    </div>
+    
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Manufacturer Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ManufacturerInfo" name="ReportName" value="ManufacturerInfo" checked="checked" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Selected Manufacturer Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SelectedManufacturerInfo" name="ReportName" value="SelectedManufacturerInfo" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Zone Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ZoneInfo" name="ReportName" value="ZoneInfo" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Division Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Divison" name="ReportName" value="Divison" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Region Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Region" name="ReportName" value="Region" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Territory Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Territory" name="ReportName" value="Territory" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Market Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Market" name="ReportName" value="Market" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Depo Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Depo" name="ReportName" value="Depo" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Zone Division Region Territory and Market Location</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ZoneDivisionRegionTerritoryandMarketLocation" name="ReportName" value="Zone Division Region Territory and Market Location" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Manufacturer Wise Product List</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="ManufacturerWiseProductList" name="ReportName" value="Manufacturer Wise Product List" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Institutional Information</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="InstitutionalInformation" name="ReportName" value="Institutional Information" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Market Wise Doctor List</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MarketWiseDoctorList" name="ReportName" value="Market Wise Doctor List" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Therapeutic Class Level 1 Report</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="TherapeuticClassLevel1" name="ReportName" value="TherapeuticClassLevel1" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Specialization wise Doctor List</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SpecializationwiseDoctorList" name="ReportName" value="Specialization wise Doctor List" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+}
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+    //
+</script>

@@ -1,0 +1,752 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        @*<button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>*@
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+    </div>
+</div>
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="box-body">
+                @*<div class="form-group">
+                        <div class="col-lg-4">
+                            <label>Management Designation Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="MGMT_CODE" class="txtBox" name="MGMT_CODE" />
+                            <input type="text" id="MGMT_NAME" class="txtBox" name="MGMT_NAME" readonly="readonly" placeholder="Press F9" />
+                        </div>
+                    </div>*@
+                <div class="form-group">
+                    <div class="col-lg-4">
+                        <label>Designation Group Name<span style="color: red">*</span></label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="hidden" id="SUStatus" class="txtBox" name="SUStatus" />
+                        <input type="hidden" id="GRP_DSIG_CODE" class="txtBox" name="GRP_DSIG_CODE" />
+                        <input type="text" id="GRP_DSIG_NAME" class="txtBox" name="GRP_DSIG_NAME" readonly="readonly" placeholder="Press F9" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="grdKendo" tabindex=""></div>
+</div>
+
+
+<div id="DeleteConfirmWindow" style="display: none">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="MgmtWindow" style="display: none;">
+    <div id="MgmtWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnMgmtWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnMgmtWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="HonInfoWindow" style="display: none;">
+    <div id="HonInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnHonInfoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnHonInfoWindowOK" class="PopUpButton" value="OK" />
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        $("#GRP_DSIG_NAME").focus();
+        //// Delete Button
+        //$("#btnDelete").click(function () {
+        //    resetEditDeleteStatus = 3; //Delete Button
+        //    deleteStatus = 1; //For Year
+        //    // When Chages Data
+        //    if (changeStatus == 1)
+        //        OpenSaveChangesDialog();
+        //        // When no Chages Data
+        //    else {
+        //        OpenConfirmationDialog();
+        //    }
+        //});
+        //To Define Data ManagDesigCeiling for Kendo Grid
+        var dataSourceDivisionInfo = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "HON_WISE_CEILING_CODE",
+                    fields: {
+                        HON_WISE_CEILING_CODE: { editable: false },
+                        HONORARIUM_CODE: { editable: true },
+                        HONORARIUM_NAME: { editable: true, defaultValue: 'Press F9' },
+                        CEILING_AMT: { editable: true, type: "number", defaultValue: '' }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for ManagDesigCeiling Kendo Grid
+        var gridDivisionInfo = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSourceDivisionInfo,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "HONORARIUM_CODE"]').attr("readonly", true);
+                $('input[name = "HONORARIUM_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Honorarium Info.", className: "btnCeilingGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "HON_WISE_CEILING_CODE", hidden: true },
+                { field: "HONORARIUM_CODE", hidden: true },
+                { field: "HONORARIUM_NAME", title: "Honorarium Name", filterable: true, attributes: { "class": "HonInfo" }, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "CEILING_AMT", title: "Ceiling Amount", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleCeilingDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        $(".btnCeilingGrid").click(function () {
+            var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieraddressgrid.addRow();
+            var cell = $('#PageDetailGrid').find('tbody tr:eq(0) td:eq(0)');
+            $('#PageDetailGrid').data('kendoGrid').editCell(cell);
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleCeilingDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 2) {
+                if (dataitem.HON_WISE_CEILING_CODE != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedHonInfo", "ManagDesigCeiling")',
+                        type: 'POST',
+                        data: JSON.stringify({ "HON_WISE_CEILING_CODE": dataitem.HON_WISE_CEILING_CODE }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 2) {
+                    if (dataitem.HON_WISE_CEILING_CODE != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedHonInfo", "ManagDesigCeiling")',
+                            type: 'POST',
+                            data: JSON.stringify({ "HON_WISE_CEILING_CODE": dataitem.HON_WISE_CEILING_CODE }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var ManagDesigCeilingModel = { "HON_WISE_CEILING_CODE": "", "HONORARIUM_CODE": "", "HONORARIUM_NAME": "", "CEILING_AMT": "", "HonCeilingAmountList": [] };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Empty or Maximum Length in MGMT_NAME
+        CheckRequiredTextBoxMaxLength('GRP_DSIG_NAME', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            ManagDesigCeilingModel.GRP_DSIG_CODE = $("#GRP_DSIG_CODE").val();
+            ManagDesigCeilingModel.SUStatus = $("#SUStatus").val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            ManagDesigCeilingModel.HonCeilingAmountList = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                    var detailModel = {};
+                    if (data[i].dirty) {
+                        detailModel.HON_WISE_CEILING_CODE = data[i].HON_WISE_CEILING_CODE;
+                        detailModel.HONORARIUM_CODE = data[i].HONORARIUM_CODE;
+                        detailModel.CEILING_AMT = data[i].CEILING_AMT;
+
+                        ManagDesigCeilingModel.HonCeilingAmountList.push(detailModel);
+                    }
+                }
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("ManagDesigCeiling", "ManagDesigCeiling")',
+                    data: JSON.stringify(ManagDesigCeilingModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#HON_WISE_CEILING_CODE').val(response.HON_WISE_CEILING_CODE);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSaveDiviList", "ManagDesigCeiling")',
+                                type: 'GET',
+                                data: { HON_WISE_CEILING_CODE: $("#HON_WISE_CEILING_CODE").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSaveDiviList", "ManagDesigCeiling")',
+                                type: 'GET',
+                                data: { HON_WISE_CEILING_CODE: $("#HON_WISE_CEILING_CODE").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 1) {
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#GRP_DSIG_NAME").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    ////////////////////Mgmt/////////////////////////
+
+    var MgmtGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MGMT_CODE",
+                fields: {
+                    //MGMT_CODE: { editable: false },
+                    //MGMT_NAME: { editable: false },
+                    GRP_DSIG_CODE: { editable: false },
+                    GRP_DSIG_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllManagementDesignationList", "ManagDesigCeiling")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var MgmtPageGrid = $("#MgmtWindowGrid").kendoGrid({
+        dataSource: MgmtGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            //{ field: "MGMT_NAME", title: "Management Designation Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            //{ field: "GRP_DSIG_NAME", title: "Designation Group Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "GRP_DSIG_NAME", title: "Group Designation Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "GRP_DSIG_CODE", hidden: true }
+        ]
+    });
+
+    var MgmtWindow = $('#MgmtWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "850px",
+        height: "400px",
+        title: "List of Management Designation Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for MGMT_NAME window grid
+    function MgmtWindowEvent() {
+        var WindowGrid = $("#MgmtWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //$("#MGMT_CODE").val(WindowGridItem.MGMT_CODE);
+        //$("#MGMT_NAME").val(WindowGridItem.MGMT_NAME);
+        $("#GRP_DSIG_CODE").val(WindowGridItem.GRP_DSIG_CODE);
+        $("#GRP_DSIG_NAME").val(WindowGridItem.GRP_DSIG_NAME);
+
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnMgmtWindowOK').click(function () {
+        MgmtWindowEvent();
+        MgmtWindow.close();
+    });
+
+    $('#btnMgmtWindowCancel').click(function () {
+        MgmtWindow.close();
+    });
+
+    $("#MgmtWindowGrid").dblclick(function () {
+        MgmtWindowEvent();
+        MgmtWindow.close();
+    });
+
+    $("#MgmtWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            MgmtWindowEvent();
+            MgmtWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            MgmtWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#GRP_DSIG_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('MgmtWindowGrid');
+                MgmtWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                //id: "HON_WISE_CEILING_CODE",
+                fields: {
+                    //MGMT_CODE: { editable: false },
+                    //MGMT_NAME: { editable: false },
+                    GRP_DSIG_CODE: { editable: false },
+                    GRP_DSIG_NAME: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            //{ field: "MGMT_NAME", title: "Management Designation Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "GRP_DSIG_NAME", title: "Designation Group Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            //{ field: "MGMT_CODE", hidden: true, title: "Management Designation Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "GRP_DSIG_CODE", hidden: true }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Mgmt Division Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetHonDesigCeilingSearchList", "ManagDesigCeiling")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#HON_WISE_CEILING_CODE").val(selectedItem.HON_WISE_CEILING_CODE);
+        //$("#MGMT_CODE").val(selectedItem.MGMT_CODE);
+        //$("#MGMT_NAME").val(selectedItem.MGMT_NAME);
+        $("#GRP_DSIG_CODE").val(selectedItem.GRP_DSIG_CODE);
+        $("#GRP_DSIG_NAME").val(selectedItem.GRP_DSIG_NAME);
+
+        $("#SUStatus").val(1);
+
+        $.ajax({
+            url: '@Url.Action("GetSaveCeilingHonList", "ManagDesigCeiling")',
+            type: 'GET',
+            data: { GRP_DSIG_CODE: $("#GRP_DSIG_CODE").val() },
+            success: function (data33) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+    }
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    /////////////////////////////////////////////////////
+
+    ///////////////////Existing Division Info List/////////////////////////
+
+    $(document).on('keyup', '.HonInfo', function (e) {
+        if (e.keyCode == 120) {
+            GetHonInfoList();
+            SelectedItemOfListOfValue('HonInfoWindowGrid');
+            HonInfoWindow.open();
+        }
+    });
+
+    function GetHonInfoList() {
+        $.ajax({
+            url: '@Url.Action("GetHonarariumTypeList", "ManagDesigCeiling")',
+            type: 'GET',
+            //data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#HonInfoWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var HonInfoWindow = $('#HonInfoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Division Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var HonInfoGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "HONORARIUM_CODE",
+                fields: {
+                    HONORARIUM_NAME: { editable: false },
+                    HONORARIUM_CODE: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var HonInfoGrid = $("#HonInfoWindowGrid").kendoGrid({
+        dataSource: HonInfoGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "HONORARIUM_NAME", title: "Honorarium Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "HONORARIUM_CODE", title: "Honorarium Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var isDuplicate = 0;
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventHonInfo(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var dataSourceBillRef = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var dataBillRef = dataSourceBillRef.data(); // Get Detail Grid Data
+        for (var j = 0; j <= dataBillRef.length - 1; j++) {
+            if (dataBillRef[j].HONORARIUM_CODE == selectedItem.HONORARIUM_CODE) {
+                isDuplicate = 1;
+                break;
+            }
+        }
+        if (isDuplicate == 0) {
+
+            var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+            var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+            pageGridItem.set("HONORARIUM_CODE", selectedItem.HONORARIUM_CODE);
+            pageGridItem.set("HONORARIUM_NAME", selectedItem.HONORARIUM_NAME);
+
+            var cell = $('#PageDetailGrid').find('tbody tr:eq(0) td:eq(3)');
+            $('#PageDetailGrid').data('kendoGrid').editCell(cell);
+
+            changeStatus = 1;
+        } else {
+            isDuplicate = 0;
+            alert("Duplicate Honorarium.");
+        }
+    }
+
+    //Handling button click for HonInfo window grid
+    $('#btnHonInfoWindowOK').click(function () {
+        ListOfValueGridEventHonInfo('HonInfoWindowGrid');
+        HonInfoWindow.close();
+    });
+    $('#btnHonInfoWindowCancel').click(function () {
+        HonInfoWindow.close();
+    });
+    $("#HonInfoWindow").dblclick(function () {
+        ListOfValueGridEventHonInfo('HonInfoWindowGrid');
+        HonInfoWindow.close();
+    });
+    $("#HonInfoWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventHonInfo('HonInfoWindowGrid');
+            HonInfoWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            HonInfoWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ///////////////////////////////////////////////////////
+</script>

@@ -1,0 +1,367 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@using (Html.BeginForm("Report", "ZoneInfo", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+    {*@
+
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        @*<button type="submit" id="btnsubmit" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Report</button>*@
+        @*<button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>*@
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label>Zone Name<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ZoneName" class="txtBox RequiredTextBox SetFocus" name="ZoneName" tabindex="1" />
+                </div>
+                <div class="col-lg-2">
+                    <label>OLD Zone Code</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="SAPZoneCode" class="txtBox" name="SAPZoneCode" tabindex="3" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label>Zone Code</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    @*<input type="text" id="ZoneCode" class="txtBox RequiredTextBox" name="ZoneCode" tabindex="2" />*@
+                    <input type="text" id="ZoneCode" class="txtBox RequiredTextBox SetFocus" name="ZoneCode" tabindex="2" readonly="readonly" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Zone Order Sl. No</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+@*}*@
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        OnlyNumericValue('SlNo');
+        //To Define Data ZoneInfo for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "ZoneCode",
+                    fields: {
+                        ZoneCode: { editable: false },
+                        ZoneName: { editable: false },
+                        SAPZoneCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllZoneList", "ZoneInfo")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for ZoneInfo Kendo Grid
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "ZoneCode", title: "Zone Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ZoneName", title: "Zone Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPZoneCode", title: "SAP Zone Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "ZoneInfo")',
+                type: 'POST',
+                data: JSON.stringify({ "ZoneCode": dataitem.ZoneCode }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus ZoneName textbox
+        $(".SetFocus").focus();
+
+        // Edit Button in Grid
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                $(".RequiredTextBox").css("border-color", "");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#ZoneCode").attr("disabled", "disabled");
+            }
+        };
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#ZoneCode").removeAttr("disabled");
+                changeStatus = 0;
+                location.reload();
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#ZoneCode").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "ZoneInfo")',
+                    type: 'POST',
+                    data: JSON.stringify({ "ZoneCode": dataitem.ZoneCode }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var manufacturerInfoModel = { "ZoneCode": "", "ZoneName": "", "SAPZoneCode": "", "SlNo": "" };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Empty or Maximum Length in ZoneName
+        CheckRequiredTextBoxMaxLength('ZoneName', 100);
+
+        // Check Maximum Length in SAPZoneCode
+        CheckNormalTextBoxMaxLength('SAPZoneCode', 200);
+
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('SlNo', 20);
+        alert(saveStatus);
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            manufacturerInfoModel.ZoneCode = $("#ZoneCode").val();
+            manufacturerInfoModel.ZoneName = $("#ZoneName").val();
+            manufacturerInfoModel.SAPZoneCode = $("#SAPZoneCode").val();
+            manufacturerInfoModel.SlNo = $("#SlNo").val();
+            manufacturerInfoModel.SUStatus = $("#SUStatus").val();
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("ZoneInfo", "ZoneInfo")',
+                    data: JSON.stringify(manufacturerInfoModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $("#SUStatus").val(1);
+                            GridReload('PageDetailGrid');
+                            $('#ZoneCode').val(response.Code);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#ZoneCode").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#ZoneCode").removeAttr("disabled");
+            location.reload();
+        }
+    });
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSuggestZoneList", "ZoneInfo")',
+                type: "GET"
+            }
+        }
+    });
+    $("#ZoneName").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith"
+    });
+</script>

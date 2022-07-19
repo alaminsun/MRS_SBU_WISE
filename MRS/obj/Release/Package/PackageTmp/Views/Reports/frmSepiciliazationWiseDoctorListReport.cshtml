@@ -1,0 +1,576 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmReports", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box">
+        <div id="MessageText" class="col-lg-6">
+        </div>
+        <div class="col-lg-2" style="">
+            <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+        </div>
+        <div class="col-lg-6">
+            <button type="submit" id="btnShowReport" value="Report">Report</button>
+            <button type="button" id="btnReset" value="Reset" onclick="Reset();">Reset</button>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Region</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="hidden" class="txtBox" id="REGION_CODE" />
+                        <input type="text" id="REGION_NAME" placeholder="All Region/Press F9" readonly="readonly" name="REGION_NAME" tabindex="1" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Degree</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="hidden" class="txtBox" id="DEGREE_CODE" />
+                        <input type="text" id="DEGREE" placeholder="All Region/Press F9" readonly="readonly" name="DEGREE" tabindex="1" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Specialization</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="hidden" class="txtBox" id="SPECIALIZATION_CODE" />
+                        <input type="text" id="SPECIALIZATION" placeholder="All Region/Press F9" readonly="readonly" name="SPECIALIZATION" tabindex="1" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">Designation</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="hidden" class="txtBox" id="DESIGNATION_CODE" />
+                        <input type="text" id="DESIGNATION" placeholder="All Region/Press F9" readonly="readonly" name="DESIGNATION" tabindex="1" />
+                    </div>
+                </div>
+
+                @*<div class="row">
+                        <div class="col-lg-8 text-right">
+                            <label style="">Region Information</label>
+                        </div>
+                        <div class="col-lg-1" style="">
+                            <<input type="hidden" class="txtBox" id="DESIGNATION_CODE" />
+                            <input type="text" id="DESIGNATION" placeholder="All Region/Press F9" readonly="readonly" name="DESIGNATION" tabindex="1" />
+                        </div>
+                    </div>*@
+
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">From Date</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="text" id="FromDate" name="FromDate" class="datePicker" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 text-right">
+                        <label style="">To Date</label>
+                    </div>
+                    <div class="col-lg-1" style="">
+                        <input type="text" id="ToDate" name="ToDate" class="datePicker" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+}
+<div id="RegionWindow" style="display: none;">
+    <div id="RegionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DegreeWindow" style="display: none;">
+    <div id="DegreeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDegreeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDegreeWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="SpecializationWindow" style="display: none;">
+    <div id="SpecializationWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSpecializationWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSpecializationWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DesignationWindow" style="display: none;">
+    <div id="DesignationWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDesignationWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDesignationWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+    }); //End of Document.Ready()
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+    });
+
+    ////////////////////Designation/////////////////////////
+
+    var DesignationGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DESIGNATION_CODE",
+                fields: {
+                    DESIGNATION_CODE: { editable: false },
+                    DESIGNATION: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDesignationList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var DesignationPageGrid = $("#DesignationWindowGrid").kendoGrid({
+        dataSource: DesignationGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DESIGNATION", title: "Designation", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DESIGNATION_CODE", title: "Designation Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var DesignationWindow = $('#DesignationWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Designation Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function DesignationWindowEvent() {
+        var WindowGrid = $("#DesignationWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DESIGNATION_CODE").val(WindowGridItem.DESIGNATION_CODE);
+        $("#DESIGNATION").val(WindowGridItem.DESIGNATION);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnDesignationWindowOK').click(function () {
+        DesignationWindowEvent();
+        DesignationWindow.close();
+    });
+
+    $('#btnDesignationWindowCancel').click(function () {
+        DesignationWindow.close();
+    });
+
+    $("#DesignationWindowGrid").dblclick(function () {
+        DesignationWindowEvent();
+        DesignationWindow.close();
+    });
+
+    $("#DesignationWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            DesignationWindowEvent();
+            DesignationWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DesignationWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DESIGNATION").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('DesignationWindowGrid');
+                DesignationWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+    ////////////////////Specialization/////////////////////////
+
+    var SpecializationGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SpecializationCode",
+                fields: {
+                    SpecializationCode: { editable: false },
+                    Specialization: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSpecializationList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var SpecializationPageGrid = $("#SpecializationWindowGrid").kendoGrid({
+        dataSource: SpecializationGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "Specialization", title: "Specialization", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SpecializationCode", title: "Specialization Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var SpecializationWindow = $('#SpecializationWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Specialization Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function SpecializationWindowEvent() {
+        var WindowGrid = $("#SpecializationWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#SPECIALIZATION_CODE").val(WindowGridItem.SpecializationCode);
+        $("#SPECIALIZATION").val(WindowGridItem.Specialization);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSpecializationWindowOK').click(function () {
+        SpecializationWindowEvent();
+        SpecializationWindow.close();
+    });
+
+    $('#btnSpecializationWindowCancel').click(function () {
+        SpecializationWindow.close();
+    });
+
+    $("#SpecializationWindowGrid").dblclick(function () {
+        SpecializationWindowEvent();
+        SpecializationWindow.close();
+    });
+
+    $("#SpecializationWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SpecializationWindowEvent();
+            SpecializationWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SpecializationWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#SPECIALIZATION").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SpecializationWindowGrid');
+                SpecializationWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    ////////////////////Degree/////////////////////////
+
+    var DegreeGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DEGREE_CODE",
+                fields: {
+                    DEGREE_CODE: { editable: false },
+                    DEGREE: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDegreeList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var DegreePageGrid = $("#DegreeWindowGrid").kendoGrid({
+        dataSource: DegreeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DEGREE", title: "Degree", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DEGREE_CODE", title: "Degree Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var DegreeWindow = $('#DegreeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Degree Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function DegreeWindowEvent() {
+        var WindowGrid = $("#DegreeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DEGREE_CODE").val(WindowGridItem.DEGREE_CODE);
+        $("#DEGREE").val(WindowGridItem.DEGREE);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnDegreeWindowOK').click(function () {
+        DegreeWindowEvent();
+        DegreeWindow.close();
+    });
+
+    $('#btnDegreeWindowCancel').click(function () {
+        DegreeWindow.close();
+    });
+
+    $("#DegreeWindowGrid").dblclick(function () {
+        DegreeWindowEvent();
+        DegreeWindow.close();
+    });
+
+    $("#DegreeWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            DegreeWindowEvent();
+            DegreeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DegreeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DEGREE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('DegreeWindowGrid');
+                DegreeWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    //////////////////Region///////////////////////////
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "RegionCode",
+                fields: {
+                    RegionCode: { editable: false },
+                    RegionName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetRegionList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "RegionName", title: "Region Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "RegionCode", title: "Region Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Region Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#REGION_CODE").val(WindowGridItem.RegionCode);
+        $("#REGION_NAME").val(WindowGridItem.RegionName);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+</script>

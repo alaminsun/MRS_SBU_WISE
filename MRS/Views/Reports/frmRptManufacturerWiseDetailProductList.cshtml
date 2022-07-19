@@ -1,0 +1,329 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptManufacturerWiseDetailProductList", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+
+
+
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label>Manufacturer Code</label><label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="hidden" id="MANUFACTURER_CODE" name="MANUFACTURER_CODE" tabindex="1" class="txtBox RequiredTextBox SetFocus" value="" placeholder="Press F9" readonly="readonly" style="text-align: center" />
+                        <input type="text" id="MANUFACTURER_NAME" name="MANUFACTURER_NAME" tabindex="1" class="txtBox RequiredTextBox SetFocus" value="" placeholder="Press F9" readonly="readonly" style="text-align: center" />
+                    </div>
+                </div><br />
+
+
+                @*<div class="form-group">
+                    <div class="col-lg-3">
+                        <label>From Date</label><label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-3">
+
+                        <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox RequiredTextBox datePickerold " value="" style="text-align: center" />
+                    </div>
+                </div><br />*@
+
+
+
+                @*<div class="form-group">
+                    <div class="col-lg-3">
+                        <label>To Date</label><label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-3">
+
+                        <input type="text" id="ToDate" name="ToDate" tabindex="1" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div>
+                </div><br />*@
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label>Order By</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <select id="OrderByClause" name="OrderByClause" class="txtBox" tabindex="5" style="text-align: center">
+                            <option value="a.PROD_ID">Product Code </option>
+                            <option value="a.PRODUCT_NAME">Product Name</option>
+                            <option value="b.generic_code">Generic Code</option>
+                            <option value="b.generic_name">Generic Name</option>
+                            <option value="g.DOSAGE_FORM_CODE">Dosage Form Code</option>
+                            <option value="g.DOSAGE_FORM_NAME">Dosage Form Name</option>
+                            <option value="h.DSG_STRENGTH_CODE">Dosage Strength Code</option>
+                            <option value="h.DSG_STRENGTH_NAME">Dosage Strength Name</option>
+
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+<div id="ManufactureIDWindow" style="display: none;">
+    <div id="ManufactureGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManufactureIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManufactureIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<div id="GenericIDWindow" style="display: none;">
+    <div id="GenericGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGenericIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGenericIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+    $(".datePickerold").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: "01/01/2000",
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $(".txtBox").val("");
+        //location.reload();
+    });
+
+
+    //*********** DEFINE GENERIC GRID ***************************** //
+
+    //*********** DEFINE Manufacture Window ***************************** //
+
+    var ManufactureIDWindow = $('#ManufactureIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "50%",
+        height: "auto",
+        title: "List of Manufecturer Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Manufacture GRID ***************************** //
+
+    var ManufactureGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MANUFACTURER_CODE",
+                fields: {
+                    MANUFACTURER_CODE: { editable: false, hidden: true },
+                    MANUFACTURER_NAME: { editable: false },
+                    SlNo: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllManufacturerList", "ProductInformation")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+    });
+
+    var ManufactureGrid = $("#ManufactureGrid").kendoGrid({
+        dataSource: ManufactureGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+                    { field: "MANUFACTURER_NAME", title: "Manufacturer Name", width: "150px", filterable: true },
+                    { field: "MANUFACTURER_CODE", title: "Manufacturer Code", width: "150px", filterable: true }
+                    //{ field: "SlNo", title: "Manufacturer Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    @*$(document.body).keypress(function (e) {
+        if ($("#MANUFACTURER_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetAllManufacturerList", "ProductInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#ManufactureGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('ManufactureGrid');
+                ManufactureIDWindow.open();
+                ManufactureIDWindow.center();
+            }
+        }
+    });*@
+
+    $(document.body).keyup(function (e) {
+        if ($("#MANUFACTURER_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ManufactureGrid');
+                ManufactureIDWindow.open();
+                ManufactureIDWindow.center();
+            }
+        }
+    });
+
+    //$("#MANUFACTURER_NAME").on('keyup keypress keydown dblclick', function (e) {
+    //    ManufactureIDWindow.open();
+    //    ManufactureIDWindow.center();
+    //    $.ajax({
+    //        url: '/ProductInformation/GetAllManufacturerList',
+    //        method: 'get',
+    //        data: 'json',
+    //        success: function (data) {
+
+    //            $("#divLoading").hide();
+    //            $("#ManufactureGrid").data("kendoGrid").dataSource.data(data);
+    //        },
+    //        complete: function (data) {
+    //            $("#divLoading").hide();
+    //        }
+    //    });
+    //    SelectedItemOfListOfValue('ManufactureGrid');
+
+    //});
+    
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnManufactureIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent('ManufactureGrid');
+        ManufactureIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnManufactureIDWindowCancel').click(function () {
+        ManufactureIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#ManufactureIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent('ManufactureGrid');
+        ManufactureIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#ManufactureIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent('ManufactureGrid');
+            ManufactureIDWindow.close();
+        }
+        else if (keycode == '27') {
+            ManufactureIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select()));
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $("#MANUFACTURER_CODE").val(selectedItem.MANUFACTURER_CODE);
+        $("#MANUFACTURER_NAME").val(selectedItem.MANUFACTURER_NAME);
+    }
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+    //********************************************** END of Manufacture POP UP Window ****************************************************//
+    //********************************************** END of GENERIC POP UP Window ****************************************************//
+
+</script>
+

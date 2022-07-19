@@ -1,0 +1,949 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Zone</a></li>
+        <li><a href="#tabs-2">Division</a></li>
+        <li><a href="#tabs-3">Region</a></li>
+        <li><a href="#tabs-4">Territory</a></li>
+        <li><a href="#tabs-5">Market</a></li>
+        <li><a href="#tabs-6">Depo</a></li>
+    </ul>
+    <div id="tabs-1">
+        <div class="row box box-danger">
+            <div class="col-lg-6">
+                <span id="MessageText" class="pull-right"></span>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+                <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+            </div>
+        </div>
+
+        <div class="row box box-primary">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Zone Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="SUStatus" class="txtBox" />
+                            <input type="text" id="ZoneCode" class="txtBox RequiredTextBox SetFocus" name="ZoneCode" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>SAP Zone Code</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SAPZoneCode" class="txtBox" name="SAPZoneCode" tabindex="2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Zone Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="ZoneName" class="txtBox RequiredTextBox" name="ZoneName" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Zone Order Sl. No</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row box box-success">
+            <div id="ZonePageDetailGrid" class="MainGrid" tabindex="5"></div>
+        </div>
+
+        <div id="DeleteConfirmWindow" style="display: none;">
+            <p><h5>Are you sure to delete?</h5></p>
+            <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+            <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+        </div>
+
+        <div id="SaveChangeWindow" style="display: none;">
+            <p><h5>Data will be lost if you continue.</h5></p>
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="tabs-2">
+        <div class="row box box-danger">
+            <div class="col-lg-6">
+                <span id="MessageText" class="pull-right"></span>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+                <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+            </div>
+        </div>
+
+        <div class="row box box-primary">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Divison Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="SUStatus" class="txtBox" />
+                            <input type="text" id="DivisonCode" class="txtBox RequiredTextBox SetFocus" name="DivisonCode" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>SAP Divison Code</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SAPDivisonCode" class="txtBox" name="SAPDivisonCode" tabindex="2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Divison Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="DivisonName" class="txtBox RequiredTextBox" name="DivisonName" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Divison Order Sl. No</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row box box-success">
+            <div id="DivisonPageDetailGrid" class="MainGrid" tabindex="5"></div>
+        </div>
+
+        <div id="DeleteConfirmWindow" style="display: none;">
+            <p><h5>Are you sure to delete?</h5></p>
+            <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+            <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+        </div>
+
+        <div id="SaveChangeWindow" style="display: none;">
+            <p><h5>Data will be lost if you continue.</h5></p>
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="tabs-3">
+        <div class="row box box-danger">
+            <div class="col-lg-6">
+                <span id="MessageText" class="pull-right"></span>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+                <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+            </div>
+        </div>
+
+        <div class="row box box-primary">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Region Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="SUStatus" class="txtBox" />
+                            <input type="text" id="RegionCode" class="txtBox RequiredTextBox SetFocus" name="RegionCode" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>SAP Region Code</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SAPRegionCode" class="txtBox" name="SAPRegionCode" tabindex="2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Region Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="RegionName" class="txtBox RequiredTextBox" name="RegionName" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Region Order Sl. No</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row box box-success">
+            <div id="RegionPageDetailGrid" class="MainGrid" tabindex="5"></div>
+        </div>
+
+        <div id="DeleteConfirmWindow" style="display: none;">
+            <p><h5>Are you sure to delete?</h5></p>
+            <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+            <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+        </div>
+
+        <div id="SaveChangeWindow" style="display: none;">
+            <p><h5>Data will be lost if you continue.</h5></p>
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="tabs-4">
+        <div class="row box box-danger">
+            <div class="col-lg-6">
+                <span id="MessageText" class="pull-right"></span>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+                <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+            </div>
+        </div>
+
+        <div class="row box box-primary">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Territory Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="SUStatus" class="txtBox" />
+                            <input type="text" id="TerritoryCode" class="txtBox RequiredTextBox SetFocus" name="TerritoryCode" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>SAP Territory Code</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SAPTerritoryCode" class="txtBox" name="SAPTerritoryCode" tabindex="2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Territory Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="TerritoryName" class="txtBox RequiredTextBox" name="TerritoryName" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Territory Order Sl No</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row box box-success">
+            <div id="TerritoryPageDetailGrid" class="MainGrid" tabindex="5"></div>
+        </div>
+
+        <div id="DeleteConfirmWindow" style="display: none;">
+            <p><h5>Are you sure to delete?</h5></p>
+            <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+            <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+        </div>
+
+        <div id="SaveChangeWindow" style="display: none;">
+            <p><h5>Data will be lost if you continue.</h5></p>
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="tabs-5">
+        <div class="row box box-danger">
+            <div class="col-lg-6">
+                <span id="MessageText" class="pull-right"></span>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+                <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+            </div>
+        </div>
+
+        <div class="row box box-primary">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Market Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="SUStatus" class="txtBox" />
+                            <input type="text" id="MarketCode" class="txtBox RequiredTextBox SetFocus" name="MarketCode" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>SAP Market Code</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SAPMarketCode" class="txtBox" name="SAPMarketCode" tabindex="2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Market Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="MarketName" class="txtBox RequiredTextBox" name="MarketName" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Market Order Sl No</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row box box-success">
+            <div id="MarketPageDetailGrid" class="MainGrid" tabindex="5"></div>
+        </div>
+
+        <div id="DeleteConfirmWindow" style="display: none;">
+            <p><h5>Are you sure to delete?</h5></p>
+            <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+            <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+        </div>
+
+        <div id="SaveChangeWindow" style="display: none;">
+            <p><h5>Data will be lost if you continue.</h5></p>
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+        </div>
+    </div>
+    <div id="tabs-6">
+        <div class="row box box-danger">
+            <div class="col-lg-6">
+                <span id="MessageText" class="pull-right"></span>
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+                <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+            </div>
+        </div>
+
+        <div class="row box box-primary">
+
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Depo Code<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="SUStatus" class="txtBox" />
+                            <input type="text" id="DepoCode" class="txtBox RequiredTextBox SetFocus" name="DepoCode" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>SAP Depo Code</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SAPDepoCode" class="txtBox" name="SAPDepoCode" tabindex="2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <label>Depo Name<span style="color: red">*</span></label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="DepoName" class="txtBox RequiredTextBox" name="DepoName" tabindex="1" />
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Depo Order Sl No</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="text" id="SlNo" class="txtBox" name="SlNo" tabindex="3" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="row box box-success">
+            <div id="DepoPageDetailGrid" class="MainGrid" tabindex="5"></div>
+        </div>
+
+        <div id="DeleteConfirmWindow" style="display: none;">
+            <p><h5>Are you sure to delete?</h5></p>
+            <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+            <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+        </div>
+
+        <div id="SaveChangeWindow" style="display: none;">
+            <p><h5>Data will be lost if you continue.</h5></p>
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+            <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#tabs").tabs();
+    });
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        OnlyNumericValue('SlNo');
+        //To Define Data ZoneInfo for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "ZoneCode",
+                    fields: {
+                        ZoneCode: { editable: false },
+                        ZoneName: { editable: false },
+                        SAPZoneCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllZoneList", "ZoneInfo")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for ZoneInfo Kendo Grid
+        var grid = $('#ZonePageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "ZoneCode", title: "Zone Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ZoneName", title: "Zone Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPZoneCode", title: "SAP Zone Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //To Define Data Divison for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "DivisonCode",
+                    fields: {
+                        DivisonCode: { editable: false },
+                        DivisonName: { editable: false },
+                        SAPDivisonCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllDivisonList", "Divison")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Divison Kendo Grid
+        var grid = $('#DivisonPageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "DivisonCode", title: "Divison Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "DivisonName", title: "Divison Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPDivisonCode", title: "SAP Divison Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //To Define Data Region for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "RegionCode",
+                    fields: {
+                        RegionCode: { editable: false },
+                        RegionName: { editable: false },
+                        SAPRegionCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllRegionList", "Region")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Region Kendo Grid
+        var grid = $('#RegionPageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "RegionCode", title: "Region Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "RegionName", title: "Region Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPRegionCode", title: "SAP Region Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Region Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //To Define Data Territory for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "TerritoryCode",
+                    fields: {
+                        TerritoryCode: { editable: false },
+                        TerritoryName: { editable: false },
+                        SAPTerritoryCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllTerritoryList", "Territory")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Territory Kendo Grid
+        var grid = $('#TerritoryPageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "TerritoryCode", title: "Territory Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "TerritoryName", title: "Territory Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPTerritoryCode", title: "SAP Territory Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Territory Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //To Define Data Market for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "MarketCode",
+                    fields: {
+                        MarketCode: { editable: false },
+                        MarketName: { editable: false },
+                        SAPMarketCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllMarketList", "Market")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Market Kendo Grid
+        var grid = $('#MarketPageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "MarketCode", title: "Market Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "MarketName", title: "Market Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPMarketCode", title: "SAP Market Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //To Define Data Depo for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "DepoCode",
+                    fields: {
+                        DepoCode: { editable: false },
+                        DepoName: { editable: false },
+                        SAPDepoCode: { editable: false },
+                        SlNo: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllDepoList", "Depo")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Depo Kendo Grid
+        var grid = $('#DepoPageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "DepoCode", title: "Depo Code", width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "DepoName", title: "Depo Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SAPDepoCode", title: "SAP Depo Code", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "ZoneInfo")',
+                type: 'POST',
+                data: JSON.stringify({ "ZoneCode": dataitem.ZoneCode }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus ZoneName textbox
+        $(".SetFocus").focus();
+
+        // Edit Button in Grid
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                $(".RequiredTextBox").css("border-color", "");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#ZoneCode").attr("disabled", "disabled");
+            }
+        };
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#ZoneCode").removeAttr("disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#ZoneCode").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "ZoneInfo")',
+                    type: 'POST',
+                    data: JSON.stringify({ "ZoneCode": dataitem.ZoneCode }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var manufacturerInfoModel = { "ZoneCode": "", "ZoneName": "", "SAPZoneCode": "", "SlNo": "" };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Empty or Maximum Length in ZoneName
+        CheckRequiredTextBoxMaxLength('ZoneCode', 20);
+        // Check Empty or Maximum Length in ZoneName
+        CheckRequiredTextBoxMaxLength('ZoneName', 100);
+
+        // Check Maximum Length in SAPZoneCode
+        CheckNormalTextBoxMaxLength('SAPZoneCode', 200);
+
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('SlNo', 20);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            manufacturerInfoModel.ZoneCode = $("#ZoneCode").val();
+            manufacturerInfoModel.ZoneName = $("#ZoneName").val();
+            manufacturerInfoModel.SAPZoneCode = $("#SAPZoneCode").val();
+            manufacturerInfoModel.SlNo = $("#SlNo").val();
+            manufacturerInfoModel.SUStatus = $("#SUStatus").val();
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("ZoneInfo", "ZoneInfo")',
+                    data: JSON.stringify(manufacturerInfoModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $("#SUStatus").val(1);
+                            GridReload('PageDetailGrid');
+                            ResetOnlyMasterPageData();
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#ZoneCode").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#ZoneCode").removeAttr("disabled");
+        }
+    });
+</script>

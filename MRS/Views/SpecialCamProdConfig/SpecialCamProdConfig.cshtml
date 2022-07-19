@@ -1,0 +1,1572 @@
+﻿@{
+    ViewBag.Title = "SpecialCamProdConfig";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+    </div>
+</div>
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div style="padding:10px;" class="box-body">
+            <div style="margin-bottom:5px;" class="form-group">
+                <div class="col-lg-2">
+                    <label>SCP Code</label> <label style="color: red">*</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="hidden" id="SC_ID" name="SC_ID" class="txtBox" />
+                    <input type="text" id="SCP_CODE" name="SCP_CODE" tabindex="" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" />
+                </div>
+                <div class="col-lg-2">
+                    <label>SCP Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="SCP_NAME" name="SCP_NAME" tabindex="" readonly="readonly" class="txtBox" value="" placeholder="SCP Name" />
+                </div>
+                <div class="col-lg-2">
+                </div>
+            </div>
+            @*<div style="margin-bottom:5px;" class="form-group">
+                    <div class="col-lg-2">
+                        <label>Generic Code</label><label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="GENERICCODE" name="GENERICCODE" tabindex="" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Generic Name</label><label style="color: red">*</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="GENERICNAME" name="GENERICNAME" tabindex="" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Generic Name" />
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="button" id="AddNewGeneric" name="AddNewGeneric" class=" btn bg-olive btn-flat margin pull-right" value="Add New Generic" />
+                    </div>
+                </div>*@
+        </div>
+    </form>
+</div>
+<div class="row box">
+    <div id="PageGenericGrid" class="MainGrid"></div>
+</div>
+<div class="row box">
+    <div class="col-lg-6">
+        <div id="PageDosageGrid" class="MainGrid"></div>
+    </div>
+    <div class="col-lg-6">
+        <div id="PageDosStrengthGrid" class="MainGrid"></div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+<div id="SpecialCamWindow" style="display: none;">
+    <div id="SpecialCamWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSpecialCamWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSpecialCamWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="GenericWindow" style="display: none;">
+    <div id="GenericWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGenericWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGenericWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DosageWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+            <label style="margin-left: 20px;">Market Name :</label>
+            <input type="text" id="txtMarketCode" placeholder="Searching by Market Name" style="width: 250px;" autofocus />
+        </div>*@
+    <div id="DosageWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDosageWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDosageWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DosStrengthWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+            <label style="margin-left: 20px;">Institute Name :</label>
+            <input type="text" id="txtInstituteCode" placeholder="Searching by Institute Name/Code" style="width: 250px;" autofocus />
+        </div>*@
+    <div id="DosStrengthWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDosStrengthWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDosStrengthWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    @*<div class="row" style="width: 596px;">
+            <label style="margin-left: 20px;">Aprov No:</label>
+            <input type="text" id="txtAprovNo" placeholder="Searching by Aprov No" style="width: 250px;" autofocus />
+        </div>*@
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var checkGridData = 1;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    var deleteStatus = 0;
+
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function () {
+            changeStatus = 1;
+        }
+    });
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+
+        //Handling Delete event for PageGenericGrid row
+        function handleGenDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageGenericGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Delete event for PageDosageGrid row
+        function handleDosDelete() {
+            deleteStatus = 3;
+            var grid1 = $("#PageDosageGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //Handling Delete event for PageDosageGrid row
+        function handleStrDelete() {
+            deleteStatus = 4;
+            var grid1 = $("#PageDosStrengthGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "SCG_ID",
+                    fields: {
+                        SCG_ID: { editable: true },
+                        GENERIC_CODE: { editable: true, defaultValue: 'Press F9' },
+                        GENERIC_NAME: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageGenericGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            height: 200,
+            pageable: {
+                pageSizes: [5, 10, 20, 40, 50, 60, 80, 100, 200]
+            },
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                // $('input[name = "DOSAGE_FORM_CODE"]').attr("readonly", true);
+                //$('input[name = "DOSAGE_FORM_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Generic Information", className: "btnAddGeneric", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //filterable: {
+            //    extra: false,
+            //    operators: {
+            //        string: {
+            //            startswith: "Starts with",
+            //            contains: "Contains"
+            //        }
+            //    }
+            //},
+            sortable: true,
+            //height: 500,
+            columns: [
+                {field:"SCG_ID",hidden:true},
+                { field: "GENERIC_CODE", title: "Generic Code", width: 100, attributes: { "class": "Generic", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "GENERIC_NAME", title: "Generic Name", width: 300, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleGenDelete }], title: "Delete", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnAddGeneric').click(function (e) {
+            var grid = $("#PageGenericGrid").data("kendoGrid");
+            $("#PageGenericGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+
+            $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+            $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+            //e.preventDefault();
+        });
+
+        $("#PageGenericGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#PageGenericGrid").data("kendoGrid");
+                $("#PageGenericGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+
+                $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+            }
+        });
+
+      //  SelectedItemOfListOfValue('PageGenericGrid');
+
+        //To face child data into another grid for a grid row on click
+        $("#PageGenericGrid").on("click", "tr", function () {
+            //$("#divLoading").show();
+            var parentGrid = $("#PageGenericGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            //CheckRecordStatusForButton(parentGridItem.RecordStatus);
+            if (parentGridItem.SCG_ID != "") {
+                $.ajax({
+                    url: '@Url.Action("GetDosageAndStrengthList", "SpecialCamProdConfig")',
+                    type: 'GET',
+                    data: { SCG_ID: parentGridItem.SCG_ID },
+                    success: function (response) {
+                        $("#PageDosageGrid").data("kendoGrid").dataSource.data(response.Dosage);
+                        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data(response.Strength);
+                        //$("#divLoading").hide();
+                    } //End of Success Call
+                });
+            }
+            else
+            {
+                $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+
+            }
+
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "DF_ID",
+                    fields: {
+                        DF_ID: { editable: true },
+                        DOSAGE_FORM_CODE: { editable: true, defaultValue: 'Press F9' },
+                        DOSAGE_FORM_NAME: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDosageGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            height: 200,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                // $('input[name = "DOSAGE_FORM_CODE"]').attr("readonly", true);
+                //$('input[name = "DOSAGE_FORM_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Dosage Information", className: "btnAddDosage", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //filterable: {
+            //    extra: false,
+            //    operators: {
+            //        string: {
+            //            startswith: "Starts with",
+            //            contains: "Contains"
+            //        }
+            //    }
+            //},
+            sortable: true,
+            //height: 500,
+            columns: [
+                { field: "DF_ID", hidden: true },
+                { field: "DOSAGE_FORM_CODE", title: "DF Code", width: 100, attributes: { "class": "DosageCode", "placeholder": "optional" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "DOSAGE_FORM_NAME", title: "Dosage Form Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDosDelete }], title: "Delete", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnAddDosage').click(function (e) {
+            var grid = $("#PageDosageGrid").data("kendoGrid");
+            $("#PageDosageGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            // e.preventDefault();
+
+            $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+        });
+        $("#PageDosageGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#PageDosageGrid").data("kendoGrid");
+                $("#PageDosageGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+            }
+        });
+
+        SelectedItemOfListOfValue('PageDosageGrid');
+
+        //To face child data into another grid for a grid row on click
+        $("#PageDosageGrid").on("click", "tr", function () {
+            //$("#divLoading").show();
+            var parentGrid = $("#PageDosageGrid").data("kendoGrid");
+            var parentGridRow = parentGrid.select();
+            var parentGridItem = parentGrid.dataItem(parentGridRow);
+            //CheckRecordStatusForButton(parentGridItem.RecordStatus);
+            if (parentGridItem.DF_ID != "") {
+                $.ajax({
+                    url: '@Url.Action("GetStrengthList", "SpecialCamProdConfig")',
+                    type: 'GET',
+                    data: { DF_ID: parentGridItem.DF_ID },
+                    success: function (response) {
+                        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data(response);
+                        //$("#divLoading").hide();
+                    } //End of Success Call
+                });
+            }
+            else {
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+
+            }
+
+        });
+        //End of facing child data into another grid for a grid row on click
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "DFS_ID",
+                    fields: {
+                        DFS_ID:{editable: true},
+                        DSG_STRENGTH_CODE: { editable: true, defaultValue: 'Press F9' },
+                        DSG_STRENGTH_NAME: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDosStrengthGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            height: 200,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                //  $('input[name = "DSG_STRENGTH_CODE"]').attr("readonly", true);
+                // $('input[name = "DSG_STRENGTH_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Dosage Strength Information", className: "btnAddStrength", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            //filterable: {
+            //    extra: false,
+            //    operators: {
+            //        string: {
+            //            startswith: "Starts with",
+            //            contains: "Contains"
+            //        }
+            //    }
+            //},
+            sortable: true,
+            //height: 500,
+            columns: [
+                {field:"DFS_ID",hidden:true},
+                { field: "DSG_STRENGTH_CODE", title: "DFS Code", width: 100, attributes: { "class": "DosStrength" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { field: "DSG_STRENGTH_NAME", title: "Dosage Form Strength Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: left" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleStrDelete }], title: "Delete", width: "65px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+        //adding new row
+        $('.btnAddStrength').click(function (e) {
+            var grid = $("#PageDosStrengthGrid").data("kendoGrid");
+            $("#PageDosStrengthGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            grid.addRow();
+            e.preventDefault();
+        });
+        $("#PageDosStrengthGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var grid = $("#PageDosStrengthGrid").data("kendoGrid");
+                $("#PageDosStrengthGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                grid.addRow();
+            }
+        });
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#SC_ID").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "SpecialCamProdConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SC_ID": $("#SC_ID").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                //$("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.SCG_ID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeleteGenericGrid", "SpecialCamProdConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "SCG_ID": dataitem.SCG_ID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageGenericGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    $("#PageGenericGrid").data("kendoGrid").dataSource.remove(dataitem);
+                } else {
+                    $("#PageGenericGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus ==3) {
+                if (dataitem.DF_ID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeleteDosageGrid", "SpecialCamProdConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "DF_ID": dataitem.DF_ID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDosageGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    $("#PageDosageGrid").data("kendoGrid").dataSource.remove(dataitem);
+                } else {
+                    $("#PageDosageGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 4) {
+                if (dataitem.DFS_ID != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeleteStrengthGrid", "SpecialCamProdConfig")',
+                        type: 'POST',
+                        data: JSON.stringify({ "DFS_ID": dataitem.DFS_ID }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                 $("#PageDosStrengthGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    $("#PageDosStrengthGrid").data("kendoGrid").dataSource.remove(dataitem);
+                } else {
+                    $("#PageDosStrengthGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+
+        });
+
+
+        //************************* Handling NO BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //************************* Click Save Chages Window OK Button******************************//
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageGenericGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                location.reload();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageGenericGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                //GetMasterInformation();
+               // SelectedItemOfListOfValue('SearchWindowGrid');
+                //SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#SC_ID").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "SpecialCamProdConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SC_ID": $("#SC_ID").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                   // $("#PageDoctorGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.SCG_ID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeleteGenericGrid", "SpecialCamProdConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "SCG_ID": dataitem.SCG_ID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageGenericGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                        $("#PageGenericGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageGenericGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 3) {
+                    if (dataitem.DF_ID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeleteDosageGrid", "SpecialCamProdConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "DF_ID": dataitem.DF_ID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDosageGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                        $("#PageDosageGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDosageGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 4) {
+                    if (dataitem.DFS_ID != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeleteStrengthGrid", "SpecialCamProdConfig")',
+                            type: 'POST',
+                            data: JSON.stringify({ "DFS_ID": dataitem.DFS_ID }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDosStrengthGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //************************* END of WINDOWS LOAD Method  ******************************//
+    });
+    //*************************************** End of document.ready Function ************************************************//
+    //**************************************************** START OF Special Cam POP UP *******************************************
+
+    var specialCamWindow = $('#SpecialCamWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "600px",
+        height: "auto",
+        title: "List of Special Campaign",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Start SCP_CODE For Search
+    $(document.body).keyup(function (e) {
+        if ($("#SCP_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SpecialCamWindowGrid');
+                specialCamWindow.open();
+                specialCamWindow.center();
+                changeStatus = 1;
+            }
+        }
+    });
+
+    //Opp search window definition
+    var SpecialCamGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SCP_CODE",
+                fields: {
+                    SCP_CODE: { editable: false },
+                    SCP_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: '@Url.Action("GetSCPList", "ScpInfo")',
+            type: 'GET',
+            data: 'JSON'
+        },
+        pageSize: 50
+    });
+    var SpecialCamGrid = $("#SpecialCamWindowGrid").kendoGrid({
+        dataSource: SpecialCamGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        //height: 150,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+
+        columns: [
+             { field: "SCP_CODE", title: "SCP Code", width: 60, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+             { field: "SCP_NAME", title: "SCP Name", width: 120, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    $("#btnSpecialCamWindowOK").click(function () {
+        ListOfValueGridEvent('SpecialCamWindowGrid');
+        specialCamWindow.close();
+    });
+    $("#SpecialCamWindowGrid").dblclick(function () {
+        ListOfValueGridEvent('SpecialCamWindowGrid');
+        specialCamWindow.close();
+    });
+    $("#SpecialCamWindowGrid").keyup(function (e) {
+        var gridSearch = $("#SpecialCamWindowGrid").data("kendoGrid");
+        var selected = (gridSearch.dataItem(gridSearch.select())); //Selected Row
+        if (selected != null) {
+            if (e.keyCode == 13) {
+                ListOfValueGridEvent('SpecialCamWindowGrid');
+                specialCamWindow.close();
+            }
+        }
+    });
+    $("#btnSpecialCamWindowCancel").click(function () {
+        specialCamWindow.close();
+    });
+    $("#SpecialCamWindow").keyup(function (e) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SelectedItemOfListOfValue('SpecialCamWindowGrid');
+            specialCamWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            specialCamWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //**************************************************** End OF Spceial Cam POP UP *******************************************
+
+    //************Start Generic Popup*******************
+    var genericWindow = $('#GenericWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List of Generic Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.Generic', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('GenericWindowGrid');
+            genericWindow.open(); //Open Popup
+
+        }
+
+    });
+
+    //Handling button click for Generic window grid
+    $('#btnGenericWindowOK').click(function () {
+        listOfGenericValueGridEvent();
+        genericWindow.close();
+    });
+
+    $('#btnGenericWindowCancel').click(function () {
+        genericWindow.close();
+    });
+
+    $("#GenericWindowGrid").dblclick(function () {
+        listOfGenericValueGridEvent();
+        genericWindow.close();
+    });
+
+    $("#GenericWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfGenericValueGridEvent();
+            genericWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            genericWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfGenericValueGridEvent() {
+        var windowGrid = $("#GenericWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageGenericGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("GENERIC_CODE ", windowGridItem.GENERIC_CODE);
+        pageGridItem.set("GENERIC_NAME", windowGridItem.GENERIC_NAME);
+
+        $("#PageGenericGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource-------------------------------------------
+
+    var genericGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GENERIC_CODE",
+                fields: {
+                    GENERIC_CODE: { editable: false },
+                    GENERIC_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetGenericInformation", "GenericInformation")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var genericGrid = $("#GenericWindowGrid").kendoGrid({
+        dataSource: genericGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "GENERIC_CODE", title: "Generic Code", width: "100px" },
+              { field: "GENERIC_NAME", title: "Generic Name", width: "220px" }
+        ]
+
+    });
+
+    //**************end Generic Popup**********************
+
+    //************Start Dosage Popup*******************
+    var dosageWindow = $('#DosageWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List of Dosage Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.DosageCode', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('DosageWindowGrid');
+            dosageWindow.open(); //Open Popup
+
+        }
+
+    });
+
+    //Handling button click for Dosage window grid
+    $('#btnDosageWindowOK').click(function () {
+        listOfDosageValueGridEvent();
+        dosageWindow.close();
+    });
+
+    $('#btnDosageWindowCancel').click(function () {
+        dosageWindow.close();
+    });
+
+    $("#DosageWindowGrid").dblclick(function () {
+        listOfDosageValueGridEvent();
+        dosageWindow.close();
+    });
+
+    $("#DosageWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfDosageValueGridEvent();
+            dosageWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            dosageWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfDosageValueGridEvent() {
+        var windowGrid = $("#DosageWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageDosageGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("DOSAGE_FORM_CODE ", windowGridItem.DOSAGE_FORM_CODE);
+        pageGridItem.set("DOSAGE_FORM_NAME", windowGridItem.DOSAGE_FORM_NAME);
+
+        $("#PageDosageGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource-------------------------------------------
+
+    var dosageGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DOSAGE_FORM_CODE",
+                fields: {
+                    DOSAGE_FORM_CODE: { editable: false },
+                    DOSAGE_FORM_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDosageFormInformation", "DosageForm")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var dosageGrid = $("#DosageWindowGrid").kendoGrid({
+        dataSource: dosageGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "DOSAGE_FORM_CODE", title: "DF Code", width: "100px" },
+              { field: "DOSAGE_FORM_NAME", title: "Dosage From Name", width: "220px" }
+        ]
+
+    });
+
+    //**************end Dosage Popup**********************
+
+
+    //************Start Dosage DosStrength Popup*******************
+    var dosStrengthWindow = $('#DosStrengthWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List of Dosage Strength Information",
+        position: { top: 100, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $(document).on('keyup', '.DosStrength', function (e) {
+        if (e.which == 120) {
+            SelectedItemOfListOfValue('DosStrengthWindowGrid');
+            dosStrengthWindow.open(); //Open Popup
+        }
+
+    });
+
+    //Handling button click for DosStrength window grid
+    $('#btnDosStrengthWindowOK').click(function () {
+        listOfDosStrengthValueGridEvent();
+        dosStrengthWindow.close();
+    });
+
+    $('#btnDosStrengthWindowCancel').click(function () {
+        dosStrengthWindow.close();
+    });
+
+    $("#DosStrengthWindowGrid").dblclick(function () {
+        listOfDosStrengthValueGridEvent();
+        dosStrengthWindow.close();
+    });
+
+    $("#DosStrengthWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            listOfDosStrengthValueGridEvent();
+            dosStrengthWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            dosStrengthWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function listOfDosStrengthValueGridEvent() {
+        var windowGrid = $("#DosStrengthWindowGrid").data("kendoGrid");
+        var windowGridRow = windowGrid.select();
+        var windowGridItem = windowGrid.dataItem(windowGridRow);
+
+        var pageGrid = $("#PageDosStrengthGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("DSG_STRENGTH_CODE ", windowGridItem.DSG_STRENGTH_CODE);
+        pageGridItem.set("DSG_STRENGTH_NAME", windowGridItem.DSG_STRENGTH_NAME);
+
+        $("#PageDosStrengthGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        changeStatus = 1;
+    }
+    //--------------------------------------Start of Defining Datasource-------------------------------------------
+
+    var dosStrengthGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DSG_STRENGTH_CODE",
+                fields: {
+                    DSG_STRENGTH_CODE: { editable: false },
+                    DSG_STRENGTH_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDosageStrengthInformation", "DosageStrength")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 50
+
+    });
+
+    var dosStrengthGrid = $("#DosStrengthWindowGrid").kendoGrid({
+        dataSource: dosStrengthGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+        sortable: true,
+        height: 300,
+        columns: [
+              { field: "DSG_STRENGTH_CODE", title: "DFS Code", width: "100px" },
+              { field: "DSG_STRENGTH_NAME", title: "Dosage Form Strength Name", width: "220px" }
+        ]
+
+    });
+
+    //**************end Dosage Strength Popup**********************
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Chages Data
+        //else {
+        //    ClearOperationalMessage();
+        //    ResetOnlyMasterPageData();
+        //    $(".RequiredTextBox").css("border-color", "");
+        //    $("#PageGenericGrid").data("kendoGrid").dataSource.data([]);
+        //    $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+        //    $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+        //    //GridReload('PageGenericGrid');
+        //   // $("#Status").val("Active");
+        //    //location.reload();
+        //}
+        ClearOperationalMessage();
+        ResetOnlyMasterPageData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageGenericGrid").data("kendoGrid").dataSource.data([]);
+        $("#PageDosageGrid").data("kendoGrid").dataSource.data([]);
+        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data([]);
+        location.reload();
+    });
+
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+
+    // Declare Object
+    var DFStrengthModel = { "DFS_ID": "", "DF_ID": "", "DSG_STRENGTH_CODE": "" };
+    var DosageFormModel = { "DF_ID": "", "SCG_ID": "", "DOSAGE_FORM_CODE": "" };
+    var GenericModel = { " SCG_ID": "", "SC_ID": "", "GENERIC_CODE": "" };
+    var Model = {
+        "SC_ID": "", "SCP_CODE": "", "GenericInfoList": [], "DosFormInfoList": [], "DfStrengthInfoList": []
+    };
+    var saveStatus = 1;
+
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('SCP_CODE', 10);
+        if (saveStatus == 1) {
+            Model.SC_ID = $('#SC_ID').val();
+            Model.SCP_CODE = $('#SCP_CODE').val();
+
+            //Generic source
+            var genericGrid = $("#PageGenericGrid").data("kendoGrid");
+            var genericGridRow = genericGrid.select();
+            var genericGridItem = genericGrid.dataItem(genericGridRow);
+            if (genericGridItem != null) {
+
+                Model.GenericInfoList = [];
+                GenericModel.SCG_ID = genericGridItem.SCG_ID;
+                GenericModel.SC_ID = genericGridItem.SC_ID;
+                GenericModel.GENERIC_CODE = genericGridItem.GENERIC_CODE;
+
+                Model.GenericInfoList.push(GenericModel);
+                GenericModel = { " SCG_ID": "", "SC_ID": "", "GENERIC_CODE": "" };
+
+                var dosageGrid = $("#PageDosageGrid").data("kendoGrid");
+                var dosageGridRow = dosageGrid.select();
+                var dosageGridItem = dosageGrid.dataItem(dosageGridRow);
+
+                if (dosageGridItem != null)
+                {
+                    Model.DosFormInfoList = [];
+                    DosageFormModel.DF_ID = dosageGridItem.DF_ID;
+                    DosageFormModel.SCG_ID = dosageGridItem.SCG_ID;
+                    DosageFormModel.DOSAGE_FORM_CODE = dosageGridItem.DOSAGE_FORM_CODE;
+
+                    Model.DosFormInfoList.push(DosageFormModel);
+                    DosageFormModel = { "DF_ID": "", "SCG_ID": "", "DOSAGE_FORM_CODE": "" };
+
+                    var dataSourceStrengthItem = $("#PageDosStrengthGrid").data("kendoGrid").dataSource;
+                    var dataStrengthItem = dataSourceStrengthItem.data(); // Get Detail Grid Data
+                    Model.DfStrengthInfoList = [];
+                    for (var i = 0; i <= dataStrengthItem.length - 1; i++) {
+                        //if (dataPeriodItem[j].dirty) {
+                        DFStrengthModel.DFS_ID = dataStrengthItem[i].DFS_ID;
+                        DFStrengthModel.DF_ID = dataStrengthItem[i].DF_ID;
+                        DFStrengthModel.DSG_STRENGTH_CODE = dataStrengthItem[i].DSG_STRENGTH_CODE;
+
+                        Model.DfStrengthInfoList.push(DFStrengthModel);
+                        DFStrengthModel = { "DFS_ID": "", "DF_ID": "", "DSG_STRENGTH_CODE": "" };
+                        //}
+                    }
+                }
+            }
+
+
+
+            $("#divLoading").show();
+            if (changeStatus == 1) {
+                if (checkGridData == 1) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SpecialCamProdConfig", "SpecialCamProdConfig")',
+                        data: JSON.stringify(Model),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (response) {
+                            $("#divLoading").hide();
+                            if (response.msg.Type == "2") {
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#SC_ID").val(response.msg.ReturnId);
+                                changeStatus = 0;
+                                $.ajax({
+                                    url: '@Url.Action("GetGenericItemList", "SpecialCamProdConfig")',
+                                    type: 'GET',
+                                    data: { SC_ID: $("#SC_ID").val() },
+                                    success: function (response) {
+                                        $("#PageGenericGrid").data("kendoGrid").dataSource.data(response.Generic);
+                                        $("#PageDosageGrid").data("kendoGrid").dataSource.data(response.Dosage);
+                                        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data(response.Strength);
+                                    }
+                                });
+
+                            } else if (response.msg.Type == 3) {
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                changeStatus = 0;
+                                $.ajax({
+                                    url: '@Url.Action("GetGenericItemList", "SpecialCamProdConfig")',
+                                    type: 'GET',
+                                    data: { SC_ID: $("#SC_ID").val() },
+                                    success: function (response) {
+                                        $("#PageGenericGrid").data("kendoGrid").dataSource.data(response.Generic);
+                                        $("#PageDosageGrid").data("kendoGrid").dataSource.data(response.Dosage);
+                                        $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data(response.Strength);
+                                    }
+                                });
+                            }
+                            else {
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                    Model = {
+                        "SC_ID": "", "SCP_CODE": "", "GenericInfoList": [], "DosFormInfoList": [], "DfStrengthInfoList": []
+                    };
+                }
+                    // Wrong Grid Data
+                else {
+                    $("#divLoading").hide();
+                    $("#MessageText").html("Please Enter the Required Grid Data Properly.");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    checkGridData = 1;
+                }
+            }
+                // No Changes Exiting Data
+            else {
+                $("#divLoading").hide();
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+        }
+    }
+
+    //************************* END of SAVE Function *******************************************//
+
+
+
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEvent(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        changeStatus = 1;
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+    }
+    ////////////////////
+    // For Search button work
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Changes Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Changes Data
+        //else {
+        //    ClearOperationalMessage();
+        //    $(".RequiredTextBox").css("border-color", "");
+        //    LoadSearchGrid();
+        //    SelectedItemOfListOfValue('SearchWindowGrid');
+        //    SearchWindow.open();
+        //}
+        ClearOperationalMessage();
+        $(".RequiredTextBox").css("border-color", "");
+        LoadSearchGrid();
+        SelectedItemOfListOfValue('SearchWindowGrid');
+        SearchWindow.open();
+    });
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SC_ID",
+                fields: {
+                    SC_ID: { editable: false },
+                    SCP_CODE: { editable: false },
+                    SCP_NAME: { editable: false }
+                }
+            }
+        },
+        pageSize: 30
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "SC_ID", hidden: true },
+            { field: "SCP_CODE", title: "SCP Code", width: "100px" },
+            { field: "SCP_NAME", title: "SCP Name", width: "200px" }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List of Record",
+        position: { top: 50, left: 200 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function LoadSearchGrid() {
+        $.ajax({
+            url: '@Url.Action("GetAll", "SpecialCamProdConfig")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        ResetOnlyMasterPageData();
+        $.each(selectedItem, function (key, value) {
+            if (value != null && value != 0)
+                $('#' + key).val(value);
+        });
+        $.ajax({
+            url: '@Url.Action("GetGenericItemList", "SpecialCamProdConfig")',
+            type: 'GET',
+            data: { SC_ID: $("#SC_ID").val() },
+            success: function (response) {
+                $("#PageGenericGrid").data("kendoGrid").dataSource.data(response.Generic);
+                $("#PageDosageGrid").data("kendoGrid").dataSource.data(response.Dosage);
+                $("#PageDosStrengthGrid").data("kendoGrid").dataSource.data(response.Strength);
+            }
+        });
+
+        @*$.ajax({
+            url: '@Url.Action("GetInstiItemList", "SpecCamDocInsConfig")',
+            type: 'GET',
+            data: { SDIC_ID: $("#SDIC_ID").val() },
+            success: function (datasc) {
+                $("#PageInstituteGrid").data("kendoGrid").dataSource.data(datasc);
+            }
+        });*@
+    }
+
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+    $("#SearchWindow").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+
+    });
+    $("#SearchWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //------------------------------------End of Search Event----------------------------------------
+
+
+</script>
+

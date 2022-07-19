@@ -1,0 +1,190 @@
+/* Formatted on 15/11/2020 4:25:19 PM (QP5 v5.227.12220.39724) */
+  SELECT TO_NUMBER (a.Slno) Slno,
+         'National' National_Name,
+         a.Mfc_Nic_Name,
+         NVL (b.tot_mfc_val, 0) tot_mfc_val,
+         NVL (c.National_Value, 0) National_Value,
+         ROUND (NVL ( ( (b.tot_mfc_val * 100) / c.national_Value), 0), 2)
+            National_pct
+    FROM Selected_Manufacturer_vue a,
+         (  SELECT t.manufacturer_code, SUM (NVL (t.tot_mfc_val, 0)) tot_mfc_val
+              FROM (  SELECT d.manufacturer_code,
+                             SUM (NVL (c.purchase_qty, 0) * NVL (c.unit_price, 0))
+                                tot_mfc_val
+                        FROM DB_USER_WORKING_SESSION a,
+                             DB_PRESCRIPTION_MASTER b,
+                             DB_PRESCRIPTION_DETAIL c,
+                             PRODUCT p,
+                             SCP_PRODUCT_VUE SC,
+                             VW_SCP_DOCTOR SD,
+                             (SELECT manufacturer_code
+                                FROM selected_manufacturer
+                               WHERE slno < 18) d
+                       WHERE     a.session_slno = b.session_slno
+                             AND b.presc_mas_slno = c.presc_mas_slno
+                             AND c.prod_id = p.prod_id
+                             AND SD.DOCTOR_ID = B.DOCTOR_ID
+                             AND A.USER_CODE = B.MRS
+                             AND B.MRS = C.MRS
+                             AND SD.MARKET_CODE = B.MARKET_CODE
+                             AND SC.GENERIC_CODE = P.GENERIC_CODE
+                             AND SC.DOSAGE_FORM_CODE = P.DOSAGE_FORM_CODE
+                             AND SC.DSG_STRENGTH_CODE = P.DSG_STRENGTH_CODE
+                             AND SC.SCP_CODE = SD.SCP_CODE
+                             AND b.presc_cate_code = 'P'
+                             AND SC.SCP_CODE = '00003'
+                             AND a.ENTRY_DATE BETWEEN TO_DATE ('01/12/2019',
+                                                               'dd/MM/yyyy')
+                                                  AND TO_DATE ('14/12/2019',
+                                                               'dd/MM/yyyy')
+                             AND p.manufacturer_code(+) = d.manufacturer_code
+                    GROUP BY d.manufacturer_code
+                    UNION
+                    SELECT '000' manufacturer_code,
+                           SUM (NVL (c.purchase_qty, 0) * NVL (c.unit_price, 0))
+                              tot_mfc_val
+                      FROM DB_USER_WORKING_SESSION a,
+                           DB_PRESCRIPTION_MASTER b,
+                           DB_PRESCRIPTION_DETAIL c,
+                           PRODUCT p,
+                           SCP_PRODUCT_VUE SC,
+                           VW_SCP_DOCTOR SD
+                     WHERE     a.session_slno = b.session_slno
+                           AND b.presc_mas_slno = c.presc_mas_slno
+                           AND A.USER_CODE = B.MRS
+                           AND B.MRS = C.MRS
+                           AND c.prod_id = p.prod_id
+                           AND SD.DOCTOR_ID = B.DOCTOR_ID
+                           AND SD.MARKET_CODE = B.MARKET_CODE
+                           AND SC.GENERIC_CODE = P.GENERIC_CODE
+                           AND SC.DOSAGE_FORM_CODE = P.DOSAGE_FORM_CODE
+                           AND SC.DSG_STRENGTH_CODE = P.DSG_STRENGTH_CODE
+                           AND SC.SCP_CODE = SD.SCP_CODE
+                           AND b.presc_cate_code = 'P'
+                           AND SC.SCP_CODE = '00003'
+                           AND a.ENTRY_DATE BETWEEN TO_DATE ('01/12/2019',
+                                                             'dd/MM/yyyy')
+                                                AND TO_DATE ('14/12/2019',
+                                                             'dd/MM/yyyy')
+                           AND p.manufacturer_code NOT IN
+                                  (SELECT manufacturer_code
+                                     FROM selected_manufacturer
+                                    WHERE slno < 18)
+                    UNION ALL
+                      SELECT d.manufacturer_code,
+                             SUM (NVL (c.purchase_qty, 0) * NVL (c.unit_price, 0))
+                                tot_mfc_val
+                        FROM DB_USER_WORKING_SESSION a,
+                             DB_PRESCRIPTION_MASTER b,
+                             DB_PRESCRIPTION_DETAIL c,
+                             PRODUCT p,
+                             SCP_PRODUCT_VUE SC,
+                             VW_SCP_INSTITUTE SI,
+                             (SELECT manufacturer_code
+                                FROM selected_manufacturer
+                               WHERE slno < 18) d
+                       WHERE     a.session_slno = b.session_slno
+                             AND b.presc_mas_slno = c.presc_mas_slno
+                             AND A.USER_CODE = B.MRS
+                             AND B.MRS = C.MRS
+                             AND c.prod_id = p.prod_id
+                             AND SI.INSTI_CODE = B.INSTI_CODE
+                             AND SI.MARKET_CODE = B.MARKET_CODE
+                             AND SC.GENERIC_CODE = P.GENERIC_CODE
+                             AND SC.DOSAGE_FORM_CODE = P.DOSAGE_FORM_CODE
+                             AND SC.DSG_STRENGTH_CODE = P.DSG_STRENGTH_CODE
+                             AND SC.SCP_CODE = SI.SCP_CODE
+                             AND b.presc_cate_code = 'O'
+                             AND SC.SCP_CODE = '00003'
+                             AND a.ENTRY_DATE BETWEEN TO_DATE ('01/12/2019',
+                                                               'dd/MM/yyyy')
+                                                  AND TO_DATE ('14/12/2019',
+                                                               'dd/MM/yyyy')
+                             AND p.manufacturer_code(+) = d.manufacturer_code
+                    GROUP BY d.manufacturer_code
+                    UNION
+                    SELECT '000' manufacturer_code,
+                           SUM (NVL (c.purchase_qty, 0) * NVL (c.unit_price, 0))
+                              tot_mfc_val
+                      FROM DB_USER_WORKING_SESSION a,
+                           DB_PRESCRIPTION_MASTER b,
+                           DB_PRESCRIPTION_DETAIL c,
+                           PRODUCT p,
+                           SCP_PRODUCT_VUE SC,
+                           VW_SCP_INSTITUTE SI
+                     WHERE     a.session_slno = b.session_slno
+                           AND b.presc_mas_slno = c.presc_mas_slno
+                           AND A.USER_CODE = B.MRS
+                           AND B.MRS = C.MRS
+                           AND c.prod_id = p.prod_id
+                           AND SI.INSTI_CODE = B.INSTI_CODE
+                           AND SI.MARKET_CODE = B.MARKET_CODE
+                           AND SC.GENERIC_CODE = P.GENERIC_CODE
+                           AND SC.DOSAGE_FORM_CODE = P.DOSAGE_FORM_CODE
+                           AND SC.DSG_STRENGTH_CODE = P.DSG_STRENGTH_CODE
+                           AND SC.SCP_CODE = SI.SCP_CODE
+                           AND b.presc_cate_code = 'O'
+                           AND SC.SCP_CODE = '00003'
+                           AND a.ENTRY_DATE BETWEEN TO_DATE ('01/12/2019',
+                                                             'dd/MM/yyyy')
+                                                AND TO_DATE ('14/12/2019',
+                                                             'dd/MM/yyyy')
+                           AND p.manufacturer_code NOT IN
+                                  (SELECT manufacturer_code
+                                     FROM selected_manufacturer
+                                    WHERE slno < 18)) t
+          GROUP BY t.manufacturer_code) b,
+         (SELECT SUM (NVL (e.National_Value, 0)) National_Value
+            FROM (SELECT SUM (NVL (c.purchase_qty, 0) * NVL (c.unit_price, 0))
+                            National_Value
+                    FROM DB_USER_WORKING_SESSION a,
+                         DB_PRESCRIPTION_MASTER b,
+                         DB_PRESCRIPTION_DETAIL c,
+                         PRODUCT p,
+                         SCP_PRODUCT_VUE SC,
+                         VW_SCP_DOCTOR SD
+                   WHERE     a.session_slno = b.session_slno
+                         AND b.presc_mas_slno = c.presc_mas_slno
+                         AND A.USER_CODE = B.MRS
+                         AND B.MRS = C.MRS
+                         AND c.prod_id = p.prod_id
+                         AND SD.DOCTOR_ID = B.DOCTOR_ID
+                         AND SD.MARKET_CODE = B.MARKET_CODE
+                         AND SC.GENERIC_CODE = P.GENERIC_CODE
+                         AND SC.DOSAGE_FORM_CODE = P.DOSAGE_FORM_CODE
+                         AND SC.DSG_STRENGTH_CODE = P.DSG_STRENGTH_CODE
+                         AND SC.SCP_CODE = SD.SCP_CODE
+                         AND b.presc_cate_code = 'P'
+                         AND SC.SCP_CODE = '00003'
+                         AND a.ENTRY_DATE BETWEEN TO_DATE ('01/12/2019',
+                                                           'dd/MM/yyyy')
+                                              AND TO_DATE ('14/12/2019',
+                                                           'dd/MM/yyyy')
+                  UNION ALL
+                  SELECT SUM (NVL (c.purchase_qty, 0) * NVL (c.unit_price, 0))
+                            National_Value
+                    FROM DB_USER_WORKING_SESSION a,
+                         DB_PRESCRIPTION_MASTER b,
+                         DB_PRESCRIPTION_DETAIL c,
+                         PRODUCT p,
+                         SCP_PRODUCT_VUE SC,
+                         VW_SCP_INSTITUTE SI
+                   WHERE     a.session_slno = b.session_slno
+                         AND b.presc_mas_slno = c.presc_mas_slno
+                         AND A.USER_CODE = B.MRS
+                         AND B.MRS = C.MRS
+                         AND c.prod_id = p.prod_id
+                         AND SI.INSTI_CODE = B.INSTI_CODE
+                         AND SI.MARKET_CODE = B.MARKET_CODE
+                         AND SC.GENERIC_CODE = P.GENERIC_CODE
+                         AND SC.DOSAGE_FORM_CODE = P.DOSAGE_FORM_CODE
+                         AND SC.DSG_STRENGTH_CODE = P.DSG_STRENGTH_CODE
+                         AND SC.SCP_CODE = SI.SCP_CODE
+                         AND b.presc_cate_code = 'O'
+                         AND SC.SCP_CODE = '00003'
+                         AND a.ENTRY_DATE BETWEEN TO_DATE ('01/12/2019',
+                                                           'dd/MM/yyyy')
+                                              AND TO_DATE ('14/12/2019',
+                                                           'dd/MM/yyyy')) e) c
+   WHERE a.Manufacturer_Code = b.Manufacturer_Code(+)
+ORDER BY TO_NUMBER (slno)

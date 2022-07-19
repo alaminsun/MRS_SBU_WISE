@@ -1,0 +1,221 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptFrequencyRankingGenericVsSpecialization", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            @*<input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;"  checked="checked" />*@
+            @*<label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>*@
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            @*<button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>*@
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+    @*<input type="hidden" id="ReportName" name="ReportName" value="O.Of Prescription,ORG.Slip,Slip,OTC Collection Status" />*@
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">From Date:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox datePicker" />
+                    </div>
+                </div><br />
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">To Date:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="2" class="txtBox datePicker" />
+                    </div>
+                </div><br />
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">Specialization:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="hidden" id="SPECIALIZATION_CODE" name="SPECIALIZATION_CODE" />
+                        <input type="text" id="SPECIALIZATION" name="SPECIALIZATION" tabindex="3" class="txtBox" readonly="readonly" placeholder="Press F9" />
+                        @*<input type="hidden" id="SpecializationCode" name="SpecializationCode" />
+                        <input type="text" id="Specialization" name="Specialization" tabindex="3" class="txtBox" readonly="readonly" placeholder="Press F9" />*@
+                    </div>
+                </div><br />
+             
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+<div id="SpecializationWindow" style="display: none;">
+    <div id="SpecializationWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSpecializationWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSpecializationWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+    }); //End of Document.Ready()
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+    function displayReport() {
+        if ($("#Specialization").val() != "") {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('Specialization', 100);
+            //CheckRequiredTextBoxMaxLength('REGION_NAME', 100);
+            return false;
+        }
+    }
+
+
+    /////////Region /////////////////
+    var SpecializationGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "SpecializationCode",
+                fields: {
+                    SpecializationCode: { editable: false },
+                    Specialization: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetSpecializationList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var SpecializationPageGrid = $("#SpecializationWindowGrid").kendoGrid({
+        dataSource: SpecializationGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "SpecializationCode", title: "Specialization Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "Specialization", title: "Specialization", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var SpecializationWindow = $('#SpecializationWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Specialization Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function SpecializationWindowEvent() {
+        var WindowGrid = $("#SpecializationWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#SPECIALIZATION_CODE").val(WindowGridItem.SpecializationCode);
+        $("#SPECIALIZATION").val(WindowGridItem.Specialization);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnSpecializationWindowOK').click(function () {
+        SpecializationWindowEvent();
+        Specialization.close();
+    });
+
+    $('#btnSpecializationWindowCancel').click(function () {
+        Specialization.close();
+    });
+
+    $("#SpecializationWindowGrid").dblclick(function () {
+        SpecializationWindowEvent();
+        SpecializationWindow.close();
+    });
+
+    $("#SpecializationWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SpecializationWindowEvent();
+            SpecializationWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SpecializationWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#SPECIALIZATION").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('SpecializationWindowGrid');
+                SpecializationWindow.open();
+            }
+        }
+    });
+
+    ////////////////////////
+</script>
+

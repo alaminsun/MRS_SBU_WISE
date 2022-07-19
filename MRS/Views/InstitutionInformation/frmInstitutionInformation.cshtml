@@ -1,0 +1,972 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTiltle</title>
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        @*<button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+            <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>*@
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Institute Name:</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="INSTI_NAME" name="INSTI_NAME" tabindex="1" class="txtBox RequiredTextBox" value="" />
+                </div>
+                <div class="col-lg-3">
+                    <label>Institute Phone No:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="INST_PHONE" tabindex="7" name="INST_PHONE" class="txtBox RequiredTextBox" value="" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Institution Code:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    <input type="text" id="INSTI_CODE" name="INSTI_CODE" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+                </div>
+                <div class="col-lg-3">
+                    <label>Upazila</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="UPAZILA_CODE" class="txtBox" />
+                    <input type="text" id="UPAZILA_NAME" name="UPAZILA_NAME" tabindex="8" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Institute Type:</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="INSTI_TYPE_CODE" class="txtBox" />
+                    <input type="text" id="INSTI_TYPE_NAME" name="INSTI_TYPE_NAME" tabindex="2" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>District</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="DISTC_CODE" class="txtBox" />
+                    <input type="text" id="DISTC_NAME" name="DISTC_NAME" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Address1:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="ADDRESS1" name="ADDRESS1" tabindex="3" class="txtBox RequiredTextBox" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>No. of Beds:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="NO_OF_BEDS" tabindex="9" name="NO_OF_BEDS" class="txtBox RequiredTextBox" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Address2:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="ADDRESS2" name="ADDRESS2" tabindex="4" class="txtBox RequiredTextBox" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Average No. of Admitted Patient</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="AVG_NO_ADMT_PATI" tabindex="10" name="AVG_NO_ADMT_PATI" class="txtBox RequiredTextBox" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Address3:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="ADDRESS3" name="ADDRESS3" tabindex="5" class="txtBox RequiredTextBox" placeholder="" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Average No. of Outdoor Patient:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="AVG_NO_OD_PATI" tabindex="11" name="AVG_NO_OD_PATI" class="txtBox RequiredTextBox" value="" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Address4:</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="ADDRESS4" name="ADDRESS4" tabindex="6" class="txtBox RequiredTextBox" value="" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label>Remarks</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="REMARKS" tabindex="12" name="REMARKS" class="txtBox RequiredTextBox" value="" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="14"></div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+<div id="InstituteTypeIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Institute Name :</label>
+        <input type="text" id="txtInstituteTypeCode" placeholder="Searching by Type Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="InstituteTypeGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstituteTypeIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstituteTypeIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="UpazilaIDWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Upazila Name :</label>
+        <input type="text" id="txtUpzilaCode" placeholder="Searching by Upzila Name/Code" style="width: 250px;" autofocus />@*<input type="button" id="btnItemAreaSearch" value="Search" style="margin-left: 2px; margin-top: 1px;" />*@
+    </div>
+    <div id="UpazilaGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnUpazilaIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnUpazilaIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<script>
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //NumericAndDecimalValue(PROD_ID);
+    //NumericAndDecimalValue(PROD_ID);
+
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+
+        // Focus Institute Code textbox
+        $("#INSTI_NAME").focus();
+        //************************* Handling DELETE event for DELETING ROW from DETAIL GRID ******************************//
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+
+
+
+        function _EditEvent(e) {
+            e.preventDefault();
+            //$("#hdnIsInsert").val(false);
+            //$('#PRODUCT_CODE').attr('disabled', true);
+            // Focus Institute Code textbox
+            $("#INSTI_CODE").focus();
+            $("#INSTI_CODE").attr("disabled", "disabled");
+            var pageGrid = $('#PageDetailGrid').data("kendoGrid");
+            dataItem = (pageGrid.dataItem(pageGrid.select()));
+            $('#INSTI_CODE').val(dataItem.INSTI_CODE);
+            $('#INSTI_NAME').val(dataItem.INSTI_NAME);
+            $('#INSTI_TYPE_CODE').val(dataItem.INSTI_TYPE_CODE);
+            $('#INSTI_TYPE_NAME').val(dataItem.INSTI_TYPE_NAME);
+            $('#ADDRESS1').val(dataItem.ADDRESS1);
+            $('#ADDRESS2').val(dataItem.ADDRESS2);
+            $('#ADDRESS3').val(dataItem.ADDRESS3);
+            $('#ADDRESS4').val(dataItem.ADDRESS4);
+            $('#INST_PHONE').val(dataItem.INST_PHONE);
+            $('#UPAZILA_CODE').val(dataItem.UPAZILA_CODE);
+            $('#UPAZILA_NAME').val(dataItem.UPAZILA_NAME);
+            $('#DISTC_CODE').val(dataItem.DISTC_CODE);
+            $('#DISTC_NAME').val(dataItem.DISTC_NAME);
+            $('#NO_OF_BEDS').val(dataItem.NO_OF_BEDS);
+            $('#AVG_NO_ADMT_PATI').val(dataItem.AVG_NO_ADMT_PATI);
+            $('#AVG_NO_OD_PATI').val(dataItem.AVG_NO_OD_PATI);
+            $('#REMARKS').val(dataItem.REMARKS);
+            $("#SUStatus").val(1);
+        }
+
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "INSTI_CODE",
+                    fields: {
+                        INSTI_CODE: { editable: false },
+                        INSTI_NAME: { editable: false },
+                        INSTI_TYPE_CODE: { editable: false },
+                        INSTI_TYPE_NAME: { editabl: false },
+                        ADDRESS1: { editable: false },
+                        ADDRESS2: { editable: false },
+                        ADDRESS3: { editable: false },
+                        ADDRESS4: { editable: false },
+                        INST_PHONE: { editable: false },
+                        UPAZILA_CODE: { editable: false },
+                        UPAZILA_NAME: { editable: false },
+                        DISTC_CODE: { editable: false },
+                        DISTC_NAME: { editable: false },
+                        NO_OF_BEDS: { editable: false },
+                        AVG_NO_ADMT_PATI: { editable: false },
+                        AVG_NO_OD_PATI: { editable: false },
+                        REMARKS: { editable: false }
+                        //AVG_PRESCRIBE_QTY: { editable: false },
+                        //AVG_BOUGHT_QTY: { editable: false },
+                        //PACK_SIZE: { editable: false },
+                        //SAP_CODE: { editable: false },
+                        //PROD_STATUS: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetInstituteformation", "InstitutionInformation")",
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            filterable: {
+                extra: true,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains",
+                        isequalto: "Is equal to"
+                    }
+                }
+            },
+            sortable: true,
+            height: 350,
+            columns: [
+                { field: "INSTI_CODE", title: "Institute Code", width: 70, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                 { field: "INSTI_NAME", title: "Institute Name", width: 105, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                  { field: "INSTI_TYPE_CODE", title: "Institute Type", width: 75, filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                  { field: "INSTI_TYPE_NAME", title: "Institute Type", width: 75, filterable: true, width: "90px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                   { field: "ADDRESS1", title: "Address1", width: 65, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                   { field: "ADDRESS2", title: "Address2", width: 65, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                   { field: "ADDRESS3", title: "Address3", width: 65, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                   { field: "ADDRESS4", title: "Address4", width: 65, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                    { field: "INST_PHONE", title: "Institute Phone", width: 65, hidden: true, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                     { field: "UPAZILA_CODE", title: "Upazilla", width: 65, filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                     { field: "UPAZILA_NAME", title: "Upazilla", width: 65, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                      { field: "DISTC_CODE", title: "District", width: 105, filterable: false, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                      { field: "DISTC_NAME", title: "District", width: 65, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                       { field: "NO_OF_BEDS", title: "No Of Beds", width: 105, hidden: true, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                        { field: "AVG_NO_ADMT_PATI", title: "Admission Patient", hidden: true, width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                         { field: "AVG_NO_OD_PATI", title: "Outdoor Patient", hidden: true, width: 100, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                          { field: "REMARKS", title: "Remarks", hidden: true, width: 70, filterable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+
+
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: _EditEvent }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "70px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "InstitutionInformation")',
+                type: 'POST',
+                data: JSON.stringify({ "instituteCode": dataitem.INSTI_CODE }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        //$("#Status").val("Active");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+
+        //************************* Handling NO BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        @*//************************* Click Save Chages Window OK Button******************************//
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                //$("#Status").val("Active");
+                $("#INSTI_CODE").removeAttr("disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#INSTI_CODE").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "InstitutionInformation")',
+                    type: 'POST',
+                    data: JSON.stringify({ "instituteCode": dataitem.INSTI_CODE }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $("#Status").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });*@
+
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        //window.onbeforeunload = function (e) {
+        //    if (changeStatus == 1) {
+        //        e.preventDefault();
+        //    }
+        //};
+        //************************* END of Document.Ready Method ******************************//
+    });
+
+
+
+
+
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function () {
+        //resetEditDeleteStatus = 1; //Reset Button
+        //// When Chages Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Chages Data
+        //else {
+        $("#INSTI_CODE").focus();
+        ClearOperationalMessage();
+        ResetOnlyMasterPageData();
+        $(".RequiredTextBox").css("border-color", "");
+        GridReload('PageDetailGrid');
+        //$("#Status").val("Active");
+        // Focus Institute Code textbox
+
+        $("#INSTI_CODE").removeAttr("disabled");
+
+
+    });
+
+    //************************* SAVE Function for SAVE Button ******************************//
+
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+    var InstitutionInformationModel = {
+        "INSTI_CODE": "", "INSTI_NAME": "", "INSTI_TYPE_CODE": "", "ADDRESS1": "", "ADDRESS2": "", "ADDRESS3": "", "ADDRESS4": "", "INST_PHONE": "", "UPAZILA_CODE": "", "UPAZILA_NAME": "", "DISTC_NAME": "",
+        "DISTC_CODE": "", "NO_OF_BEDS": "", "AVG_NO_ADMT_PATI": "", "AVG_NO_OD_PATI": "", "REMARKS": ""
+    };
+
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        // Check Empty or Maximum Length in ManufacturerName
+        //CheckRequiredTextBoxMaxLength('INSTI_CODE', 20);
+
+        // Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('INSTI_NAME', 100);
+
+        // Check Maximum Length in ContactNumber
+        CheckRequiredTextBoxMaxLength('INSTI_TYPE_CODE', 100);
+
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('NO_OF_BEDS', 6);
+
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('AVG_NO_ADMT_PATI', 6);
+
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('AVG_NO_OD_PATI', 60);
+
+
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            InstitutionInformationModel.INSTI_CODE = $("#INSTI_CODE").val();
+            InstitutionInformationModel.INSTI_NAME = $("#INSTI_NAME").val();
+            InstitutionInformationModel.INSTI_TYPE_CODE = $("#INSTI_TYPE_CODE").val();
+            InstitutionInformationModel.ADDRESS1 = $("#ADDRESS1").val();
+            InstitutionInformationModel.ADDRESS2 = $("#ADDRESS2").val();
+            InstitutionInformationModel.ADDRESS3 = $("#ADDRESS3").val();
+            InstitutionInformationModel.ADDRESS4 = $("#ADDRESS4").val();
+            InstitutionInformationModel.INST_PHONE = $("#INST_PHONE").val();
+            InstitutionInformationModel.UPAZILA_CODE = $("#UPAZILA_CODE").val();
+            InstitutionInformationModel.UPAZILA_NAME = $("#UPAZILA_NAME").val();
+            InstitutionInformationModel.DISTC_NAME = $("#DISTC_NAME").val();
+            InstitutionInformationModel.DISTC_CODE = $("#DISTC_CODE").val();
+            InstitutionInformationModel.NO_OF_BEDS = $("#NO_OF_BEDS").val();
+            InstitutionInformationModel.AVG_NO_ADMT_PATI = $("#AVG_NO_ADMT_PATI").val();
+            InstitutionInformationModel.AVG_NO_OD_PATI = $("#AVG_NO_OD_PATI").val();
+            InstitutionInformationModel.REMARKS = $("#REMARKS").val();
+            //instituteInformation.SAP_CODE = $("#SAP_CODE").val();
+            //instituteInformation.PROD_STATUS = $("#PROD_STATUS").val();
+
+            InstitutionInformationModel.SUStatus = $("#SUStatus").val();
+            //alert(InstitutionInformationModel.SUStatus);
+            alert(changeStatus)
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("SaveAndUpdateData", "InstitutionInformation")',
+                    data: JSON.stringify(InstitutionInformationModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $("#SUStatus").val(1);
+                            GridReload('PageDetailGrid');
+                            $('#INSTI_CODE').val(response.Code);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#INSTI_NAME").focus();
+            }
+
+        }
+    };
+    //************************* END of SAVE Function *******************************************//
+
+
+    //Institute Name twise Filter table row
+    $("#txtInstituteTypeCode").keyup(function () {
+        //alert('afd');
+        $("#InstituteTypeGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#InstituteTypeGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+    //Upzila Name twise Filter table row
+    $("#txtUpzilaCode").keyup(function () {
+        //alert('afd');
+        $("#UpazilaGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#UpazilaGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+
+
+    //********************************************** Institute Type POP UP Window ****************************************************
+
+    //*********** DEFINE Institute Type Window ***************************** //
+
+    var InstituteTypeIDWindow = $('#InstituteTypeIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        //width: "1352px",
+        width: "50%",
+        height: "auto",
+        title: "List of Institute Type Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Institute Type GRID ***************************** //
+
+    var InstituteTypeDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "INSTI_TYPE_CODE",
+                fields: {
+                    INSTI_TYPE_CODE: { editable: false, hidden: false },
+                    INSTI_TYPE_NAME: { editable: false }
+
+                }
+            }
+        },
+        //pageSize: 10
+    });
+
+    var InstituteTypeGrid = $("#InstituteTypeGrid").kendoGrid({
+        dataSource: InstituteTypeDataSource,
+        //pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+
+        columns: [
+
+                  { field: "INSTI_TYPE_NAME", title: "Institute Type Name", width: "150px", filterable: true },
+                  { field: "INSTI_TYPE_CODE", title: "Institute Type Code", width: "150px", filterable: false }
+
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#INSTI_TYPE_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetInstituteTypeList", "InstitutionInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#InstituteTypeGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                //SelectedItemOfListOfValue('InstituteTypeGrid');
+                //GridEventForSingleRow();
+                InstituteTypeIDWindow.open();
+                InstituteTypeIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnInstituteTypeIDWindowOK').click(function () {
+        //ListOfValueOpeningBankGridEvent('InstituteTypeGrid');
+        GridEventForSingleRow();
+        InstituteTypeIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnInstituteTypeIDWindowCancel').click(function () {
+        InstituteTypeIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#InstituteTypeIDWindow").dblclick(function () {
+        //ListOfValueOpeningBankGridEvent('InstituteTypeGrid');
+        //alert($("#SUStatus").val());
+        GridEventForSingleRow();
+        InstituteTypeIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#InstituteTypeIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            GridEventForSingleRow();
+            InstituteTypeIDWindow.close();
+        }
+        else if (keycode == '27') {
+            InstituteTypeIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function GridEventForSingleRow() {
+
+        var gridData = $("#InstituteTypeGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $("#INSTI_TYPE_CODE").val(selectedItem.INSTI_TYPE_CODE);
+        $("#INSTI_TYPE_NAME").val(selectedItem.INSTI_TYPE_NAME);
+        $("#ADDRESS1").focus();
+    }
+
+    ////To Bring Data from List of Value Grid to Main Page
+    //function ListOfValueOpeningBankGridEvent(gridName) {
+    //    var grid = $('#' + gridName).data("kendoGrid");
+    //    var selectedItem = (grid.dataItem(grid.select()));
+    //    $.each(selectedItem, function (key, value) {
+    //        if (value != null && value != 0)
+    //            $('#' + key).val(value);
+    //    });
+
+    ////    //$("#INSTI_TYPE_CODE").val(selectedItem.INSTI_TYPE_CODE);
+    ////    //$("#INSTI_TYPE_NAME").val(selectedItem.INSTI_TYPE_NAME);
+    //}
+
+
+    //Select Data from Pop up Grid
+    //function SelectedItemOfListOfValue(gridName) {
+    //    var grid = $('#' + gridName).data("kendoGrid");
+    //    grid.dataSource.read();
+    //    $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+    //    $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+    //        this.element.find('tbody tr:first').addClass('k-state-selected');
+    //    });
+    //}
+
+    //********************************************** END of Institute Type POP UP Window ****************************************************//
+
+
+    //********************************************** Upazila POP UP Window ****************************************************
+
+    //*********** DEFINE Upazila Window ***************************** //
+
+    var UpazilaIDWindow = $('#UpazilaIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "50%",
+        height: "auto",
+        title: "List of Upazila Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Upazila GRID ***************************** //
+
+    var UpazilaDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "UPAZILA_CODE",
+                fields: {
+                    UPAZILA_CODE: { editable: false, hidden: true },
+                    UPAZILA_NAME: { editable: false },
+                    //TC_L2_SLNO: { editable: false }
+                }
+            }
+        },
+
+    });
+
+    var UpazilaGrid = $("#UpazilaGrid").kendoGrid({
+        dataSource: UpazilaDataSource,
+        //pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        //filterable: {
+        //    extra: false,
+        //    operators: {
+        //        string: {
+        //            startswith: "Starts with",
+        //            contains: "Contains"
+        //        }
+        //    }
+        //},
+
+        columns: [
+                  { field: "UPAZILA_NAME", title: "Upazila Name", width: "150px", filterable: true },
+                  { field: "UPAZILA_CODE", title: "Upazila Code", width: "150px", filterable: false }
+
+                  //{ field: "TC_L2_SLNO", title: "Therapeutic Level-2 Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#UPAZILA_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetUpazilaList", "InstitutionInformation")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#UpazilaGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('UpazilaGrid');
+                UpazilaIDWindow.open();
+                UpazilaIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnUpazilaIDWindowOK').click(function () {
+        ListOfValueOpeningBankGridEvent1('UpazilaGrid');
+        UpazilaIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnUpazilaIDWindowCancel').click(function () {
+        UpazilaIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#UpazilaIDWindow").dblclick(function () {
+        ListOfValueOpeningBankGridEvent1('UpazilaGrid');
+        UpazilaIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#UpazilaIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueOpeningBankGridEvent1('UpazilaGrid');
+            UpazilaIDWindow.close();
+        }
+        else if (keycode == '27') {
+            UpazilaIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueOpeningBankGridEvent1(gridName) {
+        //var grid = $('#' + gridName).data("kendoGrid");
+        //var selectedItem = (grid.dataItem(grid.select()));
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+        //$("#UPAZILA_CODE").val(selectedItem.UPAZILA_CODE);
+        //$("#UPAZILA_NAME").val(selectedItem.UPAZILA_NAME);
+        //$("#DISTC_CODE").val(selectedItem.DISTC_CODE);
+        //$("#DISTC_NAME").val(selectedItem.DISTC_NAME);
+
+        var gridData = $("#UpazilaGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+        $("#UPAZILA_CODE").val(selectedItem.UPAZILA_CODE);
+        $("#UPAZILA_NAME").val(selectedItem.UPAZILA_NAME);
+        $("#DISTC_CODE").val(selectedItem.DISTC_CODE);
+        $("#DISTC_NAME").val(selectedItem.DISTC_NAME);
+
+        //alert($("#Upazilacode").val(selectedItem.Upozilacode));
+        var Upazilacode = selectedItem.UPAZILA_CODE;
+        GetMasterDetailsData("/InstitutionInformation/GetDistrictName", Upazilacode);
+        $("#NO_OF_BEDS").focus();
+
+    }
+
+
+    function GetMasterDetailsData(RequestedURL, Upazilacode) {
+        $.ajax({
+            url: RequestedURL,
+            type: 'GET',
+            data: { "Upazilacode": Upazilacode },
+            success: function (response) {
+                ////alert(response);
+                $("#DISTC_CODE").val(response);
+                $("#DISTC_NAME").val(response);
+
+            }
+        });
+    }
+
+    //Select Data from Pop up Grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        grid.dataSource.read();
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+
+
+    //********************************************** END of Upazila POP UP Window ****************************************************//
+
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSuggestInsInfoList", "InstitutionInformation")',
+                type: "GET"
+            }
+        }
+    });
+    $("#INSTI_NAME").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith"
+    });
+
+
+</script>
+

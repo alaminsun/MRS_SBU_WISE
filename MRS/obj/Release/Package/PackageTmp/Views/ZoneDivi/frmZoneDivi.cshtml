@@ -1,0 +1,788 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label>Zone Code<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" class="txtBox" id="ZONE_DIVI_MAS_SLNO" />
+                    <input type="text" id="ZONE_CODE" placeholder="Press F9" class="txtBox RequiredTextBox SetFocus" readonly="readonly" name="ZONE_CODE" tabindex="1" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Zone Name<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ZONE_NAME" class="txtBox RequiredTextBox" name="ZONE_NAME" readonly="readonly" tabindex="2" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="grdKendo" tabindex=""></div>
+</div>
+
+
+<div id="DeleteConfirmWindow" style="display: none">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ZoneWindow" style="display: none;">
+    <div id="ZoneWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnZoneWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnZoneWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DiviInfoWindow" style="display: none;">
+    <div id="DiviInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDiviInfoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDiviInfoWindowOK" class="PopUpButton" value="OK" />
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+        //To Define Data ZoneDivi for Kendo Grid
+        var dataSourceDivisionInfo = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "ZONE_DIVI_DTL_SLNO",
+                    fields: {
+                        ZONE_DIVI_DTL_SLNO: { editable: false },
+                        ZONE_DIVI_MAS_SLNO: { editable: false },
+                        DIVISION_CODE: { editable: true, defaultValue: 'Press F9' },
+                        DIVISION_NAME: { editable: true },
+                        ZONE_DIVI_STATUS: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for ZoneDivi Kendo Grid
+        var gridDivisionInfo = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSourceDivisionInfo,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "DIVISION_CODE"]').attr("readonly", true);
+                $('input[name = "DIVISION_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Division Info.", className: "btnDivisionGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "ZONE_DIVI_DTL_SLNO", hidden: true },
+                { field: "ZONE_DIVI_MAS_SLNO", hidden: true },
+                { field: "DIVISION_CODE", title: "Division Code", filterable: true, width: 120, attributes: { "class": "DiviInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "DIVISION_NAME", title: "Division Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ field: "ZONE_DIVI_STATUS", title: "Status", editor: ddlStatus, width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDivisionDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        $(".btnDivisionGrid").click(function () {
+            var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieraddressgrid.addRow();
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+        var ddlStatusDataSource = [{ text: "Active", value: "Active" }, { text: "Inactive", value: "Inactive" }];
+
+        function ddlStatus(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: ddlStatusDataSource
+                });
+        };
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDivisionDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#ZONE_DIVI_MAS_SLNO").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "ZoneDivi")',
+                        type: 'POST',
+                        data: JSON.stringify({ "ZONE_DIVI_MAS_SLNO": $("#ZONE_DIVI_MAS_SLNO").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.ZONE_DIVI_DTL_SLNO != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedDiviInfo", "ZoneDivi")',
+                        type: 'POST',
+                        data: JSON.stringify({ "ZONE_DIVI_DTL_SLNO": dataitem.ZONE_DIVI_DTL_SLNO }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Focus ZONE_CODE textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#ZONE_DIVI_MAS_SLNO").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "ZoneDivi")',
+                            type: 'POST',
+                            data: JSON.stringify({ "ZONE_DIVI_MAS_SLNO": $("#ZONE_DIVI_MAS_SLNO").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.ZONE_DIVI_DTL_SLNO != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedDiviInfo", "ZoneDivi")',
+                            type: 'POST',
+                            data: JSON.stringify({ "ZONE_DIVI_DTL_SLNO": dataitem.ZONE_DIVI_DTL_SLNO }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var ZoneDiviDtlModel = { "ZONE_DIVI_DTL_SLNO": "", "ZONE_DIVI_MAS_SLNO": "", "DIVISION_CODE": "", "DIVISION_NAME": "", "ZONE_DIVI_STATUS": "" };
+    var zoneDiviMasModel = { "ZONE_DIVI_MAS_SLNO": "", "ZONE_CODE": "", "DivisonList": [] };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Maximum Length in ZONE_CODE
+        CheckRequiredTextBoxMaxLength('ZONE_CODE', 20);
+        // Check Empty or Maximum Length in ZONE_NAME
+        CheckRequiredTextBoxMaxLength('ZONE_NAME', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            zoneDiviMasModel.ZONE_CODE = $("#ZONE_CODE").val();
+            zoneDiviMasModel.ZONE_DIVI_MAS_SLNO = $("#ZONE_DIVI_MAS_SLNO").val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            zoneDiviMasModel.DivisonList = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].dirty) {
+                        ZoneDiviDtlModel.ZONE_DIVI_DTL_SLNO = data[i].ZONE_DIVI_DTL_SLNO;
+                        ZoneDiviDtlModel.DIVISION_CODE = data[i].DIVISION_CODE;
+                        ZoneDiviDtlModel.ZONE_DIVI_STATUS = data[i].ZONE_DIVI_STATUS;
+
+                        zoneDiviMasModel.DivisonList.push(ZoneDiviDtlModel);
+                        ZoneDiviDtlModel = { "ZONE_DIVI_DTL_SLNO": "", "ZONE_DIVI_MAS_SLNO": "", "DIVISION_CODE": "", "DIVISION_NAME": "", "ZONE_DIVI_STATUS": "" };
+                    }
+                }
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("ZoneDivi", "ZoneDivi")',
+                    data: JSON.stringify(zoneDiviMasModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#ZONE_DIVI_MAS_SLNO').val(response.ZONE_DIVI_MAS_SLNO);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSaveDiviList", "ZoneDivi")',
+                                type: 'GET',
+                                data: { ZONE_DIVI_MAS_SLNO: $("#ZONE_DIVI_MAS_SLNO").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSaveDiviList", "ZoneDivi")',
+                                type: 'GET',
+                                data: { ZONE_DIVI_MAS_SLNO: $("#ZONE_DIVI_MAS_SLNO").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 1) {
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#ZONE_CODE").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    ////////////////////Zone/////////////////////////
+
+    var ZoneGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ZONE_CODE",
+                fields: {
+                    ZONE_CODE: { editable: false },
+                    ZONE_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetZoneList", "ZoneDivi")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var ZonePageGrid = $("#ZoneWindowGrid").kendoGrid({
+        dataSource: ZoneGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "ZONE_NAME", title: "Zone Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ZONE_CODE", title: "Zone Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var ZoneWindow = $('#ZoneWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Zone Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function ZoneWindowEvent() {
+        var WindowGrid = $("#ZoneWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#ZONE_CODE").val(WindowGridItem.ZONE_CODE);
+        $("#ZONE_NAME").val(WindowGridItem.ZONE_NAME);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnZoneWindowOK').click(function () {
+        ZoneWindowEvent();
+        ZoneWindow.close();
+    });
+
+    $('#btnZoneWindowCancel').click(function () {
+        ZoneWindow.close();
+    });
+
+    $("#ZoneWindowGrid").dblclick(function () {
+        ZoneWindowEvent();
+        ZoneWindow.close();
+    });
+
+    $("#ZoneWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ZoneWindowEvent();
+            ZoneWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ZoneWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#ZONE_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ZoneWindowGrid');
+                ZoneWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ZONE_DIVI_MAS_SLNO",
+                fields: {
+                    ZONE_DIVI_MAS_SLNO: { editable: false },
+                    ZONE_CODE: { editable: false },
+                    ZONE_NAME: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "ZONE_DIVI_MAS_SLNO", hidden: true },
+            { field: "ZONE_NAME", title: "Zone Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ZONE_CODE", title: "Zone Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Zone Division Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetZoneSearchList", "ZoneDivi")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#ZONE_DIVI_MAS_SLNO").val(selectedItem.ZONE_DIVI_MAS_SLNO);
+        $("#ZONE_CODE").val(selectedItem.ZONE_CODE);
+        $("#ZONE_NAME").val(selectedItem.ZONE_NAME);
+        $.ajax({
+            url: '@Url.Action("GetSaveDiviList", "ZoneDivi")',
+            type: 'GET',
+            data: { ZONE_DIVI_MAS_SLNO: $("#ZONE_DIVI_MAS_SLNO").val() },
+            success: function (data33) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+    }
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    /////////////////////////////////////////////////////
+
+    ///////////////////Existing Division Info List/////////////////////////
+
+    $(document).on('keyup', '.DiviInfo', function (e) {
+        if (e.keyCode == 120) {
+            GetDiviInfoList();
+            SelectedItemOfListOfValue('DiviInfoWindowGrid');
+            DiviInfoWindow.open();
+        }
+    });
+
+    function GetDiviInfoList() {
+        $.ajax({
+            url: '@Url.Action("GetDiviInfoList", "ZoneDivi")',
+            type: 'GET',
+            //data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#DiviInfoWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var DiviInfoWindow = $('#DiviInfoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Division Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var DiviInfoGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DIVISION_CODE",
+                fields: {
+                    DIVISION_NAME: { editable: false },
+                    DIVISION_CODE: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var DiviInfoGrid = $("#DiviInfoWindowGrid").kendoGrid({
+        dataSource: DiviInfoGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DIVISION_NAME", title: "Division Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DIVISION_CODE", title: "Division Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventDiviInfo(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("DIVISION_CODE", selectedItem.DIVISION_CODE);
+        pageGridItem.set("DIVISION_NAME", selectedItem.DIVISION_NAME);
+
+        changeStatus = 1;
+    }
+
+    //Handling button click for DiviInfo window grid
+    $('#btnDiviInfoWindowOK').click(function () {
+        ListOfValueGridEventDiviInfo('DiviInfoWindowGrid');
+        DiviInfoWindow.close();
+    });
+    $('#btnDiviInfoWindowCancel').click(function () {
+        DiviInfoWindow.close();
+    });
+    $("#DiviInfoWindow").dblclick(function () {
+        ListOfValueGridEventDiviInfo('DiviInfoWindowGrid');
+        DiviInfoWindow.close();
+    });
+    $("#DiviInfoWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventDiviInfo('DiviInfoWindowGrid');
+            DiviInfoWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DiviInfoWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ///////////////////////////////////////////////////////
+</script>

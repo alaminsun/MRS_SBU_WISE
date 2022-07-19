@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("frmUserWorkingSession", "UserWorkingSession", FormMethod.Post, new { name = "UserWorkingSession", id = "UserWorkingSession" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-6">
+            <span id="MessageText" class="pull-right" style="color:green;font-weight:bold;font-size:16px;">@ViewBag.Msg</span>
+        </div>
+        <div class="col-lg-6">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnCheck" class=" btn bg-olive btn-flat margin pull-right">Check & Load</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <label style="float: right; margin-right: 3%;">Excel File:</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <div>
+                            <input name="files" id="files" type="file" class="txtBox" />
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label>From Date</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="EntryDate" name="EntryDate" class="datePicker txtBox" required />
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Serial No</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="SerialNo" class="txtBox" readonly="readonly" value="@ViewBag.Tag" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-2">
+                        <label>To Date</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="PurchaseDate" name="PurchaseDate" class="datePicker txtBox" required />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+        <p style="position: absolute; top: 50%; left: 42%; color: White;">
+            Uploading...Please wait... <img src="~/Content/Images/cube.gif" />
+        </p>
+    </div>
+}
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:MM/dd/yyyy}"
+            , value: new Date()
+        });
+    }); //End of Document.Ready()
+
+    // Reset Data
+    $("#btnReset").click(function () {
+        $("#MessageText").html("");
+        ResetOnlyMasterPageData();
+        $(".txtBox").css("border-color", "");
+        $(".k-upload-files").remove();
+        $(".k-upload-status").remove();
+        $(".k-upload.k-header").addClass("k-upload-empty");
+        $(".k-upload-button").removeClass("k-state-focused");
+    });
+
+</script>
+
+<script>
+
+    function onSelect(e) {
+        //  kendoConsole.log("Select :: " + getFileInfo(e));
+    }
+
+    function onUpload(e) {
+        //  kendoConsole.log("Upload :: " + getFileInfo(e));
+    }
+
+    function onSuccess(e) {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoadExcelFile", "UserWorkingSession")',
+            type: 'GET',
+            data: { "fileName": $("#files").val() },
+            success: function (response) {
+                //changeStatus = 1;
+                if (response.msg.Type == 2) {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                else {
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                $("#divLoading").hide();
+            } //End of success call
+        });
+        //   kendoConsole.log("Success (" + e.operation + ") :: " + getFileInfo(e));
+    }
+
+    function onError(e) {
+        //$('#MessageText').html(respnse.msg.Msg);
+        //alert(e.Msg);
+    }
+
+    function onComplete(e) {
+        // kendoConsole.log("Complete");
+    }
+
+    function onCancel(e) {
+        //  kendoConsole.log("Cancel :: " + getFileInfo(e));
+    }
+
+    function onRemove(e) {
+        // kendoConsole.log("Remove :: " + getFileInfo(e));
+    }
+
+    function onProgress(e) {
+        //kendoConsole.log("Upload progress :: " + e.percentComplete + "% :: " + getFileInfo(e));
+    }
+
+    $(document).ready(function () {
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: "UploadFile",
+                removeUrl: "Remove",
+                autoUpload: true
+            },
+            cancel: onCancel,
+            complete: onComplete,
+            error: onError,
+            progress: onProgress,
+            remove: onRemove,
+            select: onSelect,
+            success: onSuccess,
+            upload: onUpload
+        });
+    });
+</script>

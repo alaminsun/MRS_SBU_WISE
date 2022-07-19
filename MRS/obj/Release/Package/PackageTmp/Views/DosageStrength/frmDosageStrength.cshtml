@@ -1,0 +1,377 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Dosage Strength Name</label><label style="color: red">*</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="DSG_STRENGTH_NAME" tabindex="2" name="DSG_STRENGTH_NAME" class="txtBox RequiredTextBox SetFocus" value="" />
+                </div>
+                @*<div class="col-lg-3">
+                    <label>Dosage Strength SL. NO.</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" id="DF_STRENGTH_SLNO" name="DF_STRENGTH_SLNO" tabindex="1" class="txtBox RequiredTextBox" value="" />
+                </div>*@
+            </div>
+            <div class="form-group">
+                <div class="col-lg-3">
+                    <label>Dosage Strength Code</label>
+                </div>
+                <div class="col-lg-3">
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    @*<input type="text" id="DSG_STRENGTH_CODE" name="DSG_STRENGTH_CODE" tabindex="1" class="txtBox RequiredTextBox" value="" />*@
+                    <input type="text" id="DSG_STRENGTH_CODE" name="DSG_STRENGTH_CODE" tabindex="2" class="txtBox" value="" readonly="readonly" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p>
+        <h5>Data will be lost if you continue.</h5>
+    </p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script>
+    //***************************** To Declare Global Variable ****************************//
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //NumericAndDecimalValue(DSG_STRENGTH_CODE);
+    //NumericAndDecimalValue(DSG_STRENGTH_CODE);
+
+
+    //************************* START Document.Ready Finction ******************************//
+    $(document).ready(function () {
+        OnlyNumericValue('DF_STRENGTH_SLNO');
+
+        //************************* Handling DELETE event for DELETING ROW from DETAIL GRID ******************************//
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+
+        //************************* EDIT Button for DETAIL GRID******************************//
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                $(".RequiredTextBox").css("border-color", "");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#DSG_STRENGTH_CODE").attr("disabled", "disabled");
+            }
+        };
+
+
+        //************************* DEFINE DETAIL KENDO GRID ******************************//
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "DSG_STRENGTH_CODE",
+                    fields: {
+                        DSG_STRENGTH_CODE: { editable: false },
+                        DSG_STRENGTH_NAME: { editable: false },
+                        DF_STRENGTH_SLNO: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetDosageStrengthInformation", "DosageStrength")",
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for Store Kendo Grid
+
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                { field: "DSG_STRENGTH_CODE", title: "Dosage Strength Code", width: 150, filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { field: "DSG_STRENGTH_NAME", title: "Dosage Strength Name", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                //{ field: "DF_STRENGTH_SLNO", title: "Dosage Strength Sl. No.", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        }).data('kendoGrid');
+        //************************* END OF DETAIL GRID ******************************//
+
+        //************************* Handling YES BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "DosageStrength")',
+                type: 'POST',
+                data: JSON.stringify({ "dosageStrengthCode": dataitem.DSG_STRENGTH_CODE }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $("#Status").val("Active");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+
+        //************************* Handling NO BUTTON click for GRID ROW Deletetion ******************************//
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //************************* Click Save Chages Window OK Button******************************//
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#Status").val("Active");
+                $("#DSG_STRENGTH_CODE").removeAttr("disabled");
+                changeStatus = 0;
+                location.reload();
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#DSG_STRENGTH_CODE").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "DosageStrength")',
+                    type: 'POST',
+                    data: JSON.stringify({ "dosageStrengthCode": dataitem.DSG_STRENGTH_CODE }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $("#Status").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        //************************* Click Save Chages Popup Cancel Button******************************//
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+
+        //************************* Clear Operational Message after Operational Message ******************************//
+        ClearOperationalMessage();
+
+        //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+        ClearRequiredTextBoxRedColor();
+
+        //************************* To Chech UNSAVED Data in Details GRID ******************************//
+        CheckUnSavedMasterData();
+
+        //************************* Set Focus on First TextBox ******************************//
+        $(".SetFocus").focus();
+        //// Declare Numeric Class in SlNo Textbox
+        //$(".numaric").numeric();
+
+        //************************* WINDOWS LOAD Method  ******************************//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //************************* END of Document.Ready Method ******************************//
+    });
+
+    //************************* RESET Function for RESET Button ******************************//
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#Status").val("Active");
+            $("#DSG_STRENGTH_CODE").removeAttr("disabled");
+            location.reload();
+        }
+    });
+
+    //************************* SAVE Function for SAVE Button ******************************//
+
+
+    //*************** DECLARE VIEW MODEL for SAVING Data ***********************************//
+    var dosageStrengthViewModel = { "DSG_STRENGTH_CODE": "", "DSG_STRENGTH_NAME": "", "DF_STRENGTH_SLNO": "" };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Maximum Length in MfcNicName
+        CheckRequiredTextBoxMaxLength('DSG_STRENGTH_NAME', 60);
+
+        // Check Maximum Length in ContactNumber
+        CheckNormalTextBoxMaxLength('DF_STRENGTH_SLNO', 10);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            dosageStrengthViewModel.DSG_STRENGTH_CODE = $("#DSG_STRENGTH_CODE").val();
+            dosageStrengthViewModel.DSG_STRENGTH_NAME = $("#DSG_STRENGTH_NAME").val();
+            dosageStrengthViewModel.DF_STRENGTH_SLNO = $("#DF_STRENGTH_SLNO").val();
+            dosageStrengthViewModel.SUStatus = $("#SUStatus").val();
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("SaveAndUpdateData", "DosageStrength")',
+                    data: JSON.stringify(dosageStrengthViewModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $("#SUStatus").val(1);
+                            GridReload('PageDetailGrid');
+                            $('#DSG_STRENGTH_CODE').val(response.Code);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            GridReload('PageDetailGrid');
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#DSG_STRENGTH_CODE").focus();
+            }
+        }
+    };
+    //************************* END of SAVE Function *******************************************//
+    var dataSource1 = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: '@Url.Action("GetSuggestDosageStrengthList", "DosageStrength")',
+                type: "GET"
+            }
+        }
+    });
+    $("#DSG_STRENGTH_NAME").kendoAutoComplete({
+        dataSource: dataSource1,
+        filter: "startswith"
+    });
+</script>

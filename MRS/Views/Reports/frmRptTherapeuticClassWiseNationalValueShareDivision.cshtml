@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptTherapeuticClassWiseNationalValueShareDivision", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            @*<button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>*@
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style="">Therapeutic Class Wise Value Share of a Division (By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Therapeutic Class Wise Value Share of a Division (By %)" name="ReportName" value="Therapeutic Class Wise Value Share of a Division (By %)" checked="checked" />
+                    </div><br />
+                    <label style="">Therapeutic Class Wise Value Share of a Division (By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="Therapeutic Class Wise Value Share of a Division (By Value)" name="ReportName" value="Therapeutic Class Wise Value Share of a Division (By Value)" />
+                    </div><br />
+                </div>
+                <div class="form-group col-lg-6">
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Selection:</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select id="ddlTherapeutic" name="ddlTherapeutic" class="txtBox" tabindex="1">
+                                <option value="All Therapeutic">All Therapeutic</option>
+                                <option value="Selected Therapeutic">Selected Therapeutic</option>
+                            </select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Type:</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select id="ddlPresCategory" name="ddlPresCategory" class="txtBox" style="width: 100%;" tabindex="2"></select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Division :</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="hidden" id="DIVISION_CODE" name="DIVISION_CODE" class="txtBox RequiredTextBox" />
+                            <input type="text" id="DIVISION_NAME" name="DIVISION_NAME" tabindex="3" style="width:250px" class="txtBox RequiredTextBox" required="required" readonly="readonly" placeholder="Press F9">
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">Therapeutic Class Level:</label>
+                        </div>
+                        <div class="col-lg-5">
+                            <select id="ddlTheraClassLevel" name="ddlTheraClassLevel" class="txtBox" tabindex="4">
+                                <option value="THERAPEUTIC CLASS LEVEL-1">Therapeutic Class Level-1</option>
+                                <option value="THERAPEUTIC CLASS LEVEL-2">Therapeutic Class Level-2</option>
+                                <option value="THERAPEUTIC CLASS LEVEL-3">Therapeutic Class Level-3</option>
+                                <option value="THERAPEUTIC CLASS LEVEL-4">Therapeutic Class Level-4</option>
+                            </select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">From Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="FromDate" name="FromDate" style="width:100%" tabindex="5" class="txtBox datePicker" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <label class="pull-right">To Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="ToDate" name="ToDate" style="width:100%" tabindex="6" class="txtBox datePicker" />
+                        </div>
+                    </div><br />
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<div id="RegionWindow" style="display: none;">
+    <div id="RegionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+        LoadPrescription();
+    }); //End of Document.Ready()
+
+    function LoadPrescription() {
+        $.ajax({
+            url: '@Url.Action("GetPrescriptionCategory", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    $('#ddlPresCategory').append($('<option>', { value: item.PRESC_CATE_CODE, html: item.PRESC_CATE_NAME }, '<option/>'));
+                });
+            },
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }
+
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+    function displayReport() {
+
+        if ($("#DIVISION_NAME").val() != "") {
+            return true;
+        }
+        else {
+            CheckRequiredTextBoxMaxLength('DIVISION_NAME', 10);
+            return false;
+        }
+    }
+
+
+    //////Region////////////////////////
+
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "DIVISION_CODE",
+                fields: {
+                    DIVISION_CODE: { editable: false },
+                    DIVISION_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDivisionList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DIVISION_CODE", title: "Territory Code", filterable: true, hidden: false, sortable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DIVISION_NAME", title: "Territory Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DIVISION_CODE").val(WindowGridItem.DIVISION_CODE);
+        $("#DIVISION_NAME").val(WindowGridItem.DIVISION_NAME);
+        $("#ddlTheraClassLevel").focus();
+        changeStatus = 1;
+    };
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DIVISION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+                RegionWindow.center();
+
+            }
+        }
+    });
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+</script>

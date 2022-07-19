@@ -1,0 +1,577 @@
+﻿@{
+    ViewBag.Title = "FrmDoctorGroupMstDtl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmRptDoctorMonthlyValueShare", "RptDoctorMonthlyValueShare", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 50px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style="">SELECTED DOCTOR MONTHLY VALUE SHARE(By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SELECTED DOCTOR MONTHLY VALUE SHARE(By %)" name="ReportName" value="SELECTED DOCTOR MONTHLY VALUE SHARE(By %)" checked="checked" />
+                    </div><br />
+                    <label style="">SELECTED DOCTOR MONTHLY VALUE SHARE(By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="SELECTED DOCTOR MONTHLY VALUE SHARE(By Value)" name="ReportName" value="SELECTED DOCTOR MONTHLY VALUE SHARE(By Value)" />
+                    </div>
+                </div>
+                <div class="form-group col-lg-6">
+                    <div class="col-lg-6">
+                        <label class="pull-right">Year:</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <select id="ddlYear" name="ddlYear" class="txtBox" style="width: 100%;" tabindex="7"></select>
+                    </div><br /><br />
+                    <div class="col-lg-6">
+                        <label class="pull-right">Manufacturer:</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <input type="hidden" id="MANUFACTURER_CODE" name="MANUFACTURER_CODE" />
+                        <input type="text" id="MANUFACTURER_NAME" placeholder="Press F9" readonly="readonly" name="MANUFACTURER_NAME" class="txtBox RequiredTextBox" tabindex="1" />
+                    </div>
+                    <br /><br />
+                    <div class="col-lg-6">
+                        <label class="pull-right" style="margin-top:10px;">Doctors File Path:</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <input name="files" class="files" id="files" type="file">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row box box-success">
+        <div id="PageDetailGrid" class="grdKendo" tabindex="3"></div>
+    </div>
+}
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="ManufacturerWindow" style="display: none;">
+    <div id="ManufacturerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManufacturerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManufacturerWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DoctorWindow" style="display: none;">
+    <div id="DoctorGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDoctorWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDoctorWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+
+    var deleteStatus = 0;
+    var dataitem = {};
+
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+        var currentYear = (new Date).getFullYear();
+        for (var i = 0; i < 10; i++) {
+            var popYear = currentYear - i;
+            $("#ddlYear").append("<option value='" + popYear + "'>" + popYear + "</option>")
+        }
+    });
+
+    //******************************DECLARE GRID DELETE ROW EVENT FOR PAGEDETAILGRID **************************************//
+    function handleDoctorGroupMstDtlDelete() {
+        deleteStatus = 2;
+        var grid1 = $("#PageDetailGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+        OpenConfirmationDialog();
+    };
+
+    //***************************************To Define Data TC_L1_L2 for Kendo Grid******************************************//
+    var dataSourceDivisionInfo = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "DOC_GRP_DET_SLNO",
+                fields: {
+                    DOC_GRP_DET_SLNO: { editable: false },
+                    DOC_GRP_MAS_SLNO: { editable: false },
+                    DOCTOR_ID: { editable: true, defaultValue: 'Press F9' },
+                    DOCTOR_NAME: { editable: true },
+                    DEGREE: { editable: true },
+                    DESIGNATION: { editable: true },
+                    SPECIALIZATION: { editable: true },
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+
+    var gridDoctorGroupMstDtlInfo = $('#PageDetailGrid').kendoGrid({
+        dataSource: dataSourceDivisionInfo,
+        width: 430,
+        pageable: true,
+        edit: function (e) {
+            $("input[name=DOCTOR_ID]").attr("readonly", true);
+            $("input[name=DOCTOR_NAME]").attr("readonly", true);
+            $("input[name=DEGREE]").attr("readonly", true);
+            $("input[name=DESIGNATION]").attr("readonly", true);
+            $("input[name=SPECIALIZATION]").attr("readonly", true);
+        },
+        selectable: "row",
+        //toolbar: [{ text: "Add Doctor Details ", className: "btnAddDoctor", imageClass: "k-icon k-add" }],
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "DOC_GRP_DET_SLNO", hidden: true },
+            { field: "DOC_GRP_MAS_SLNO", hidden: true },
+            { field: "DOCTOR_ID", title: "Doctor Id", filterable: true, width: 120, attributes: { "class": "_doctorCode" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DOCTOR_NAME", title: "Doctor Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DEGREE", title: "Degree", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DESIGNATION", title: "Designation", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "SPECIALIZATION", title: "Specialization", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDoctorGroupMstDtlDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    }).data('kendoGrid');
+
+
+
+    //****************************************To Define Columns for TC_L1_L2 Kendo Grid***************************************//
+    $(".btnAddDoctor").click(function () {
+        var DoctorGridRow = $("#PageDetailGrid").data("kendoGrid");
+        $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        DoctorGridRow.addRow();
+    });
+
+    $("#PageDetailGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            var DoctorGridRow = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            DoctorGridRow.addRow();
+        }
+    });
+
+    //Handling Yes button click for grid row deletion
+    $('#btnConfirmationOK').click(function () {
+        if (deleteStatus == 2) {
+            if (dataitem.DOC_GRP_DET_SLNO != null && dataitem.DOC_GRP_DET_SLNO != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteDetailList", "RptSelectedDoctorValueShare")',
+                    type: 'POST',
+                    data: JSON.stringify({ "doctorGroupDtlSlNo": dataitem.DOC_GRP_DET_SLNO }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        } else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            } else {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                $('#MessageText').html("Grid Row Deleted Successfully");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        }
+    });
+
+    //Handling No button click for grid row deletion
+    $('#btnConfirmationCancel').click(function () {
+        dataitem = {};
+        CloseConfirmationDialog();
+    });
+
+    //To clear operational/error message
+    ClearOperationalMessage();
+
+    //For removing operational & required message after triggering other event
+    ClearRequiredTextBoxRedColor();
+
+    // To check unsaved data in master or details
+    CheckUnSavedMasterDetailData();
+
+    // Focus ZONE_CODE textbox
+    $(".SetFocus").focus();
+
+    // **       Page Unloaded **//
+    window.onbeforeunload = function (e) {
+        if (changeStatus == 1) {
+            e.preventDefault();
+        }
+    };
+    //  **       Page Unloaded **//
+    //});
+    // ** End Start Document .Ready
+
+    //*********** Doctor Window ***************************** //
+
+    var DoctorWindow = $('#DoctorWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Doctor Detail Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-2 GRID ***************************** //
+
+    var TherapeuticLevel2DataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DOCTOR_ID",
+                fields: {
+                    DOCTOR_ID: { editable: false, hidden: true },
+                    DOCTOR_NAME: { editable: false }
+
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDoctorData", "RptSelectedDoctorValueShare")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+    });
+
+    var DoctorGrid = $("#DoctorGrid").kendoGrid({
+        dataSource: TherapeuticLevel2DataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        columns: [
+            { field: "DOCTOR_NAME", title: "Doctor Name", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DOCTOR_ID", title: "Doctor Id", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+        ]
+    });
+
+    $(document).on('keyup', '._doctorCode', function (e) {
+        if (e.keyCode == 120) {
+            SelectedItemOfListOfValue('DoctorGrid');
+            DoctorWindow.open();
+            DoctorWindow.center();
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnDoctorWindowOK').click(function () {
+        ListOfValueGridEventDiviInfo('DoctorGrid');
+        DoctorWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnDoctorWindowCancel').click(function () {
+        TherapeuticLevel2DataSource.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#DoctorWindow").dblclick(function () {
+        ListOfValueGridEventDiviInfo('DoctorGrid');
+        DoctorWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#DoctorWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventDiviInfo('DoctorGrid');
+            DoctorWindow.close();
+        }
+        else if (keycode == '27') {
+            DoctorWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventDiviInfo(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("DOCTOR_ID", selectedItem.DOCTOR_ID);
+        pageGridItem.set("DOCTOR_NAME", selectedItem.DOCTOR_NAME);
+        pageGridItem.set("DEGREE", selectedItem.DEGREE);
+        pageGridItem.set("DESIGNATION", selectedItem.DESIGNATION);
+        pageGridItem.set("SPECIALIZATION", selectedItem.SPECIALIZATION);
+    }
+
+    $("#btnReset").click(function () {
+        ClearOperationalMessage();
+        ResetOnlyMasterPageData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        $("#files").val('');
+        $(".txtBox").css("border-color", "");
+        $(".k-upload-files").remove();
+        $(".k-upload-status").remove();
+        $(".k-upload.k-header").addClass("k-upload-empty");
+        $(".k-upload-button").removeClass("k-state-focused");
+    });
+
+    function displayReport() {
+
+        if ($("#MANUFACTURER_NAME").val() != "") {
+            return true;
+        }
+        else {
+            CheckRequiredTextBoxMaxLength('MANUFACTURER_NAME', 300);
+            return false;
+        }
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //////////////////Manufacturer///////////////////////////
+
+    var ManufacturerGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ManufacturerCode",
+                fields: {
+                    ManufacturerCode: { editable: false },
+                    ManufacturerName: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetManufacturerList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var ManufacturerPageGrid = $("#ManufacturerWindowGrid").kendoGrid({
+        dataSource: ManufacturerGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "ManufacturerName", title: "Manufacturer Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ManufacturerCode", title: "Manufacturer Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var ManufacturerWindow = $('#ManufacturerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Manufacturer Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function ManufacturerWindowEvent() {
+        var WindowGrid = $("#ManufacturerWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#MANUFACTURER_CODE").val(WindowGridItem.ManufacturerCode);
+        $("#MANUFACTURER_NAME").val(WindowGridItem.ManufacturerName);
+        changeStatus = 1;
+        $(".RequiredTextBox").css("border-color", "");
+        $('#MessageText').html('');
+    };
+
+    $('#btnManufacturerWindowOK').click(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+    $('#btnManufacturerWindowCancel').click(function () {
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindowGrid").dblclick(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ManufacturerWindowEvent();
+            ManufacturerWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ManufacturerWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#MANUFACTURER_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ManufacturerWindowGrid');
+                ManufacturerWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    //************************************  UPLOAD EXCELL FILE INTO KENDO GRID *****************************************//
+
+    function onSelect(e) {
+        //  kendoConsole.log("Select :: " + getFileInfo(e));
+    }
+
+    function onUpload(e) {
+        //  kendoConsole.log("Upload :: " + getFileInfo(e));
+    }
+
+    function onSuccess(e) {
+        //$("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoadExcelFile", "RptDoctorMonthlyValueShare")',
+            type: 'GET',
+            data: { "fileName": $("#files").val() },
+            success: function (response) {
+                if (response != "") {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                    $("#MessageText").html("Excel File Uploaded Successfully");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                } else {
+                    $("#MessageText").html("Failed to Upload Excel File");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+            } //End of success call
+        });
+    }
+
+    function onError(e) {
+        //alert(e.Msg);
+    }
+
+    function onComplete(e) {
+        // kendoConsole.log("Complete");
+    }
+
+    function onCancel(e) {
+        //  kendoConsole.log("Cancel :: " + getFileInfo(e));
+    }
+
+    function onRemove(e) {
+        // kendoConsole.log("Remove :: " + getFileInfo(e));
+    }
+
+    function onProgress(e) {
+        //kendoConsole.log("Upload progress :: " + e.percentComplete + "% :: " + getFileInfo(e));
+    }
+
+    $(document).ready(function () {
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: "UploadFile",
+                removeUrl: "Remove",
+                autoUpload: true
+            },
+            cancel: onCancel,
+            complete: onComplete,
+            error: onError,
+            progress: onProgress,
+            remove: onRemove,
+            select: onSelect,
+            success: onSuccess,
+            upload: onUpload
+        });
+    });
+
+    //************************************  END OF UPLOAD EXCELL FILE INTO KENDO GRID **********************************//
+</script>

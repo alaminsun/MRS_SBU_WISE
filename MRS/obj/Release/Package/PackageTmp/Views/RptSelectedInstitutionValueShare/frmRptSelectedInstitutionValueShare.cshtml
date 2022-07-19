@@ -1,0 +1,451 @@
+﻿@{
+    ViewBag.Title = "FrmInstitutionGroupMstDtl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptSelectedInstitutionValueShare", "RptSelectedInstitutionValueShare", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 50px;" tabindex="3" checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            @*<button type="submit" id="btnPDF" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> PDF</button>*@
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form">
+            <div class="box-body">
+                <div class="form-group col-lg-6">
+                    <label style="">MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE(By %)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE(By %)" name="ReportName" value="MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE(By %)" checked="checked" />
+                    </div><br />
+                    <label style="">MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE(By Value)</label>
+                    <div class="col-lg-1" style="">
+                        <input type="radio" id="MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE(By Value)" name="ReportName" value="MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE(By Value)" />
+                    </div>
+                </div>
+                <div class="form-group col-lg-6">
+                    <div class="col-lg-6">
+                        <label class="pull-right">FromDate:</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-6">
+                        <label class="pull-right">To Date</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="1" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-6">
+                        <label class="pull-right" style="margin-top:10px;">Institutions File Path:</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <input name="files" id="files" type="file">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row box box-success">
+        <div id="PageDetailGrid" class="grdKendo" tabindex="3"></div>
+    </div>
+}
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="InstitutionWindow" style="display: none;">
+    <div id="InstitutionGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstitutionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstitutionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+
+    var deleteStatus = 0;
+    var dataitem = {};
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+    });
+
+    //******************************DECLARE GRID DELETE ROW EVENT FOR PAGEDETAILGRID **************************************//
+    function handleInstituteGroupMstDtlDelete() {
+        deleteStatus = 2;
+        var grid1 = $("#PageDetailGrid").data("kendoGrid");
+        dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+        OpenConfirmationDialog();
+    };
+
+    //***************************************To Define Data TC_L1_L2 for Kendo Grid******************************************//
+    var dataSourceDivisionInfo = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "INSTI_GRP_DET_SLNO",
+                fields: {
+                    INSTI_GRP_DET_SLNO: { editable: false },
+                    INSTI_GRP_MAS_SLNO: { editable: false },
+                    INSTI_CODE: { editable: true, defaultValue: 'Press F9' },
+                    INSTI_NAME: { editable: true },
+                    INSTI_TYPE_CODE: { editable: true },
+                    INSTI_TYPE_NAME: { editable: true },
+                    ADDRESS: { editable: true },
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+
+    var gridInstitutionGroupMstDtlInfo = $('#PageDetailGrid').kendoGrid({
+        dataSource: dataSourceDivisionInfo,
+        width: 430,
+        pageable: true,
+        edit: function (e) {
+            $("input[name=INSTI_CODE]").attr("readonly", true);
+            $("input[name=INSTI_TYPE_CODE]").attr("readonly", true);
+            $("input[name=INSTI_TYPE_NAME]").attr("readonly", true);
+            $("input[name=ADDRESS]").attr("readonly", true);
+
+        },
+        selectable: "row",
+        //toolbar: [{ text: "Add Institution Details", className: "btnAddInstitution", imageClass: "k-icon k-add" }],
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        columns: [
+            { field: "INSTI_GRP_DET_SLNO", hidden: true },
+            { field: "INSTI_GRP_MAS_SLNO", hidden: true },
+            { field: "INSTI_CODE", title: "Institution Code", filterable: true, width: 70, attributes: { "class": "_institutionCode" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_NAME", title: "Institution Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_CODE", hidden: true, title: "INSTI_TYPE_CODE", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_NAME", title: "Institution Type Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS", title: "Address", filterable: true, width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleInstituteGroupMstDtlDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    }).data('kendoGrid');
+
+
+
+    //****************************************To Define Columns for TC_L1_L2 Kendo Grid***************************************//
+    $(".btnAddInstitution").click(function () {
+        var InstitutionGridRow = $("#PageDetailGrid").data("kendoGrid");
+        $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+        InstitutionGridRow.addRow();
+    });
+
+    $("#PageDetailGrid").keyup(function (e) {
+        if (e.keyCode == 13) {
+            var InstitutionGridRow = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            InstitutionGridRow.addRow();
+        }
+    });
+
+    //Handling Yes button click for grid row deletion
+    $('#btnConfirmationOK').click(function () {
+        if (deleteStatus == 2) {
+            if (dataitem.INSTI_GRP_DET_SLNO != null && dataitem.INSTI_GRP_DET_SLNO != "") {
+                $.ajax({
+                    url: '@Url.Action("DeleteDetailList", "RptSelectedInstitutionValueShare")',
+                    type: 'POST',
+                    data: JSON.stringify({ "institutionGroupDtlSlNo": dataitem.INSTI_GRP_DET_SLNO }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        } else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            } else {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                $('#MessageText').html("Grid Row Deleted Successfully");
+                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            }
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        }
+    });
+
+    //Handling No button click for grid row deletion
+    $('#btnConfirmationCancel').click(function () {
+        dataitem = {};
+        CloseConfirmationDialog();
+    });
+
+    //To clear operational/error message
+    ClearOperationalMessage();
+
+    //For removing operational & required message after triggering other event
+    ClearRequiredTextBoxRedColor();
+
+    // To check unsaved data in master or details
+    CheckUnSavedMasterDetailData();
+
+    // Focus ZONE_CODE textbox
+    $(".SetFocus").focus();
+
+
+    // **       Page Unloaded **//
+    window.onbeforeunload = function (e) {
+        if (changeStatus == 1) {
+            e.preventDefault();
+        }
+    };
+    //  **       Page Unloaded **//
+    //});
+    // ** End Start Document .Ready
+
+    //*********** DEFINE Therapeutic Leve-2 Window ***************************** //
+
+    var InstitutionWindow = $('#InstitutionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Institution Detail Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE Therapeutic Leve-2 GRID ***************************** //
+
+    var TherapeuticLevel2DataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "INSTI_CODE",
+                fields: {
+                    INSTI_CODE: { editable: false, hidden: true },
+                    INSTI_NAME: { editable: false }
+
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetInstitutionData", "RptSelectedInstitutionValueShare")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+    });
+
+    var InstitutionGrid = $("#InstitutionGrid").kendoGrid({
+        dataSource: TherapeuticLevel2DataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: true,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+        columns: [
+                  { field: "INSTI_NAME", title: "Institution Name", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "INSTI_CODE", title: "Institution Id", width: "150px", filterable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    $(document).on('keyup', '._institutionCode', function (e) {
+        if (e.keyCode == 120) {
+            SelectedItemOfListOfValue('InstitutionGrid');
+            InstitutionWindow.open();
+            InstitutionWindow.center();
+        }
+    });
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnInstitutionWindowOK').click(function () {
+        ListOfValueGridEventDiviInfo('InstitutionGrid');
+        InstitutionWindow.close();
+    });
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnInstitutionWindowCancel').click(function () {
+        TherapeuticLevel2DataSource.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#InstitutionWindow").dblclick(function () {
+        ListOfValueGridEventDiviInfo('InstitutionGrid');
+        InstitutionWindow.close();
+    });
+
+    // Select Data through keyup From PopUp
+    $("#InstitutionWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventDiviInfo('InstitutionGrid');
+            InstitutionWindow.close();
+        }
+        else if (keycode == '27') {
+            InstitutionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventDiviInfo(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("INSTI_CODE", selectedItem.INSTI_CODE);
+        pageGridItem.set("INSTI_NAME", selectedItem.INSTI_NAME);
+        pageGridItem.set("INSTI_TYPE_CODE", selectedItem.INSTI_TYPE_CODE);
+        pageGridItem.set("INSTI_TYPE_NAME", selectedItem.INSTI_TYPE_NAME);
+        pageGridItem.set("ADDRESS", selectedItem.ADDRESS);
+    }
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+    //********************************************** END of Therapeutic Leve-2 POP UP Window ****************************************************//
+
+    $("#btnReset").click(function () {
+        $("#MessageText").html("");
+        $(".k-upload-files").remove();
+        $(".k-upload-status").remove();
+        $(".k-upload.k-header").addClass("k-upload-empty");
+        $(".k-upload-button").removeClass("k-state-focused");
+    });
+
+    //************************************  UPLOAD EXCELL FILE INTO KENDO GRID *****************************************//
+
+    function onSelect(e) {
+        //  kendoConsole.log("Select :: " + getFileInfo(e));
+    }
+
+    function onUpload(e) {
+        //  kendoConsole.log("Upload :: " + getFileInfo(e));
+    }
+
+    function onSuccess(e) {
+        $("#divLoading").show();
+        $.ajax({
+            url: '@Url.Action("LoadExcelFile", "RptSelectedInstitutionValueShare")',
+            type: 'GET',
+            data: { "fileName": $("#files").val() },
+            success: function (response) {
+
+                if (response != "") {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(response);
+                    $("#MessageText").html("Excel File Uploaded Successfully");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                } else {
+                    $("#MessageText").html("Failed to Upload Excel File");
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+                $("#divLoading").hide();
+            } //End of success call
+        });
+        //   kendoConsole.log("Success (" + e.operation + ") :: " + getFileInfo(e));
+    }
+
+    function onError(e) {
+        //alert(e.Msg);
+    }
+
+    function onComplete(e) {
+        // kendoConsole.log("Complete");
+    }
+
+    function onCancel(e) {
+        //  kendoConsole.log("Cancel :: " + getFileInfo(e));
+    }
+
+    function onRemove(e) {
+        // kendoConsole.log("Remove :: " + getFileInfo(e));
+    }
+
+    function onProgress(e) {
+        //kendoConsole.log("Upload progress :: " + e.percentComplete + "% :: " + getFileInfo(e));
+    }
+
+    $(document).ready(function () {
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: "UploadFile",
+                removeUrl: "Remove",
+                autoUpload: true
+            },
+            cancel: onCancel,
+            complete: onComplete,
+            error: onError,
+            progress: onProgress,
+            remove: onRemove,
+            select: onSelect,
+            success: onSuccess,
+            upload: onUpload
+        });
+    });
+
+    //************************************  END OF UPLOAD EXCELL FILE INTO KENDO GRID **********************************//
+</script>

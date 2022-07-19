@@ -1,0 +1,444 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmRptGenericWiseValueShareNationalVsRegion", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                @*<div class="form-group col-lg-5">
+                        <label style="">Generic Wise National Value Share (by %)</label>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="Generic Wise National Value Share (by %)" name="ReportName" value="Generic Wise National Value Share (by %)" checked="checked" />
+                        </div><br />
+                        <label style="">Generic Wise National Value Share (By Value)</label>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="Generic Wise National Value Share (By Value)" name="ReportName" value="Generic Wise National Value Share (By Value)" />
+                        </div><br />
+                    </div>*@
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">From Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox datePicker form-control" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">To Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="ToDate" name="ToDate" tabindex="2" class="txtBox datePicker form-control" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">Prescription Category:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <select id="ddlPresCategory" name="ddlPresCategory" class="textField form-control" style="width: 100%;" tabindex="3"></select>
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">Generic:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <select id="ddlGeneric" name="ddlGeneric" class="textField form-control" tabindex="4">
+                                <option value="allGeneric">All Generic</option>
+                                <option value="selectedGeneric">Selected Generic</option>
+                            </select>
+                        </div>
+                    </div><br />
+                    @*<div class="form-group">
+                            <div class="col-lg-5">
+                                <label class="pull-right">Data Source:</label>
+                            </div>
+                            <div class="col-lg-2">
+                                <select id="ddlDataSource" name="ddlDataSource" class="textField" style="width: 100%;" tabindex="7"></select>
+                            </div>
+                        </div><br />*@
+
+                    @*<div class="form-group">
+                            <div class="col-lg-5">
+                                <label class="pull-right">Market :</label>
+                            </div>
+                            <div class="col-lg-7">
+                                <input type="hidden" id="MARKET_CODE" name="MARKET_CODE" class="txtBox RequiredTextBox" />
+                                <input type="text" id="MARKET_NAME" name="MARKET_NAME" tabindex="5" style="width:250px" class="txtBox RequiredTextBox" required="required" readonly="readonly" placeholder="All Market/(Press F9)">
+                            </div>
+                        </div><br />*@
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">Manufacturer :</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <input type="hidden" id="MANUFACTURER_CODE" name="MANUFACTURER_CODE" class="txtBox RequiredTextBox" />
+                            <input type="text" id="MANUFACTURER_NAME" name="MANUFACTURER_NAME" tabindex="5" style="width:250px" class="txtBox RequiredTextBox form-control" required="required" readonly="readonly" placeholder="(Press F9)">
+                        </div>
+                    </div><br />
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+
+<div id="RegionWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="RegionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegionWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="ManufacturerWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="ManufacturerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManufacturerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManufacturerWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+
+
+
+    ///*************Start Documnet Ready*************************//
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+
+        });
+
+        LoadPrescription()
+        //LoadDataSource()
+
+    });
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "MARKET_CODE",
+                fields: {
+                    MARKET_CODE: { editable: false },
+                    MARKET_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetMarketList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "MARKET_CODE", title: "Market Code", filterable: true, hidden: false, sortable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "MARKET_NAME", title: "Market Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#MARKET_CODE").val(WindowGridItem.MARKET_CODE);
+        $("#MARKET_NAME").val(WindowGridItem.MARKET_NAME);
+        changeStatus = 1;
+    };
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#MARKET_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+                RegionWindow.center();
+
+            }
+        }
+    });
+
+
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    var ManufacturerGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "MANUFACTURER_CODE",
+                fields: {
+                    MANUFACTURER_CODE: { editable: false },
+                    MANUFACTURER_NAME: { editable: false },
+
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetManufacturerListForReport", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var ManufacturerPageGrid = $("#ManufacturerWindowGrid").kendoGrid({
+        dataSource: ManufacturerGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "MANUFACTURER_CODE", title: "Manufacturer Code", filterable: true, hidden: false, sortable: true, width: "40px", attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "MANUFACTURER_NAME", title: "Manufacturer Name", width: "60px", filterable: true, sortable: true },
+        ]
+    });
+
+    var ManufacturerWindow = $('#ManufacturerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: " ",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnManufacturerWindowOK').click(function () {
+        GenericWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+
+    $('#btnManufacturerWindowCancel').click(function () {
+        ManufacturerWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#ManufacturerWindowGrid").dblclick(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function ManufacturerWindowEvent() {
+        var WindowGrid = $("#ManufacturerWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#MANUFACTURER_CODE").val(WindowGridItem.MANUFACTURER_CODE);
+        $("#MANUFACTURER_NAME").val(WindowGridItem.MANUFACTURER_NAME);
+        changeStatus = 1;
+    };
+
+    $("#ManufacturerWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ManufacturerWindowEvent();
+            ManufacturerWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ManufacturerWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#MANUFACTURER_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('ManufacturerWindowGrid');
+                ManufacturerWindow.open();
+                ManufacturerWindow.center();
+
+            }
+        }
+    });
+
+
+    function displayReport() {
+
+        if ($("#MANUFACTURER_NAME").val() != "") {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('MANUFACTURER_NAME', 10);
+            return false;
+        }
+    }
+
+
+    /**************Load SR Info Combo Function****************/
+
+    function LoadPrescription() {
+        $.ajax({
+            url: '@Url.Action("GetPrescriptionCategory", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    $('#ddlPresCategory').append($('<option>', { value: item.PRESC_CATE_CODE, html: item.PRESC_CATE_NAME }, '<option/>'));
+                });
+            },
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }
+
+    @*function LoadDataSource() {
+        $.ajax({
+            url: '@Url.Action("GetDataSource", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    $('#ddlDataSource').append($('<option>', { value: item.Survey_Comp_Code, html: item.Survey_Comp_Name }, '<option/>'));
+                });
+            },
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }*@
+
+    // ------- End Of Ready Function --------
+
+    ClearOperationalMessage();
+    ClearOperationMsgTextBoxRedColor();
+    ClearRequiredTextBoxRedColor();
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        $('#btnSubmit').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+</script>
+
+
+
+
+

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>FontAwesomeToolkit</id>
+    <version>4.7</version>
+    <title>Font Awesome, the iconic font and CSS toolkit</title>
+    <authors>Dave Gandy</authors>
+    <owners>Dave Gandy</owners>
+    <licenseUrl>http://fontawesome.io/license/</licenseUrl>
+    <projectUrl>http://fontawesome.io/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Font Awesome, the iconic font and css toolkit. Follows the MVC directories best practices.</description>
+    <summary>Font Awesome, the iconic font and css toolkit</summary>
+    <releaseNotes>http://fontawesome.io/whats-new/</releaseNotes>
+    <tags>font awesome icon css toolkit</tags>
+  </metadata>
+</package>

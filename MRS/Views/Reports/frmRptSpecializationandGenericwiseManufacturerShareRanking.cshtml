@@ -1,0 +1,629 @@
+﻿@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("frmRptSpecializationandGenericwiseManufacturerShareRanking", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                @*<div class="form-group col-lg-6">
+                        <label style=""> DOSAGE_FORM Wise Product Share Ranking (%)</label>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="DOSAGE_FORMProductShareRankingPersent" name="ReportName" value="DOSAGE_FORMProductShareRankingPersent" checked="checked" />
+                        </div><br />
+                        <label style=""> DOSAGE_FORM Wise Product Share Ranking By Value</label>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="DOSAGE_FORMProductShareRankingValue" name="ReportName" value="DOSAGE_FORMProductShareRankingValue" />
+                        </div><br />
+                    </div>*@
+                <div class="form-group col-lg-8 panel-danger">
+                    <div class="col-lg-3">
+                        <label>Generic Name</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" style="display: none" name="GENERIC_CODE" id="GENERIC_CODE" class="txtBox" />
+                        <input type="text" id="GENERIC_NAME" name="GENERIC_NAME" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-3">
+                        <label>Dosage Form Name</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" style="display: none" name="DOSAGE_FORM_CODE" id="DOSAGE_FORM_CODE" class="txtBox" />
+                        <input type="text" id="DOSAGE_FORM_NAME" name="DOSAGE_FORM_NAME" tabindex="2" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" style="text-align: center" />
+                    </div><br /><br />
+
+                    <div class="col-lg-3">
+                        <label>Location</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" style="display: none" name="REGION_CODE" id="REGION_CODE" class="txtBox" />
+                        <input type="text" id="REGION_NAME" name="REGION_NAME" tabindex="3" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" style="text-align: center" />
+                    </div><br /><br />
+
+                    @*<div class="col-lg-4">
+                            <label>Type</label>
+                        </div>
+                        <div class="col-lg-6">
+                            @Html.DropDownList("PRESC_CATE_CODE", new SelectList(ViewBag.PrescriptionDropDownList, "PRESC_CATE_CODE", "PRESC_CATE_NAME"), new { @class = "txtBox", @style = "text-align: center" })
+                        </div><br /><br />*@
+
+                    <div class="col-lg-3">
+                        <label>From Date</label>
+                    </div>
+                    <div class="col-lg-7">
+                        @*<input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox RequiredTextBox datePickerold" value="" style="text-align: center" />*@
+                        <input type="text" id="FromDate" name="FromDate" tabindex="4" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div><br /><br />
+                    <div class="col-lg-3">
+                        <label>To Date</label>
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="5" class="txtBox RequiredTextBox datePicker" value="" style="text-align: center" />
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+}
+
+<div id="GenericIDWindow" style="display: none;">
+    <div id="GenericGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnGenericIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnGenericIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DOSAGE_FORMIDWindow" style="display: none;">
+    <div id="DOSAGE_FORMGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDOSAGE_FORMIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDOSAGE_FORMIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="REGIONIDWindow" style="display: none;">
+    <div id="REGIONGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnREGIONIDWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnREGIONIDWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // create DatePicker from input HTML element
+    $(".datePicker").kendoDatePicker({
+        format: "dd/MM/yyyy",
+        value: new Date(),
+        //max: new Date()
+        editable: false,
+        change: function() {
+            changeStatus = 1;
+        }
+    });
+    //$(".datePickerold").kendoDatePicker({
+    //    format: "dd/MM/yyyy",
+    //    value: "01/01/2000",
+    //    //max: new Date()
+    //    editable: false,
+    //    change: function () {
+    //        changeStatus = 1;
+    //    }
+    //});
+    $("#btnReset").click(function() {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        //$(".txtBox").val("");
+        $("#GENERIC_CODE").val("");
+        $("#GENERIC_NAME").val("");
+        $("#DOSAGE_FORM_CODE").val("");
+        $("#DOSAGE_FORM_NAME").val("");
+        $("#REGION_CODE").val("");
+        $("#REGION_NAME").val("");
+    });
+
+    function displayReport() {
+
+        if (($("#GENERIC_NAME").val() != "") && ($("#DOSAGE_FORM_NAME").val()) != "" && ($("#REGION_NAME").val() != "")) {
+            return true;
+        }
+        else {
+
+            CheckRequiredTextBoxMaxLength('GENERIC_NAME', 60);
+            CheckRequiredTextBoxMaxLength('DOSAGE_FORM_NAME', 60);
+            CheckRequiredTextBoxMaxLength('REGION_NAME', 60);
+            return false;
+        }
+    }
+
+    //************************* Clear Operational Message after Operational Message ******************************//
+    ClearOperationalMessage();
+
+    //************************* Clear TEXT BOX COLOR after fire any EVENT ******************************//
+    ClearRequiredTextBoxRedColor();
+
+    //************************* To Chech UNSAVED Data in Details GRID ******************************//
+    CheckUnSavedMasterData();
+
+    //********************************************** GENERIC POP UP Window ****************************************************
+
+    //*********** DEFINE GENERIC Window ***************************** //
+
+    var GenericIDWindow = $('#GenericIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Generic Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE GENERIC GRID ***************************** //
+
+    var GenericGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "GENERIC_CODE",
+                fields: {
+                    GENERIC_CODE: { editable: false, hidden: true },
+                    GENERIC_NAME: { editable: false },
+                    GEN_ORD_SLNO: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var GenericGrid = $("#GenericGrid").kendoGrid({
+        dataSource: GenericGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "GENERIC_NAME", title: "Generic Name", width: "150px", filterable: true },
+                  { field: "GENERIC_CODE", title: "Generic Code", width: "150px", filterable: true }
+                  //{ field: "GEN_ORD_SLNO", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#GENERIC_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GenericListForProductShareRanking", "Reports")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#GenericGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('GenericGrid');
+                GenericIDWindow.open();
+                GenericIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnGenericIDWindowOK').click(function () {
+        ListGenericGridEvent();
+        GenericIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnGenericIDWindowCancel').click(function () {
+        GenericIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#GenericIDWindow").dblclick(function () {
+        ListGenericGridEvent();
+        GenericIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#GenericIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListGenericGridEvent();
+            GenericIDWindow.close();
+        }
+        else if (keycode == '27') {
+            GenericIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListGenericGridEvent(gridName) {
+        var WindowGrid = $("#GenericGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+        $("#GENERIC_CODE").val(WindowGridItem.GENERIC_CODE);
+        $("#GENERIC_NAME").val(WindowGridItem.GENERIC_NAME);
+        $("#DOSAGE_FORM_NAME").focus();
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of GENERIC POP UP Window ****************************************************//
+
+
+
+
+
+    //********************************************** DOSAGE_FORM POP UP Window ****************************************************
+
+    //*********** DEFINE DOSAGE_FORM Window ***************************** //
+
+    var DOSAGE_FORMIDWindow = $('#DOSAGE_FORMIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Dosage Form Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE DOSAGE_FORM GRID ***************************** //
+
+    var DOSAGE_FORMGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DOSAGE_FORM_CODE",
+                fields: {
+                    DOSAGE_FORM_CODE: { editable: false, hidden: true },
+                    DOSAGE_FORM_NAME: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var DOSAGE_FORMGrid = $("#DOSAGE_FORMGrid").kendoGrid({
+        dataSource: DOSAGE_FORMGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "DOSAGE_FORM_NAME", title: "DOSAGE_FORM Name", width: "150px", filterable: true },
+                  { field: "DOSAGE_FORM_CODE", title: "DOSAGE_FORM Code", width: "150px", filterable: true }
+                  //{ field: "GEN_ORD_SLNO", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#DOSAGE_FORM_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("DosageFormList", "Reports")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#DOSAGE_FORMGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide();
+                    }
+                });
+                SelectedItemOfListOfValue('DOSAGE_FORMGrid');
+                DOSAGE_FORMIDWindow.open();
+                DOSAGE_FORMIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnDOSAGE_FORMIDWindowOK').click(function () {
+        ListDosageFormGridEvent();
+        DOSAGE_FORMIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnDOSAGE_FORMIDWindowCancel').click(function () {
+        DOSAGE_FORMIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#DOSAGE_FORMIDWindow").dblclick(function () {
+        ListDosageFormGridEvent();
+        DOSAGE_FORMIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#DOSAGE_FORMIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListDosageFormGridEvent();
+            DOSAGE_FORMIDWindow.close();
+        }
+        else if (keycode == '27') {
+            DOSAGE_FORMIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListDosageFormGridEvent(gridName) {
+        var WindowGrid = $("#DOSAGE_FORMGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+        $("#DOSAGE_FORM_CODE").val(WindowGridItem.DOSAGE_FORM_CODE);
+        $("#DOSAGE_FORM_NAME").val(WindowGridItem.DOSAGE_FORM_NAME);
+        $("#REGION_NAME").focus();
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of DOSAGE_FORM POP UP Window ****************************************************//
+
+
+    //********************************************** REGION POP UP Window ****************************************************
+
+    //*********** DEFINE REGION Window ***************************** //
+
+    var REGIONIDWindow = $('#REGIONIDWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "100%",
+        height: "auto",
+        title: "List of Location Data",
+        position: { top: 100, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //*********** DEFINE REGION GRID ***************************** //
+
+    var REGIONGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "REGION_CODE",
+                fields: {
+                    REGION_CODE: { editable: false, hidden: true },
+                    REGION_NAME: { editable: false }
+
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var REGIONGrid = $("#REGIONGrid").kendoGrid({
+        dataSource: REGIONGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        sortable: true,
+        height: 350,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "Contains"
+                }
+            }
+        },
+
+        columns: [
+
+                  { field: "REGION_NAME", title: "Region Name", width: "150px", filterable: true },
+                  { field: "REGION_CODE", title: "Region Code", width: "150px", filterable: true }
+                  //{ field: "GEN_ORD_SLNO", title: "Generic Sl. No.", width: "150px", filterable: false }
+        ]
+    });
+
+
+
+
+    //Open PopUp by pressing F9 key
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                $("#divLoading").show();
+                $.ajax({
+                    url: '@Url.Action("GetRegion", "Reports")',
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#divLoading").hide();
+                        $("#REGIONGrid").data("kendoGrid").dataSource.data(data);
+                    },
+                    complete: function (data) {
+                        $("#divLoading").hide(data);
+                    }
+                });
+                SelectedItemOfListOfValue('REGIONGrid');
+                REGIONIDWindow.open();
+                REGIONIDWindow.center();
+            }
+        }
+    });
+
+
+
+    //Press Ok button after Select Data From PopUp
+    $('#btnREGIONIDWindowOK').click(function () {
+        ListRegionGridEvent();
+        REGIONIDWindow.close();
+    });
+
+
+    //Press Cancel button after Select Data From PopUp
+    $('#btnREGIONIDWindowCancel').click(function () {
+        REGIONIDWindow.close();
+    });
+
+
+    // Select Data through double Click From PopUp
+    $("#REGIONIDWindow").dblclick(function () {
+        ListRegionGridEvent();
+        REGIONIDWindow.close();
+    });
+
+
+    // Select Data through keyup From PopUp
+    $("#REGIONIDWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListRegionGridEvent();
+            REGIONIDWindow.close();
+        }
+        else if (keycode == '27') {
+            REGIONIDWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+
+    //To Bring Data from List of Value Grid to Main Page
+    function ListRegionGridEvent(gridName) {
+        var WindowGrid = $("#REGIONGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //$.each(selectedItem, function (key, value) {
+        //    if (value != null && value != 0)
+        //        $('#' + key).val(value);
+        //});
+
+        $("#FromDate").focus();
+        $("#REGION_CODE").val(WindowGridItem.REGION_CODE);
+        $("#REGION_NAME").val(WindowGridItem.REGION_NAME);
+    }
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    //********************************************** END of REGION POP UP Window ****************************************************//
+</script>
+

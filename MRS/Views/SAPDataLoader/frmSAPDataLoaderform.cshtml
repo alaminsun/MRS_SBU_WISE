@@ -1,0 +1,224 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmSAPDataLoaderform", "SAPDataLoader", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-6">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-6">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-left" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-left"><i class="glyphicon glyphicon-save"></i> Download</button>
+            <button type="button" id="btnSubmit" class=" btn bg-olive btn-flat margin pull-left"><i class="glyphicon glyphicon-save"></i> Finalized</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+
+                <div class="form-group">
+                    <div class="col-lg-2">
+                        <label>PO Person:</label>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="hidden" id="USER_ID" name="USER_ID" />
+                        <input type="text" id="EmpolyeeName" name="EmpolyeeName" tabindex="3" class="txtBox" readonly="readonly" placeholder="Press F9" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+<div id="POUserWindow" style="display: none;">
+    <div id="POUserWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnPOUserWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnPOUserWindowOK" class="PopUpButton" value="OK" />
+</div>
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+        });
+    }); //End of Document.Ready()
+    $("#btnReset").click(function () {
+        $('#MessageText').html('');
+        $(".txtBox").val("");
+        location.reload();
+    });
+    function displayReport() {
+        if ($("#EmpolyeeName").val() != "") {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('EmpolyeeName', 100);
+            //CheckRequiredTextBoxMaxLength('REGION_NAME', 100);
+            return false;
+        }
+    }
+
+
+    /////////Region /////////////////
+    var POUserGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "POUserCode",
+                fields: {
+                    POUserCode: { editable: false },
+                    POUser: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetPOUserList", "SAPDataLoader")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var POUserPageGrid = $("#POUserWindowGrid").kendoGrid({
+        dataSource: POUserGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "POUserCode", title: "Empolyee ID", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "POUser", title: "User Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "EmpolyeeName", title: "Empolyee Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var POUserWindow = $('#POUserWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of POUser Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function POUserWindowEvent() {
+        var WindowGrid = $("#POUserWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#MessageText").html("");
+        $("#EmpolyeeName").css("border-color", "");
+
+
+        $("#USER_ID").val(WindowGridItem.POUserCode);
+        $("#EmpolyeeName").val(WindowGridItem.EmpolyeeName);
+        //$("#USERNAME").val(WindowGridItem.POUser);
+
+
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnPOUserWindowOK').click(function () {
+        POUserWindowEvent();
+        POUserWindow.close();
+    });
+
+    $('#btnPOUserWindowCancel').click(function () {
+        POUserWindow.close();
+    });
+
+    $("#POUserWindowGrid").dblclick(function () {
+        POUserWindowEvent();
+        POUserWindow.close();
+    });
+
+    $("#POUserWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            POUserWindowEvent();
+            POUserWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            POUserWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#EmpolyeeName").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('POUserWindowGrid');
+                POUserWindow.open();
+            }
+        }
+    });
+
+    ////////////////////////
+
+    $("#btnSubmit").click(function () {
+        $.ajax({
+            url: '@Url.Action("Save", "SAPDataLoader")',
+            data: JSON.stringify(""),
+            type: 'POST',
+            contentType: 'application/json;',
+            dataType: 'json',
+            success: function (response) {
+                //alert(response.msg.Type);
+                if (response.msg.Type == 2) {
+                    $('#MessageText').html("Data Saved Successfully.");
+                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    $("#EmpolyeeName").html("");
+                }
+                else {
+                    changeStatus = 0;
+                    $('#MessageText').html(response.msg.Msg);
+                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                }
+            }
+        });
+    });
+</script>
+
+

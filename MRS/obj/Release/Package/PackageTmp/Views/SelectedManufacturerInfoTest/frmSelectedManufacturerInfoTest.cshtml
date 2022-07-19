@@ -1,0 +1,499 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Select Manufacturer</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="MainGrid" tabindex="5"></div>
+</div>
+
+<div id="ManufacturerWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Manufacturer:</label>
+        <input type="text" id="txtManufacturer" placeholder="Searching by Manufacturer Name/Code" style="width: 250px;" autofocus />
+    </div>
+    <div id="ManufacturerWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnManufacturerWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnManufacturerWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        OnlyNumericValue('SlNo');
+        //To Define Data ManufacturerInfo for Kendo Grid
+        var dataSource = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "ManufacturerCode",
+                    fields: {
+                        ManufacturerCode: { editable: false },
+                        ManufacturerName: { editable: false },
+                        MfcNicName: { editable: false },
+                        SlNo: { editable: true }
+                    }
+                }
+            },
+            //pageSize: 10,
+            transport: {
+                read: {
+                    url: "@Url.Action("GetAllSelectedManufacturerList", "SelectedManufacturerInfo")", // at first data show
+                    type: "GET"
+                }
+            }
+        });
+
+        //To Define Columns for ManufacturerInfo Kendo Grid
+        var grid = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSource,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "ManufacturerCode", title: "Manufacturer Code", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ManufacturerName", title: "Manufacturer Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "MfcNicName", title: "Mfc Nic Name", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SlNo", title: "Order Sl. No", width: 180, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ command: [{ name: "Edit", text: "Edit", imageClass: "k-icon k-edit", click: handleEdit }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "80px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDelete(event) {
+            dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            }
+            else {
+                resetEditDeleteStatus = 3; //Delete Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            $.ajax({
+                url: '@Url.Action("Delete", "SelectedManufacturerInfo")',
+                type: 'POST',
+                data: JSON.stringify({ "ManufacturerCode": dataitem.ManufacturerCode }),
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        $("#Status").val("Active");
+                        $(".SetFocus").focus();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            $(".RequiredTextBox").css("border-color", "");
+            CloseConfirmationDialog();
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterData();
+
+        // Focus ManufacturerName textbox
+        $(".SetFocus").focus();
+
+        // Edit Button in Grid
+        function handleEdit(event) {
+            // For Grid Edit Button
+            resetEditDeleteStatus = 2;
+            // When Changes Data
+            if (changeStatus == 1) {
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                OpenSaveChangesDialog();
+            }
+                // When No Changes Data
+            else {
+                $(".RequiredTextBox").css("border-color", "");
+                dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#ManufacturerCode").attr("disabled", "disabled");
+            }
+        };
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                //ClearDetailGridFilterAndPaging('PageDetailGrid');
+                $(".RequiredTextBox").css("border-color", "");
+                GridReload('PageDetailGrid');
+                $("#Status").val("Active");
+                $("#ManufacturerCode").removeAttr("disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 2) { // Edit
+                $(".RequiredTextBox").css("border-color", "");
+                SetMasterData(dataitem);
+                $("#SUStatus").val(1);
+                $("#ManufacturerCode").attr("disabled", "disabled");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else if (resetEditDeleteStatus == 3) { // Delete
+                $.ajax({
+                    url: '@Url.Action("Delete", "SelectedManufacturerInfo")',
+                    type: 'POST',
+                    data: JSON.stringify({ "ManufacturerCode": dataitem.ManufacturerCode }),
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            ClearOperationalMessage();
+                            ResetOnlyMasterPageData();
+                            $(".RequiredTextBox").css("border-color", "");
+                            $("#Status").val("Active");
+                            $(".SetFocus").focus();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+                $(".RequiredTextBox").css("border-color", "");
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+        //// Check Empty or Maximum Length in ManufacturerName
+        //CheckRequiredTextBoxMaxLength('ManufacturerName', 100);
+
+        //// Check Maximum Length in MfcNicName
+        //CheckNormalTextBoxMaxLength('MfcNicName', 200);
+
+        //// Check Maximum Length in ContactNumber
+        //CheckNormalTextBoxMaxLength('SlNo', 20);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            var manufacturerModel = {};
+
+            manufacturerModel.SelectedManufacturerList = [];
+            var detailDataSource = $('#PageDetailGrid').data("kendoGrid").dataSource;
+            var detailData = detailDataSource.data();
+
+            for (var i = 0; i < detailData.length; i++) {
+                var detailModel = {};
+                detailModel.ManufacturerCode = detailData[i].ManufacturerCode;
+                detailModel.MfcNicName = detailData[i].MfcNicName;
+                detailModel.SlNo = detailData[i].SlNo;
+
+                manufacturerModel.SelectedManufacturerList.push(detailModel);
+            }
+
+            //if (changeStatus == 1) {
+            $.ajax({
+                url: '@Url.Action("SelectedManufacturerInfo", "SelectedManufacturerInfoTest")',
+                data: JSON.stringify(manufacturerModel),
+                type: 'POST',
+                contentType: 'application/json;',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.msg.Type == 2) {
+                        changeStatus = 0;
+                        $("#SUStatus").val(1);
+                        GridReload('PageDetailGrid');
+                        //ResetOnlyMasterPageData();
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else if (response.msg.Type == 3) {
+                        changeStatus = 0;
+                        GridReload('PageDetailGrid');
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else {
+                        changeStatus = 0;
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                }
+            });
+            //}
+            //    // No Changes Exiting Data
+            //else {
+            //    $("#MessageText").html("No Changes to Save.");
+            //    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+            //    $("#ManufacturerCode").focus();
+            //}
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            GridReload('PageDetailGrid');
+            $("#Status").val("Active");
+            $("#ManufacturerCode").removeAttr("disabled");
+        }
+    });
+
+
+    ////////////////////////Manufacturer Information ///////////////////////////////////////////
+
+    //$(document.body).keyup(function (e) {
+    //    if ($("#ManufacturerName").is(":focus")) {
+    //        if (e.which == 120) {
+    //            GetManufacturerInfo();
+    //            //SelectedItemOfListOfValue('ManufacturerWindowGrid');
+    //            ManufacturerWindow.open(); //Open Popup
+    //            ManufacturerWindow.center();
+    //        }
+    //    }
+    //});
+
+    $("#btnSearch").click(function () {
+        GetManufacturerInfo();
+        ManufacturerWindow.open(); //Open Popup
+        ManufacturerWindow.center();
+    });
+
+    function GetManufacturerInfo() {
+        $.ajax({
+            url: '@Url.Action("GetAllManufacturerList", "SelectedManufacturerInfoTest")',
+            type: 'GET',
+            success: function (response) {
+                $("#ManufacturerWindowGrid").data('kendoGrid').dataSource.data(response);
+            } //End of success call
+        });
+    }
+
+    var ManufacturerWindow = $('#ManufacturerWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Manufacturer Information",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var ManufacturerDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "ManufacturerCode",
+                fields: {
+                    ManufacturerCode: { editable: false },
+                    ManufacturerName: { editable: false },
+                    MfcNicName: { editable: false }
+                }
+            }
+        }
+        //,
+        //pageSize: 30
+    });
+
+    var ManufacturerGrid = $("#ManufacturerWindowGrid").kendoGrid({
+        dataSource: ManufacturerDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        //autoBind: false,
+        columns: [
+                { template: "<input type='checkbox' class='checkbox' value='#= ManufacturerCode #' />", title: "Select", width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ManufacturerCode", title: "Manufacturer Code", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "ManufacturerName", title: "Manufacturer Name", width: 200, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "MfcNicName", title: "Mfc Nic Name", width: 150, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "Status", title: "Status", width: 110, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    function ManufacturerWindowEvent() {
+        //var WindowGrid = $("#ManufacturerWindowGrid").data("kendoGrid");
+        //var WindowGridRow = WindowGrid.select();
+        //var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        //$("#ManufacturerCode").val(WindowGridItem.ManufacturerCode);
+        //$("#ManufacturerName").val(WindowGridItem.ManufacturerName);
+        //$("#MfcNicName").val(WindowGridItem.MfcNicName);
+        //$("#SlNo").val(WindowGridItem.SlNo);
+
+        //changeStatus = 1;
+
+        var checkedCheckboxes = $("#ManufacturerWindowGrid :checked");
+        console.log(checkedCheckboxes);
+        var selectManufacturerList = "";
+        //var grid = $("#ManufacturerWindowGrid").data("kendoGrid");
+        if (checkedCheckboxes.length > 0) {
+            for (var i = 0; i < checkedCheckboxes.length; i++) {
+                if (selectManufacturerList != "") {
+                    selectManufacturerList += "," + "'" + checkedCheckboxes[i].value + "'";
+                } else {
+                    selectManufacturerList = "'" + checkedCheckboxes[i].value + "'";
+                }
+            }
+
+            //alert(selectManufacturerList);
+
+            $.ajax({
+                url: '@Url.Action("GetSelectedManufacturerList", "SelectedManufacturerInfoTest")',
+                type: 'GET',
+                data: { "selectManufacturerList": selectManufacturerList },
+                success: function (response) {
+                    $("#PageDetailGrid").data('kendoGrid').dataSource.data(response);
+                } //End of success call
+            });
+        } else {
+            $('#MessageText').html("Please Select Manufacturer.");
+            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+    };
+
+    $('#btnManufacturerWindowOK').click(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+    $('#btnManufacturerWindowCancel').click(function () {
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindow").dblclick(function () {
+        ManufacturerWindowEvent();
+        ManufacturerWindow.close();
+    });
+
+    $("#ManufacturerWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ManufacturerWindowEvent();
+            ManufacturerWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            ManufacturerWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ////////////////////////////////////////////////////////////////
+
+    //Manufacturer Name twise Filter table row
+    $("#txtManufacturer").keyup(function () {
+        //alert('afd');
+        $("#ManufacturerWindowGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#ManufacturerWindowGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+</script>

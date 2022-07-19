@@ -1,0 +1,1101 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.formTitle</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute; right:20px;" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:75px;" />
+                <input type="button" id="btnSubmit" class="Button" value="Save" onclick="Save()" style="position:absolute; right:133px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Session Sl No</label><label style="color: red">*</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" id="SUStatus" value="" />
+                <input type="text" id="txtSessionSl" name="SessionSl" tabindex="1" class="txtBox RequiredTextBox" value="" placeholder="Press F9" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-2">
+
+                <label>Market :</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="hidden" id="SUStatus" class="txtBox" />
+                @*<input type="hidden" class="txtBox" id="INSTI_MKT_MAS_SLNO_1" />*@
+                <input type="hidden" id="MARKET_CODE" class="txtBox" />
+
+                <input type="text" id="MARKET_NAME" name="MARKET_NAME" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="" />
+                @*<input type="text" id="MARKET_NAME" placeholder="Press F9" class="txtBox" name="MARKET_NAME" tabindex="" />*@
+            </div>
+            <div class="col-lg-2">
+                <label> Slip Serial No : </label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="PRESC_MAS_SLNO" name="PRESC_MAS_SLNO" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" value="" />
+                @*<input type="text" id="PRESC_MAS_SLNO" class="txtBox" name="PRESC_MAS_SLNO" tabindex="" />*@
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div id="PageDetailGrid" class="grdKendo" tabindex=""></div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationYes" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationNo" value="Cancel" />
+</div>
+
+<div id="DeleteMasterWindow" style="display: none;">
+    <input type="button" class="TwoButtonWindow" id="btnMConfirmationOK" value="Yes" />
+    <input type="button" class="TwoButtonWindow" id="btnMConfirmationCancel" value="No" />
+</div>
+
+<div id="SessionListWindow" style="display: none;">
+    <div id="SessionListGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="ProductInfoWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="ProductInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnProductInfoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnProductInfoWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyer" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>*@
+
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="MarketIDWindow" style="display: none;">
+    <div id="MarketInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnMarketInfoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnMarketInfoWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="SessionMarketListWindow" style="display: none;">
+    <div id="SessionMarketGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    var gridInput = 0;
+    var saveStatus = 0;
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        $('#SUStatus').val(0);
+        $('#btnDelete').attr('disabled', true);
+        //Function For Doctors Information Grid
+        var openSessionInfoWindow = $('#SessionListWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "30%",
+            height: "auto",
+            title: "Session List.",
+            position: { top: 100, left: 150 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+        //Popup Doctor Grid
+        $('#txtSessionSl').keyup(function (e) {
+            if (e.keyCode == 120) {
+                openSessionInfoWindow.open();
+                getSessionList('/Slip/GetSessionSl');
+                $('#MARKET_CODE').val('');
+                $('#MARKET_NAME').val('');
+                $('#PRESC_MAS_SLNO').val('');
+                //$('#txtDesignation').val('');
+                //$('#txtAddress1').val('');
+                //$('#txtAddress2').val('');
+                //$('#txtAddress3').val('');
+                //$('#txtAddress4').val('');
+            }
+        });
+
+        function getSessionList(requestedUrl) {
+            $.ajax({
+                url: requestedUrl,
+                method: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $("#SessionListGrid").data("kendoGrid").dataSource.data(data);
+                },
+                error: function () {
+                    alert('error');
+                }
+            });
+        }
+
+
+        var SessionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SessionSl"
+                }
+            },
+            pageSize: 10
+        });
+
+        var SessionInformationGrid = $("#SessionListGrid").kendoGrid({
+            dataSource: SessionGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "SessionSl", title: "Session Sl", width: "150px", filterable: true }
+            ]
+        });
+
+        $("#SessionListGrid").dblclick(function () {
+            var row = $(this).data('kendoGrid');
+            var selectRow = row.dataItem(row.select());
+            $('#txtSessionSl').val(selectRow.SessionSl);
+
+            openSessionInfoWindow.close();
+        });
+
+
+
+
+        //To Define Data ZoneDivi for Kendo Grid
+        var dataSourceMarketInfo = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "PRESC_DET_SLNO",
+                    fields: {
+                        PRESC_DET_SLNO: { editable: false },
+                        PRESC_MAS_SLNO: { editable: false },
+                        PRODUCT_NAME: { editable: true, defaultValue: 'Press F9' },
+                        PURCHASE_QTY: { editable: true },
+                        DOSAGE_FORM_CODE: { editable: true},
+                        DSG_STRENGTH_CODE: { editable: true},
+                        DOSAGE_FORM_NAME: { editable: true },
+                        DSG_STRENGTH_NAME: { editable: true },
+                        UNIT_PRICE: { editable: true },
+                        PROD_ID: { editable: true }
+
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for ZoneDivi Kendo Grid
+        var gridDivisionInfo = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSourceMarketInfo,
+            //width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Product", className: "btnMarketGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 350,
+            columns: [
+                { field: "PRESC_DET_SLNO", hidden: true },
+                { field: "PRESC_MAS_SLNO", hidden: true },
+                { field: "PRODUCT_NAME", title: "Product Name", filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "PURCHASE_QTY", title: "Purchase Qty", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "DOSAGE_FORM_CODE", title: "Dosage Form", hidden:true, filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;"} },
+                { field: "DSG_STRENGTH_CODE", title: "Dosage Strength", hidden:true, filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                 { field: "DOSAGE_FORM_NAME", title: "Dosage Form", filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                  { field: "DSG_STRENGTH_NAME", title: "Dosage Strength", filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                   { field: "UNIT_PRICE", title: "Unit Price", filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                    { field: "PROD_ID", title: "Product Id", filterable: true, width: 120, attributes: { "class": "ProductInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                     //{ field: "MARKET_CODE", title: "Market Code", filterable: true, width: 120, attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: DeleteWindow }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+
+        $('.btnMarketGrid').click(function () {
+            var addflag = 1;
+            var parentFlag = 1;
+            if (parentFlag == 1) {
+                $("#MessageText").html("");
+                var grid = $("#PageDetailGrid").data("kendoGrid");
+
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+                var addData = dataSource.data();
+                if (addData != null) { // For Add row when Exiting Data in Grid
+                    for (var i = 0; i < addData.length; i++) {
+                        if (addData[i].PROD_ID == "") {
+                            addflag = 0;
+                        }
+                    }
+                }
+                if (addflag == 1) {
+                    grid.addRow();
+                    $('#btnDelete').attr('disabled', true);
+                }
+            }
+
+        });
+
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Focus ZONE_CODE textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                //$("#ZONE_DIVI_STATUS").val("Active");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                //$("#ZONE_DIVI_STATUS").val("Active");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) {
+                var instituteCode = $('#INSTI_MKT_MAS_SLNO').val();// Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#INSTI_MKT_MAS_SLNO").val() != "") {
+                        master.INSTI_MKT_MAS_SLNO = $('#INSTI_MKT_MAS_SLNO').val();
+                        var mstSl = $("#INSTI_MKT_MAS_SLNO_1").val();
+                        //alert(mstSl);
+                        //var instituteCode = $('#INSTI_MKT_MAS_SLNO').val();
+                        $.ajax({
+                            url: '@Url.Action("DeleteAllData", "InstitutionCoverMarketInformation")',
+                            type: 'POST',
+                            data: JSON.stringify({ master: mstSl }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    //$("#ZONE_DIVI_STATUS").val("Active");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.INSTI_MKT_DET_SLNO != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeleteByDtlId", "InstitutionCoverMarketInformation")',
+                            type: 'POST',
+                            data: JSON.stringify({ "INSTI_MKT_DET_SLNO": dataitem.INSTI_MKT_DET_SLNO }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+
+
+        $('#btnDelete').click(function () {
+            OpenConfirmationMDialog();
+        });
+
+        var ConfirmMWindow;
+        function OpenConfirmationMDialog() {
+            ConfirmMWindow = $('#DeleteMasterWindow').kendoWindow({
+                width: "300px",
+                padding: "0px 0px 0px 100px",
+                title: "Do You Want To Delete Record?",
+                //visible: false,
+                //draggable: true,
+                visible: false,
+                //resizable: false,
+                draggable: true,
+                position: { top: 200, left: 400 }
+            }).data('kendoWindow');
+            ConfirmMWindow.open();
+        }
+
+        function CloseConfirmationMDialog() {
+            ConfirmMWindow.close();
+        }
+
+        $('#btnMConfirmationOK').click(function () {
+            var marketCode = $('#MARKET_CODE').val();
+            $.ajax({
+                url: '/Slip/DeleteMaster',
+                method: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ marketCode: marketCode }),
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#btnDelete').attr('disabled', true);
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $(".RequiredTextBox").css("border-color", "");
+                        //$("#Status").val("Active");
+                        $(".SetFocus").focus();
+                        CloseConfirmationMDialog();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        CloseConfirmationMDialog();
+                    }
+
+                }
+            });
+        });
+
+        $("#btnMConfirmationCancel").click(function () {
+            CloseConfirmationMDialog();
+        });
+
+
+        //Row-wise delete from Kendo grid
+        $('#btnConfirmationYes').click(function () {
+            var grid = $('#PageDetailGrid').data("kendoGrid");
+            var dataItem = (grid.dataItem(grid.select()));
+            var dtlSlNo = dataItem.PRESC_DET_SLNO;
+            if (dtlSlNo != 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("DeleteByDtlId", "Slip")',
+                    dataType: 'JSON',
+                    data: JSON.stringify({ sl: dtlSlNo }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            ClearOperationalMessage();
+                            //ResetOnlyMasterPageData();
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+
+                            var grid = $('#PageDetailGrid').data("kendoGrid");
+                            var dataItem = grid.dataItem(grid.select());
+                            //$("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+
+                            var countTotal = grid.dataSource.data();
+                            alert(countTotal.length);
+                            if (countTotal.length == 0) {
+
+                                $('#btnDelete').attr('disabled', false);
+                            }
+                            //var grid = $('#PageDetailGrid').data("kendoGrid");
+                            //var dataItem = grid.dataItem(grid.select());
+                            //$("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                            //var countTotal = $("#PageDetailGrid").data("kendoGrid").dataSource.data();
+                            //if (countTotal.length == 0) {
+                            //    $('#btnDelete').attr('disabled', false);
+                            //}
+
+                            $(".RequiredTextBox").css("border-color", "");
+                            //$("#Status").val("Active");
+                            $(".SetFocus").focus();
+                            confirmDeleteWindow.close();
+                        }
+
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            confirmDeleteWindow.close();
+                        }
+
+                    },
+                    error: function () {
+                        $("#MessageText").show(500).css("margin", "0 1px 20px 0").html("Error Occured.").delay(800).fadeOut(10000);
+                        confirmDeleteWindow.close();
+                    }
+                });
+            }
+            else {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                confirmDeleteWindow.close();
+            }
+        });
+
+    });
+
+
+    $("#btnConfirmationNo").click(function () {
+        confirmDeleteWindow.close();
+    });
+
+
+        /*********Load Page Grid*******/
+        function LoadData() {
+            var loadData = $('#PageDetailGrid').data('kendoGrid');
+            loadData.dataSource.read();
+        }
+
+
+
+        //  **       Page Unloaded **//
+        //});
+        // ** End Start Document .Ready
+
+        var details = { "PRESC_MAS_SLNO": "", "PRESC_DET_SLNO": "", "PROD_ID": "", "PRODUCT_NAME": "", "PURCHASE_QTY": "", "UNIT_PRICE": "" };
+        var master = { "PRESC_MAS_SLNO": "", "SessionSl": "", "PRESC_CATE_CODE": "", "MARKET_CODE": "", "MARKET_NAME": "", "SUStatus": "", "SlipDetailModels": [] };
+        //var saveStatus = 1;
+        // Save Or Update Data
+
+
+        /*************Delete ****************/
+
+
+        var confirmDeleteWindow;
+        function CancelWindow() {
+            confirmDeleteWindow.close();
+        }
+
+        function DeleteWindow() {
+            //$('#btnDelete').attr('disabled', true);
+            confirmDeleteWindow = $('#DeleteConfirmWindow').kendoWindow({
+                width: "300px",
+                padding: "0px 0px 0px 100px",
+                title: "Do You Want To Delete Record?",
+                visible: false,
+                draggable: true,
+                position: { top: 200, left: 400 }
+            }).data('kendoWindow');
+
+            confirmDeleteWindow.open();
+        }
+
+
+
+
+
+        function Save() {
+            saveStatus = 1;
+            CheckRequiredTextBoxMaxLength('MARKET_NAME', 50);
+            if (saveStatus == 1) {
+                master.SlipDetailModels = [];
+                master.PRESC_MAS_SLNO = $("#PRESC_MAS_SLNO").val();
+                master.MARKET_CODE = $("#MARKET_CODE").val();
+                master.MARKET_NAME = $("#MARKET_NAME").val();
+                master.SessionSl = $("#SessionSl").val();
+                master.SUStatus = $("#SUStatus").val();
+                //master.PRESC_CATE_CODE = $("#PRESC_CATE_CODE").val();
+
+                var detailDataSource = $('#PageDetailGrid').data("kendoGrid").dataSource;
+                var detailData = detailDataSource.data();
+
+                if (detailData.length > 0) {
+                    for (var i = 0; i < detailData.length; i++) {
+                        details.PROD_ID = detailData[i].PROD_ID;
+                        details.PRODUCT_NAME = detailData[i].PRODUCT_NAME;
+                        //details.PURCHASE_QTY = detailData[i].PURCHASE_QTY;
+                        details.PURCHASE_QTY = detailData[i].PURCHASE_QTY;
+                        details.UNIT_PRICE = detailData[i].UNIT_PRICE;
+                        details.PRESC_DET_SLNO = detailData[i].PRESC_DET_SLNO;
+
+
+                        master.SlipDetailModels.push(details);
+
+                        details = { "PRESC_MAS_SLNO": "", "PRESC_DET_SLNO": "", "PROD_ID": "", "PRODUCT_NAME": "", "PURCHASE_QTY": "", "UNIT_PRICE": "" };
+                    }
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("SlipInfo", "Slip")',
+                    dataType: 'JSON',
+                    data: JSON.stringify({ master: master }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+
+                        if (response.msg.Type == 2) {
+                            //$("#SUStatus").val(0);
+                            //ResetOnlyMasterPageData();
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            //$("#MessageText").show(500).css("color", "green").html("Data Saved Successfully.").delay(800).fadeOut(10000);
+                        }
+                        else if (response.msg.Type == 3) {
+
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            //$("#MessageText").show(500).css('color', 'red').html(response.Message).delay(800).fadeOut(10000);
+                        }
+                    },
+
+                    error: function () {
+                        $("#MessageText").show(500).css("color", "red").html("Error Occured !!.").delay(800).fadeOut(10000);
+                    }
+                });
+            }
+            else {
+                $("#PageDetailGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>Required Details Information !</b></td></tr>');
+                //$("#MessageText").show(500).css("color", "red").html("Value Required!!").delay(800).fadeOut(10000);
+            }
+        }
+
+
+
+        $("#btnReset").click(function () {
+            $('#SUStatus').val(0);
+            //resetEditDeleteStatus = 1; //Reset Button
+            //// When Chages Data
+            //if (changeStatus == 1)
+            //    OpenSaveChangesDialog();
+            //    // When no Chages Data
+            //else {
+                ClearOperationalMessage();
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                $('#btnDelete').attr('disabled', true);
+            //}
+        });
+
+
+
+
+
+
+        //*********** DEFINE Market Window ***************************** //
+
+        var MarketIDWindow = $('#MarketIDWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "50%",
+            height: "auto",
+            title: "List of Market Data",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        //*********** DEFINE MARKET GRID ***************************** //
+
+        var MarketDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "MARKET_CODE",
+                    fields: {
+                        MARKET_CODE: { editable: false, hidden: false },
+                        MARKET_NAME: { editable: false }
+
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var MarketGrid = $("#MarketInfoWindowGrid").kendoGrid({
+            dataSource: MarketDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 350,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+
+                      { field: "MARKET_NAME", title: "Market Name", width: "150px", filterable: true },
+                      { field: "MARKET_CODE", title: "Market Code", width: "150px", filterable: false }
+
+            ]
+        });
+
+
+
+
+        //Open PopUp by pressing F9 key
+        $(document.body).keyup(function (e) {
+            if ($("#MARKET_NAME").is(":focus")) {
+                if (e.keyCode == 120) {
+                    $("#divLoading").show();
+                    $.ajax({
+                        url: '@Url.Action("GetMarketInfo", "Slip")',
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data) {
+                            $("#divLoading").hide();
+                            $("#MarketInfoWindowGrid").data("kendoGrid").dataSource.data(data);
+                        },
+                        complete: function (data) {
+                            $("#divLoading").hide();
+                        }
+                    });
+                    SelectedItemOfListOfValue('MarketInfoWindowGrid');
+                    //MarketIDWindow.open();
+                    //MarketIDWindow.center();
+                }
+            }
+        });
+
+
+
+        //Press Ok button after Select Data From PopUp
+     $('#btnMarketInfoWindowOK').click(function () {
+            ListOfValueOpeningBankGridEvent('MarketInfoWindowGrid');
+            MarketIDWindow.close();
+        });
+
+
+        //Press Cancel button after Select Data From PopUp
+      $('#btnMarketInfoWindowCancel').click(function () {
+            MarketIDWindow.close();
+        });
+
+
+        // Select Data through double Click From PopUp
+        $("#MarketIDWindow").dblclick(function () {
+            ListOfValueOpeningBankGridEvent('MarketInfoWindowGrid');
+            MarketIDWindow.close();
+        });
+
+
+        // Select Data through keyup From PopUp
+        $("#MarketIDWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueOpeningBankGridEvent('MarketInfoWindowGrid');
+                MarketIDWindow.close();
+            }
+            else if (keycode == '27') {
+                MarketIDWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueOpeningBankGridEvent(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select()));
+            $.each(selectedItem, function (key, value) {
+                if (value != null && value != 0)
+                    $('#' + key).val(value);
+            });
+
+            //$("#INSTI_TYPE_CODE").val(selectedItem.INSTI_TYPE_CODE);
+            //$("#INSTI_TYPE_NAME").val(selectedItem.INSTI_TYPE_NAME);
+
+
+
+        }
+
+
+        //Select Data from Pop up Grid
+        function SelectedItemOfListOfValue(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            grid.dataSource.read();
+            $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+            $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+        }
+
+
+
+
+        /////////////////////////////////////////////
+        //*********** DEFINE Product Window ***************************** //
+
+        $(document).on('keyup', '.ProductInfo', function (e) {
+            if (e.keyCode == 120) {
+                GetProductInfoList();
+                SelectedItemOfListOfValue('ProductInfoWindowGrid');
+                ProductInfoWindow.open();
+            }
+        });
+
+        function GetProductInfoList() {
+            $.ajax({
+                url: '@Url.Action("GetProductInfo", "Slip")',
+                type: 'GET',
+                //data: { "supplierid": $("#SupplierID").val() },
+                success: function (data) {
+                    $("#ProductInfoWindowGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+
+        var ProductInfoWindow = $('#ProductInfoWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            width: "700px",
+            height: "auto",
+            title: "List Of Product",
+            position: { top: 100, left: 300 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        var ProductInfoGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "PRODUCT_NAME",
+                    fields: {
+                        PRODUCT_NAME: { editable: true, },
+                        //PURCHASE_QTY: { editable: true },
+                        DOSAGE_FORM_CODE: { editable: true },
+                        DSG_STRENGTH_CODE: { editable: true },
+                        DOSAGE_FORM_NAME: { editable: true },
+                        DSG_STRENGTH_NAME: { editable: true },
+                        UNIT_PRICE: { editable: true },
+                        PROD_ID: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+
+        });
+
+        var ProductGrid = $("#ProductInfoWindowGrid").kendoGrid({
+            dataSource: ProductInfoGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            height: 300,
+            columns: [
+                { field: "PRODUCT_NAME", title: "Product Name", width: "60px", filterable: true, sortable: false },
+                { field: "DOSAGE_FORM_CODE", title: "Dosage From Code", width: "60px", hidden : true, filterable: false, sortable: false },
+                 { field: "DSG_STRENGTH_CODE", title: "Dosage Strength Code", width: "60px", hidden : true, filterable: false, sortable: false },
+                  { field: "DOSAGE_FORM_NAME", title: "Dosage From", width: "60px", filterable: false, sortable: false },
+                 { field: "DSG_STRENGTH_NAME", title: "Dosage Strength", width: "60px", filterable: false, sortable: false },
+                  { field: "UNIT_PRICE", title: "Unit Price", width: "60px", filterable: false, sortable: false },
+                   { field: "PROD_ID", title: "Product Id", width: "60px", filterable: false, sortable: false }
+            ]
+        });
+        //To Bring Data from List of Value Grid to Main Page
+        function ListOfValueGridEventDiviInfo(gridName) {
+            var grid = $('#' + gridName).data("kendoGrid");
+            var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+            var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+            var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+            pageGridItem.set("PRODUCT_NAME", selectedItem.PRODUCT_NAME);
+            pageGridItem.set("DOSAGE_FORM_CODE", selectedItem.DOSAGE_FORM_CODE);
+            pageGridItem.set("DSG_STRENGTH_CODE", selectedItem.DSG_STRENGTH_CODE);
+            pageGridItem.set("DOSAGE_FORM_NAME", selectedItem.DOSAGE_FORM_NAME);
+            pageGridItem.set("DSG_STRENGTH_NAME", selectedItem.DSG_STRENGTH_NAME);
+            pageGridItem.set("UNIT_PRICE", selectedItem.UNIT_PRICE);
+            pageGridItem.set("PROD_ID", selectedItem.PROD_ID);
+        }
+
+        //Handling button click for MarketInfo window grid
+        $('#btnProductInfoWindowOK').click(function () {
+            ListOfValueGridEventDiviInfo('ProductInfoWindowGrid');
+            ProductInfoWindow.close();
+        });
+        $('#btnProductInfoWindowCancel').click(function () {
+            ProductInfoWindow.close();
+        });
+
+        // Select Data through double Click From PopUp
+        $("#ProductInfoWindow").dblclick(function () {
+            ListOfValueGridEventDiviInfo('ProductInfoWindowGrid');
+            ProductInfoWindow.close();
+        });
+        $("#ProductInfoWindow").keyup(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                ListOfValueGridEventDiviInfo('ProductInfoWindowGrid');
+                ProductInfoWindow.close();
+            }
+                // Close Window with escape key
+            else if (keycode == '27') {
+                ProductInfoWindow.close();
+            }
+            event.stopPropagation();
+        });
+
+
+        /////////////////////////////////////////////////
+
+        function loadDetails(marketCode, sessionSl) {
+            saveStatus = 1;
+            var marketCode = $('#MARKET_CODE').val();
+            CheckRequiredTextBoxMaxLength('MARKET_NAME', 10);
+            if (saveStatus == 1) {
+                $.ajax({
+                    url: '/Slip/GetSessionProduct',
+                    method: 'post',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify({ marketCode: marketCode, sessionSl: sessionSl }),
+                    dataType: 'json',
+                    success: function (data) {
+                        //$('#PageDetailGrid').data('kendoGrid').dataSource.data(data);
+                        if (data.length > 0) {
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.data(data);
+                            $('#btnDelete').attr('disabled', true);
+                        }
+                        else {
+                            $('#btnDelete').attr('disabled', false);
+                        }
+                        $('#SUStatus').val(1);
+                    }
+                });
+            }
+        }
+
+
+        //Function For Session Doctors Information Grid
+        var openSessionDoctorInfoWindow = $('#SessionMarketListWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "50%",
+            height: "auto",
+            title: "Session Market Information.",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+
+        //Session DoctorList Window
+        var SessionDoctorInfoGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "MARKET_CODE"
+                }
+            },
+            pageSize: 10
+        });
+
+        var SessionDoctorInformationGrid = $("#SessionMarketGrid").kendoGrid({
+            dataSource: SessionDoctorInfoGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+
+                       { field: "MARKET_NAME", title: "Market Name", width: "150px", filterable: true },
+                       { field: "PRESC_CATE_CODE", title: "Prescription Category Code", width: "150px", filterable: false },
+                       { field: "MARKET_CODE", title: "Market Code", width: "150px", filterable: false },
+                       { field: "PRESC_MAS_SLNO", title: "Prescription Master Slno", width: "150px", filterable: false }
+            ]
+        });
+
+
+        $("#SessionMarketGrid").dblclick(function () {
+            $('#SUStatus').val(1);
+            var grid = $(this).data('kendoGrid');
+            var selectRow = grid.dataItem(grid.select());
+            $('#MARKET_CODE').val(selectRow.MARKET_CODE);
+            $('#MARKET_NAME').val(selectRow.MARKET_NAME);
+            $('#PRESC_MAS_SLNO').val(selectRow.PRESC_MAS_SLNO);
+            var sessionSl = $('#txtSessionSl').val();
+            loadDetails(selectRow.MARKET_CODE, sessionSl);
+
+            //loadDetails(selectRow.DoctorId, sessionSl);
+            //loadMarkets(selectRow.DoctorId);
+            //$('#btnDelete').prop('disabled', false);
+            //$('#txtDesignation').val(selectRow.Designation);
+            //$('#txtAddress1').val(selectRow.Address1);
+            //$('#txtAddress2').val(selectRow.Address2);
+            //$('#txtAddress3').val(selectRow.Address3);
+            //$('#txtAddress4').val(selectRow.Address4);
+
+            //loadMarkets(selectRow.DoctorId);
+            //$('#ddlMarket').val(selectRow.MarketName);
+
+            openSessionDoctorInfoWindow.close();
+        });
+
+
+        $('#MARKET_NAME').keyup(function (e) {
+            if ($('#txtSessionSl').val() == '') {
+
+                if (e.keyCode == 120) {
+                    MarketIDWindow.open();
+                }
+            }
+            else {
+                if (e.keyCode == 120) {
+                    openSessionDoctorInfoWindow.open();
+                    sessionDoctorsInfo($('#txtSessionSl').val());
+                }
+            }
+        });
+        function sessionDoctorsInfo(sessionSl) {
+            $.ajax({
+                url: '/Slip/GetSesstionMarketList',
+                method: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ sessionSl: sessionSl }),
+                dataType: 'json',
+                success: function (data) {
+                    $('#SessionMarketGrid').data('kendoGrid').dataSource.data(data);
+                }
+            });
+        }
+
+
+
+
+
+    ///////////////////////////////////////////////////////
+</script>
+

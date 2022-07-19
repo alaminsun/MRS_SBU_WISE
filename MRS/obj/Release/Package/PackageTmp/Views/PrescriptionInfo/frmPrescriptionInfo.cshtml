@@ -1,0 +1,889 @@
+﻿@{
+    ViewBag.Title = "Prescription Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="FormHeader">
+        <fieldset id="FormHeaderFieldSet">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">@ViewBag.Title</div>
+            </div>
+            <div id="MessageText" class="col-lg-6">
+            </div>
+            <div id="ButtonPanel" class="col-lg-2">
+                <input type="button" id="btnReset" class="Button" value="Reset" style="position:absolute;left:140px" />
+                <input type="button" id="btnDelete" class="Button" value="Delete" style="position:absolute; right:110px" />
+                @*<input type="button" id="btnSearch" class="Button" value="Search" style="position: absolute; right:170px" />*@
+                <input type="button" id="btnSubmit" class="Button" value="Save" style="position: absolute; right: 60px;" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Session Sl No</label><label style="color: red">*</label>
+            </div>
+            <div class="col-lg-3">
+                @*<input type="hidden" id="SUStatus" value="" />*@
+                @*<input type="text" id="txtSessionSl" name="SessionSl" tabindex="1" class="txtBox RequiredTextBox" value="" placeholder="Press(F9)" readonly="readonly" />*@
+                <input type="text" id="txtPrescriptionSl" name="PrescriptionSl" tabindex="1" class="txtBox RequiredTextBox" value="" placeholder="Press(F9)" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="FormBody">
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Doctor ID</label><label style="color: red">*</label>
+            </div>
+            <div class="col-lg-3">
+                <input type="hidden" id="SUStatus" class="txtBox" />
+                <input type="hidden" id="PrescriptionMstSl" class="txtBox" />
+                <input type="text" id="txtDoctorId" name="DoctorId" tabindex="1" class="txtBox RequiredTextBox" value="" placeholder="Press(F9)" readonly="readonly" />
+            </div>
+
+            <div class="col-lg-3">
+                <label>Name</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtDoctorName" name="DoctorName" tabindex="2" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-3">
+                <label>Degree</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtDegree" tabindex="3" name="Degree" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+
+            <div class="col-lg-3">
+                <label>Designation</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtDesignation" tabindex="4" name="Designation" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-3">
+                <label>Address-1</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtAddress1" name="Address1" tabindex="5" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+
+            <div class="col-lg-3">
+                <label>Address-2</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtAddress2" tabindex="21" name="Address2" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Address-3</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtAddress3" name="Address3" tabindex="22" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+
+            <div class="col-lg-3">
+                <label>Address-4</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtAddress4" tabindex="23" name="Address4" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <label>Prescription Sl No.</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" id="txtPrescriptionSlNo" name="PrescriptionSlNo" tabindex="22" class="txtBox RequiredTextBox" value="" readonly="readonly" />
+            </div>
+
+            <div class="col-lg-3">
+                <label>Market</label><label style="color: red"></label>
+            </div>
+            <div class="col-lg-3">
+                <select id="ddlMarket" class="txtBox" name="Market" tabindex="9"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DoctorInfoFormWindow" style="display: none;">
+    <input type="text" id="txtId" class="RequiredTextBox" value="" placeholder="Search By Id" style="padding-right:100px; position:relative" />
+    <input type="text" id="txtName" class="RequiredTextBox" value="" placeholder="Search By Name" style="padding-right:100px; position:relative" />
+    <input type="button" id="btnSearchDoctor" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    <div id="DoctorInfoGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="ProductListWindow" style="display: none;">
+    <div id="ProductListGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="SessionListWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Search :</label>
+        <input type="text" id="txtPSearch" class="RequiredTextBox" value="" placeholder="" style="padding-right:100px; position:relative" />
+        <input type="button" id="btnSearchPrescription" class="Button" value="Search" style="position:absolute; margin-left:20px;" />
+    </div>
+    <div id="SessionListGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div id="SessionDoctorListWindow" style="display: none;">
+    <div id="SessionDoctorGrid" class="PopUpGrid">
+    </div>
+</div>
+
+<div class="row">
+    <div class="FormBody" style="">
+        <div id="PrescriptionGrid" class="MainGrid">
+        </div>
+    </div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="DeleteMasterWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnMConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnMConfirmationCancel" value="Cancel" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnDelete').attr('disabled', true);
+        //Function For Session Information Grid
+        var openSessionInfoWindow = $('#SessionListWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "30%",
+            height: "auto",
+            title: "Session List.",
+            position: { top: 100, left: 150 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+        //Popup Doctor Grid
+        $('#txtPrescriptionSl').keyup(function (e) {
+            if (e.keyCode == 120) {
+                $('#txtPSearch').val('');
+                openSessionInfoWindow.open();
+                //getSessionList('/PrescriptionInfo/GetPrescriptionSl');
+                $('#txtDoctorId').val('');
+                $('#txtDoctorName').val('');
+                $('#txtDegree').val('');
+                $('#txtDesignation').val('');
+                $('#txtAddress1').val('');
+                $('#txtAddress2').val('');
+                $('#txtAddress3').val('');
+                $('#txtAddress4').val('');
+            }
+        });
+
+        $('#btnSearchPrescription').click(function () {
+
+            //$('#txtPSearch').val('');
+            var PrescriptionMstSl = $("#txtPSearch").val();
+            if (PrescriptionMstSl == '') {
+                PrescriptionMstSl = 0;
+            }
+            ItemList1("/PrescriptionInfo/GetPrescriptionList", PrescriptionMstSl);
+            //GridEventForSelected();
+            //areaWindow.close();
+            //var prescriptionId = $('#txtPSearch').val();
+            //if (prescriptionId == '') {
+            //    prescriptionId = 0;
+            //}
+            ////var doctorName = $('#txtName').val();
+            ////var degree = $('#txtDeg').val();
+            //$.ajax({
+            //    url: '/PrescriptionInfo/GetPrescriptionList',
+            //    type: 'post',
+            //    contentType: 'application/json;charset=utf-8',
+            //    data: JSON.stringify({ prescriptionId: prescriptionId }),
+            //    dataType: 'json',
+            //    success: function (data) {
+            //        $("#SessionListPGrid").data("kendoGrid").dataSource.data(data);
+
+            //    }
+            //});
+        });
+
+        function ItemList1(RequestedURL, PrescriptionMstSl) {
+            $.ajax({
+                url: RequestedURL,
+                type: 'get',
+                data: { "PrescriptionMstSl": PrescriptionMstSl },
+                dataType: "JSON",
+                success: function (data) {
+                    $("#SessionListPGrid").data("kendoGrid").dataSource.data(data);
+                    if (data.length == 1) {
+                        //GridEventForAreaSingleRow(data);
+                        //GridEventForSelected();
+                        //areaWindow.close();
+                    }
+                }
+            });
+        }
+
+
+        //function getSessionList(requestedUrl) {
+        //    $.ajax({
+        //        url: requestedUrl,
+        //        method: 'get',
+        //        dataType: 'json',
+        //        success: function (data) {
+        //            $("#SessionListGrid").data("kendoGrid").dataSource.data(data);
+        //        },
+        //        error: function () {
+        //            alert('error');
+        //        }
+        //    });
+        //}
+
+        //Session Grid
+        var SessionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "SessionSl"
+                }
+            },
+            pageSize: 10
+        });
+
+        var SessionInformationGrid = $("#SessionListGrid").kendoGrid({
+            dataSource: SessionGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "PRESC_MAS_SLNO", title: "Prescription Sl", width: "150px", filterable: true }
+            ]
+        });
+
+        $("#SessionListGrid").dblclick(function () {
+            var row = $(this).data('kendoGrid');
+            var selectRow = row.dataItem(row.select());
+            $('#txtPrescriptionSl').val(selectRow.PRESC_MAS_SLNO);
+
+            openSessionInfoWindow.close();
+        });
+
+        //Function For Session Doctors Information Grid
+        var openSessionDoctorInfoWindow = $('#SessionDoctorListWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "90%",
+            height: "auto",
+            title: "Session Doctors Information.",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        //Session DoctorList Window
+        var SessionDoctorInfoGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "DoctorId"
+                }
+            },
+            pageSize: 10
+        });
+
+        var SessionDoctorInformationGrid = $("#SessionDoctorGrid").kendoGrid({
+            dataSource: SessionDoctorInfoGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "DoctorId", title: "Doctor Id", width: "150px", filterable: true },
+                      { field: "DoctorName", title: "Doctor Name", width: "150px", filterable: false },
+                      { field: "Degree", title: "Degree", width: "150px", filterable: false },
+                      { field: "Designation", title: "Designation", width: "150px", filterable: false },
+                      { field: "Address1", title: "Address1", width: "150px", filterable: false, hidden: true },
+                      { field: "Address2", title: "Address2", width: "150px", filterable: false, hidden: true },
+                      { field: "Address3", title: "Address3", width: "150px", filterable: false, hidden: true },
+                      { field: "Address4", title: "Address4", width: "150px", filterable: false, hidden: true },
+                      { field: "MarketCode", title: "Market Code", width: "150px", filterable: false, hidden: true },
+                      { field: "MarketName", title: "Market Name", width: "150px", filterable: false }
+            ]
+        });
+
+        $("#SessionDoctorGrid").dblclick(function () {
+            var grid = $(this).data('kendoGrid');
+            var selectRow = grid.dataItem(grid.select());
+            $('#txtDoctorId').val(selectRow.DoctorId);
+            $('#txtDoctorName').val(selectRow.DoctorName);
+            $('#txtDegree').val(selectRow.Degree);
+            $('#txtDesignation').val(selectRow.Designation);
+            $('#txtAddress1').val(selectRow.Address1);
+            $('#txtAddress2').val(selectRow.Address2);
+            $('#txtAddress3').val(selectRow.Address3);
+            $('#txtAddress4').val(selectRow.Address4);
+
+            loadDetails(selectRow.DoctorId);
+            loadMarkets(selectRow.DoctorId);
+
+            $('#ddlMarket').val(selectRow.MarketName);
+
+            openSessionDoctorInfoWindow.close();
+        });
+
+        function loadDetails(doctorId) {
+            saveStatus = 1;
+            //var doctorId = $('#txtDoctorId').val();
+            CheckRequiredTextBoxMaxLength('txtDoctorId', 10);
+            if (saveStatus == 1) {
+                $.ajax({
+                    url: '/PrescriptionInfo/GetSessionProduct',
+                    method: 'post',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify({ doctorId: doctorId }),
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#PrescriptionGrid').data('kendoGrid').dataSource.data(data);
+                        if (data.length == 0) {
+                            $('#btnDelete').prop('disabled', false);
+                        }
+                        $('#SUStatus').val(1);
+                    }
+                });
+            }
+        }
+        //Function For Doctors Information Grid
+        var openDoctorInfoWindow = $('#DoctorInfoFormWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "90%",
+            height: "auto",
+            title: "Doctors Information.",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+
+        $('#txtDoctorId').keyup(function (e) {
+            if ($('#txtSessionSl').val() == '') {
+
+                if (e.keyCode == 120) {
+                    openDoctorInfoWindow.open();
+                }
+            }
+            else {
+                if (e.keyCode == 120) {
+                    openSessionDoctorInfoWindow.open();
+                    sessionDoctorsInfo($('#txtSessionSl').val());
+                }
+            }
+        });
+        function sessionDoctorsInfo(sessionSl) {
+            $.ajax({
+                url: '/PrescriptionInfo/GetSesstionDoctorList',
+                method: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ sessionSl: sessionSl }),
+                dataType: 'json',
+                success: function (data) {
+                    $('#SessionDoctorGrid').data('kendoGrid').dataSource.data(data);
+                }
+            });
+        }
+        //Popup Doctor Grid
+        //$('#txtDoctorId').keyup(function (e) {
+        //    if (e.keyCode == 120) {
+        //        openDoctorInfoWindow.open();
+        //    }
+        //});
+
+        var DoctorInfoGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "DoctorId"
+                }
+            },
+            pageSize: 10
+        });
+
+        var DoctorInformationGrid = $("#DoctorInfoGrid").kendoGrid({
+            dataSource: DoctorInfoGridDataSource,
+            pageable: true,
+            editable: false,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 300,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "DoctorId", title: "Doctor Id", width: "150px", filterable: true },
+                      { field: "DoctorName", title: "Doctor Name", width: "150px", filterable: false },
+                      { field: "Degree", title: "Degree", width: "150px", filterable: false },
+                      { field: "Designation", title: "Designation", width: "150px", filterable: false },
+                      { field: "Address1", title: "Address1", width: "150px", filterable: false, hidden: true },
+                      { field: "Address2", title: "Address2", width: "150px", filterable: false, hidden: true },
+                      { field: "Address3", title: "Address3", width: "150px", filterable: false, hidden: true },
+                      { field: "Address4", title: "Address4", width: "150px", filterable: false, hidden: true }
+            ]
+        });
+
+        $('#btnSearchDoctor').click(function () {
+            var doctorId = $('#txtId').val();
+            if (doctorId == '') {
+                doctorId = 0;
+            }
+            var doctorName = $('#txtName').val();
+            $.ajax({
+                url: '/DoctorInformation/GetDoctorsData',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ doctorId: doctorId, doctorName: doctorName }),
+                dataType: 'json',
+                success: function (data) {
+                    $("#DoctorInfoGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        });
+        //Fill kendo grid row from popup grid
+        $("#DoctorInfoGrid").dblclick(function () {
+            var gridData = $("#DoctorInfoGrid").data("kendoGrid");
+            var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+
+            $('#txtDoctorId').val(selectedItem.DoctorId);
+            $('#txtDoctorName').val(selectedItem.DoctorName);
+            $('#txtDegree').val(selectedItem.Degree);
+            $('#txtDesignation').val(selectedItem.Designation);
+            $('#txtAddress1').val(selectedItem.Address1);
+            $('#txtAddress2').val(selectedItem.Address2);
+            $('#txtAddress3').val(selectedItem.Address3);
+            $('#txtAddress4').val(selectedItem.Address4);
+            openDoctorInfoWindow.close();
+
+            loadMarkets(selectedItem.DoctorId);
+        });
+
+        function loadMarkets(doctorId) {
+            $.ajax({
+                url: '/PrescriptionInfo/GetMarkets',
+                method: 'post',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ doctorId: doctorId }),
+                dataType: 'json',
+                success: function (data) {
+                    $('#ddlMarket').empty();
+                    $.each(data, function (i, item) {
+                        $('#ddlMarket').append($('<option>', { val: item.MarketCode, html: item.MarketName }, '</option>'));
+                    });
+                },
+                error: function () {
+                    alert('Error Occured!!');
+                }
+            })
+        }
+
+        //Prescription Grid Defination
+        var PrescriptionGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ProductId",
+                    fields: {
+                        ProductId: { editable: true, defaultValue: "Press (F9)" },
+                        ProductName: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var PrescriptionGrid = $("#PrescriptionGrid").kendoGrid({
+            dataSource: PrescriptionGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 370,
+            edit: function (e) {
+                $("[name='ProductId']", e.container).keyup(function (event) {
+                    if (event.keyCode == 120) {
+                        ProductList("/PrescriptionInfo/GetProducts");
+                        openProductListWindow.open();
+                        openProductListWindow.center();
+                    }
+                });
+            },
+            toolbar: [{
+                text: "Add Items",
+                className: "btnAddContainer",
+                imageClass: "k-icon k-add"
+            }],
+
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "PrescriptionDtlSl", title: "Prescriptin DtlSl", width: "150px", filterable: false, hidden: true },
+                      { field: "PrescriptionMstSl", title: "Prescription MstSl", width: "150px", filterable: false, hidden: true },
+                      { field: "ProductId", title: "Product Id", width: "150px", filterable: true },
+                      { field: "ProductName", title: "Product Name", width: "150px", filterable: false },
+                      { field: "Quantity", title: "Purchase Quantity", width: "150px", filterable: false },
+                      { field: "DosageFormCode", title: "Dosage Form Code", width: "150px", filterable: false, hidden: true },
+                      { field: "DosageForm", title: "Dosage Form", width: "150px", filterable: false },
+                      { field: "DosageStrengthCode", title: "Dosage Strength Code", width: "150px", filterable: false, hidden: true },
+                      { field: "DosageStrength", title: "Dosage Strength", width: "150px", filterable: false },
+                      { field: "UnitPrice", title: "Unit Price", width: "150px", filterable: false },
+                      { command: [{ name: "DeletedRow", text: "Remove", imageClass: "k-icon k-i-close", click: handleDelete }], title: "Remove", width: "90px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;text-align: center" } }
+            ]
+        });
+
+        function handleDelete() {
+            var grid = $('#PrescriptionGrid').data('kendoGrid');
+            var detailSl = grid.dataItem(grid.select());
+
+            if (detailSl.PrescriptionDtlSl == null) {
+                grid.dataSource.remove(detailSl);
+                var dataSource = grid.dataSource.data();
+                if (dataSource.length == 0) {
+                    $('#btnDelete').attr('disabled', false);
+                }
+            }
+            else {
+                OpenConfirmationDialog();
+            }
+        }
+        $('#btnConfirmationCancel').click(function () {
+            CloseConfirmationDialog();
+        });
+
+        $('#btnConfirmationOK').click(function () {
+            var grid = $('#PrescriptionGrid').data('kendoGrid');
+            var detailSl = grid.dataItem(grid.select());
+            $.ajax({
+                url: '/PrescriptionInfo/Delete',
+                method: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ sl: detailSl.PrescriptionDtlSl }),
+                success: function () {
+                    grid.dataSource.remove(detailSl);
+                    CloseConfirmationDialog();
+
+                    var dataSource = grid.dataSource.data();
+                    if (dataSource.length == 0) {
+                        $('#btnDelete').attr('disabled', false);
+                    }
+                }
+            });
+        });
+
+        //adding new row
+        $('.btnAddContainer').click(function () {
+            var addflag = 1;
+            var parentFlag = 1;
+            if (parentFlag == 1) {
+                $("#MessageText").html("");
+                var grid = $("#PrescriptionGrid").data("kendoGrid");
+
+                $("#PrescriptionGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                var dataSource = $("#PrescriptionGrid").data("kendoGrid").dataSource;
+                var addData = dataSource.data();
+                if (addData != null) { // For Add row when Exiting Data in Grid
+                    for (var i = 0; i < addData.length; i++) {
+                        if (addData[i].ProductName == "") {
+                            addflag = 0;
+                        }
+                    }
+                }
+                if (addflag == 1) {
+                    grid.addRow();
+                    $('#btnDelete').attr('disabled', true);
+                }
+            }
+
+        });
+
+        //Function For Product Information Grid
+        var openProductListWindow = $('#ProductListWindow').kendoWindow({
+            actions: ["Minimize", "Maximize", "Close"],
+            visible: false,
+            //width: "1352px",
+            width: "90%",
+            height: "auto",
+            title: "Product Information.",
+            position: { top: 100, left: 50 },
+            modal: true,
+            draggable: true
+        }).data('kendoWindow');
+        ////ProductList Populate
+        function ProductList(RequestedURL) {
+            $.ajax({
+                url: RequestedURL,
+                type: 'GET',
+                dataType: "JSON",
+                success: function (data) {
+                    $("#ProductListGrid").data("kendoGrid").dataSource.data(data);
+                }
+            });
+        }
+
+        //Prescription Grid Defination
+        var ProductGridDataSource = new kendo.data.DataSource({
+            schema: {
+                model: {
+                    id: "ProductId",
+                    fields: {
+                        ProductId: { editable: false }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        var ProductGrid = $("#ProductListGrid").kendoGrid({
+            dataSource: ProductGridDataSource,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            navigatable: true,
+            sortable: true,
+            height: 370,
+
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        startswith: "Starts with",
+                        contains: "Contains"
+                    }
+                }
+            },
+
+            columns: [
+                      { field: "ProductId", title: "Product Id", width: "150px", filterable: true },
+                      { field: "ProductName", title: "Product Name", width: "150px", filterable: false },
+                      { field: "DosageFormCode", title: "Dosage Form Code", width: "150px", filterable: false, hidden: true },
+                      { field: "DosageForm", title: "Dosage Form", width: "150px", filterable: false },
+                      { field: "DosageStrengthCode", title: "Dosage Strength Code", width: "150px", filterable: false, hidden: true },
+                      { field: "DosageStrength", title: "Dosage Strength", width: "150px", filterable: false },
+                      { field: "UnitPrice", title: "Unit Price", width: "150px", filterable: false }
+            ]
+        });
+
+        $("#ProductListGrid").dblclick(function () {
+            var sourceGrid = $(this).data('kendoGrid');
+            var selectedItem = sourceGrid.dataItem(sourceGrid.select());
+
+            var destinationGrid = $('#PrescriptionGrid').data('kendoGrid');
+            var selectedRow = destinationGrid.dataItem(destinationGrid.select());
+
+            selectedRow.set('ProductId', selectedItem.ProductId);
+            selectedRow.set('ProductName', selectedItem.ProductName);
+            selectedRow.set('DosageFormCode', selectedItem.DosageFormCode);
+            selectedRow.set('DosageForm', selectedItem.DosageForm);
+            selectedRow.set('DosageStrengthCode', selectedItem.DosageStrengthCode);
+            selectedRow.set('DosageStrength', selectedItem.DosageStrength);
+            selectedRow.set('UnitPrice', selectedItem.UnitPrice);
+
+            openProductListWindow.close();
+        });
+
+
+        $('#btnSubmit').click(function () {
+            saveStatus = 1;
+            var mstModel = {};
+            mstModel.PrescriptionMstSl = $('#PrescriptionMstSl').val();
+            mstModel.DoctorId = $('#txtDoctorId').val();
+            mstModel.CategoryCode = 'P';
+            mstModel.SessionSl = $('#SessionSl').val();
+            mstModel.MarketCode = $('#ddlMarket').val();
+            mstModel.SUStatus = $('#SUStatus').val();
+            mstModel.Details = [];
+            CheckRequiredTextBoxMaxLength('txtDoctorId', 20)
+            if (saveStatus == 1) {
+                var grid = $('#PrescriptionGrid').data('kendoGrid').dataSource.data();
+
+                if (grid.length > 0) {
+                    for (var i = 0; i < grid.length; i++) {
+                        var detailsModel = {};
+
+                        detailsModel.PrescriptionDtlSl = grid[i].PrescriptionDtlSl;
+                        detailsModel.PrescriptionMstSl = grid[i].PrescriptionMstSl;
+                        detailsModel.ProductId = grid[i].ProductId;
+                        detailsModel.Quantity = grid[i].Quantity;
+                        detailsModel.UnitPrice = grid[i].UnitPrice;
+
+                        mstModel.Details.push(detailsModel);
+                    }
+
+                    $.ajax({
+                        url: '/PrescriptionInfo/Prescription',
+                        method: 'post',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify({ model: mstModel }),
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.msg.Type == 2) {
+                                //ResetOnlyMasterPageData();
+                                $('#txtPrescriptionSlNo').val(response.msg.ReturnId);
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                            else if (response.msg.Type == 3) {
+
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                            else {
+
+                                $('#MessageText').html(response.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                else {
+                    $("#PrescriptionGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>Required Details Information !</b></td></tr>');
+                }
+            }
+        });
+
+        $('#btnSearch').click(function () {
+            searchDetails();
+        });
+        function searchDetails() {
+            saveStatus = 1;
+            var doctorId = $('#txtDoctorId').val();
+            CheckRequiredTextBoxMaxLength('txtDoctorId', 10);
+            if (saveStatus == 1) {
+                $.ajax({
+                    url: '/PrescriptionInfo/GetSessionProduct',
+                    method: 'post',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify({ doctorId: doctorId }),
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#PrescriptionGrid').data('kendoGrid').dataSource.data(data);
+                        if (data.length == 0) {
+                            $('#btnDelete').prop('disabled', false);
+                        }
+                        $('#SUStatus').val(1);
+                    }
+                });
+            }
+        }
+
+        $('#btnReset').click(function () {
+            $('#PrescriptionGrid').data('kendoGrid').dataSource.data([]);
+            ResetOnlyMasterPageData();
+            $('#ddlMarket').empty();
+            $('#btnDelete').attr('disabled', true);
+            $('.RequiredTextBox').css('border-color', '');
+        });
+
+        $('#btnDelete').click(function () {
+            OpenConfirmationMDialog();
+        });
+
+        var ConfirmMWindow;
+        function OpenConfirmationMDialog() {
+            ConfirmMWindow = $('#DeleteMasterWindow').kendoWindow({
+                width: "200px",
+                padding: "0px 0px 0px 100px",
+                title: "Confirmation!",
+                visible: false,
+                resizable: false,
+                draggable: true,
+                position: { top: 200, left: 400 }
+            }).data('kendoWindow');
+            ConfirmMWindow.open();
+        }
+
+        function CloseConfirmationMDialog() {
+            ConfirmMWindow.close();
+        }
+
+        $('#btnMConfirmationOK').click(function () {
+            var doctorId = $('#txtDoctorId').val();
+            $.ajax({
+                url: '/PrescriptionInfo/DeleteMaster',
+                method: 'post',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({ doctorId: doctorId }),
+                success: function () {
+                    $('#btnDelete').attr('disabled', true);
+                    ResetOnlyMasterPageData();
+                    CloseConfirmationMDialog();
+                    $('#ddlMarket').empty();
+                }
+            });
+        });
+    });
+</script>

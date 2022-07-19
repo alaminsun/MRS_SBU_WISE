@@ -1,0 +1,789 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label>Division Code<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" class="txtBox" id="DIVI_REGI_MAS_SLNO" />
+                    <input type="text" id="DIVISION_CODE" placeholder="Press F9" class="txtBox RequiredTextBox SetFocus" name="DIVISION_CODE" readonly="readonly" tabindex="1" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Division Name<span style="color: red">*</span></label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="DIVISION_NAME" class="txtBox RequiredTextBox" name="DIVISION_NAME" readonly="readonly" tabindex="2" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="grdKendo" tabindex="5"></div>
+</div>
+
+<div id="DeleteConfirmWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="DivisionWindow" style="display: none;">
+    <div id="DivisionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDivisionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDivisionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="RegiInfoWindow" style="display: none;">
+    <div id="RegiInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegiInfoWindowCancel" class="PopUpButton" value="Cancel"/>
+    <input type="button" id="btnRegiInfoWindowOK" class="PopUpButton" value="OK"/>
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        // Delete Button
+        $("#btnDelete").click(function () {
+            resetEditDeleteStatus = 3; //Delete Button
+            deleteStatus = 1; //For Year
+            // When Chages Data
+            if (changeStatus == 1)
+                OpenSaveChangesDialog();
+                // When no Chages Data
+            else {
+                OpenConfirmationDialog();
+            }
+        });
+        //To Define Data DivisionRegi for Kendo Grid
+        var dataSourceDivisionInfo = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "DIVI_REGI_DTL_SLNO",
+                    fields: {
+                        DIVI_REGI_DTL_SLNO: { editable: false },
+                        DIVI_REGI_MAS_SLNO: { editable: false },
+                        REGION_CODE: { editable: true, defaultValue: 'Press F9' },
+                        REGION_NAME: { editable: true },
+                        DIVI_REGI_STATUS: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for DivisionRegi Kendo Grid
+        var gridDivisionInfo = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSourceDivisionInfo,
+            width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            edit: function (e) {
+                $('input[name = "REGION_CODE"]').attr("readonly", true);
+                $('input[name = "REGION_NAME"]').attr("readonly", true);
+            },
+            toolbar: [{ text: "Add Region Info.", className: "btnDivisionGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            columns: [
+                { field: "DIVI_REGI_DTL_SLNO", hidden: true },
+                { field: "DIVI_REGI_MAS_SLNO", hidden: true },
+                { field: "REGION_CODE", title: "Region Code", filterable: true, width: 120, attributes: { "class": "RegiInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "REGION_NAME", title: "Region Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                //{ field: "DIVI_REGI_STATUS", title: "Status", editor: ddlStatus, width: 80, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: handleDivisionDelete }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        $(".btnDivisionGrid").click(function () {
+            var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieraddressgrid.addRow();
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+        var ddlStatusDataSource = [{ text: "Active", value: "Active" }, { text: "Inactive", value: "Inactive" }];
+
+        function ddlStatus(container, options) {
+            $('<input data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    optionLabel: "Select",
+                    autoBind: false,
+                    change: function () {
+                        changeStatus = 1;
+                    },
+                    dataSource: ddlStatusDataSource
+                });
+        };
+
+        //Handling Delete event for PageDeailsGrid row
+        function handleDivisionDelete() {
+            deleteStatus = 2;
+            var grid1 = $("#PageDetailGrid").data("kendoGrid");
+            dataitem = (grid1.dataItem(grid1.select())); //Selected Row
+            //dataitem = grid.dataItem($(event.currentTarget).closest("tr"));
+            if (changeStatus == 0) {
+                OpenConfirmationDialog();
+            } else {
+                resetEditDeleteStatus = 3; //Delete Division Grid Button
+                OpenSaveChangesDialog();
+            }
+        };
+
+        //Handling Yes button click for grid row deletion
+        $('#btnConfirmationOK').click(function () {
+            if (deleteStatus == 1) {
+                if ($("#DIVI_REGI_MAS_SLNO").val() != "") {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "DivisionRegi")',
+                        type: 'POST',
+                        data: JSON.stringify({ "DIVI_REGI_MAS_SLNO": $("#DIVI_REGI_MAS_SLNO").val() }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                ClearOperationalMessage();
+                                ResetOnlyMasterPageData();
+                                $(".RequiredTextBox").css("border-color", "");
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            } else if (deleteStatus == 2) {
+                if (dataitem.DIVI_REGI_DTL_SLNO != "") {
+                    $.ajax({
+                        url: '@Url.Action("DeletedRegiInfo", "DivisionRegi")',
+                        type: 'POST',
+                        data: JSON.stringify({ "DIVI_REGI_DTL_SLNO": dataitem.DIVI_REGI_DTL_SLNO }),
+                        contentType: 'application/json;',
+                        dataType: 'json',
+                        success: function (respnse) {
+                            if (respnse.msg.Type == 2) {
+                                $('#MessageText').html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                            } else {
+                                $("#MessageText").html(respnse.msg.Msg);
+                                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            }
+                        }
+                    });
+                } else {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                }
+                $(".RequiredTextBox").css("border-color", "");
+                CloseConfirmationDialog();
+            }
+        });
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Focus DIVISION_CODE textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) { // Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#DIVI_REGI_MAS_SLNO").val() != "") {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "DivisionRegi")',
+                            type: 'POST',
+                            data: JSON.stringify({ "DIVI_REGI_MAS_SLNO": $("#DIVI_REGI_MAS_SLNO").val() }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.DIVI_REGI_DTL_SLNO != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeletedRegiInfo", "DivisionRegi")',
+                            type: 'POST',
+                            data: JSON.stringify({ "DIVI_REGI_DTL_SLNO": dataitem.DIVI_REGI_DTL_SLNO }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+        //  **       Page Unloaded **//
+    });
+    // ** End Start Document .Ready
+
+    // Declare Object
+    var DivisionDiviDtlModel = { "DIVI_REGI_DTL_SLNO": "", "DIVI_REGI_MAS_SLNO": "", "DIVISION_CODE": "", "DIVISION_NAME": "", "DIVI_REGI_STATUS": "" };
+    var zoneDiviMasModel = { "DIVI_REGI_MAS_SLNO": "", "DIVISION_CODE": "", "RegionList": [] };
+    var saveStatus = 1;
+    // Save Or Update Data
+    function Save() {
+
+        saveStatus = 1;
+
+        // Check Maximum Length in DIVISION_CODE
+        CheckRequiredTextBoxMaxLength('DIVISION_CODE', 20);
+        // Check Empty or Maximum Length in DIVISION_NAME
+        CheckRequiredTextBoxMaxLength('DIVISION_NAME', 100);
+
+        // Check Save Proper Data
+        if (saveStatus == 1) {
+            zoneDiviMasModel.DIVISION_CODE = $("#DIVISION_CODE").val();
+            zoneDiviMasModel.DIVI_REGI_MAS_SLNO = $("#DIVI_REGI_MAS_SLNO").val();
+
+            var dataSource = $("#PageDetailGrid").data("kendoGrid").dataSource;
+            var data = dataSource.data(); // Get Detail Grid Data
+            zoneDiviMasModel.RegionList = [];
+            if (dataSource.hasChanges) {
+                for (var i = 0; i <= data.length - 1; i++) {
+                    if (data[i].dirty) {
+                        DivisionDiviDtlModel.DIVI_REGI_DTL_SLNO = data[i].DIVI_REGI_DTL_SLNO;
+                        DivisionDiviDtlModel.REGION_CODE = data[i].REGION_CODE;
+                        DivisionDiviDtlModel.DIVI_REGI_STATUS = data[i].DIVI_REGI_STATUS;
+
+                        zoneDiviMasModel.RegionList.push(DivisionDiviDtlModel);
+                        DivisionDiviDtlModel = { "DIVI_REGI_DTL_SLNO": "", "DIVI_REGI_MAS_SLNO": "", "DIVISION_CODE": "", "DIVISION_NAME": "", "DIVI_REGI_STATUS": "" };
+                    }
+                }
+            }
+
+            if (changeStatus == 1) {
+                $.ajax({
+                    url: '@Url.Action("DivisionRegi", "DivisionRegi")',
+                    data: JSON.stringify(zoneDiviMasModel),
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.msg.Type == 2) {
+                            changeStatus = 0;
+                            $('#DIVI_REGI_MAS_SLNO').val(response.DIVI_REGI_MAS_SLNO);
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSaveRegiList", "DivisionRegi")',
+                                type: 'GET',
+                                data: { DIVI_REGI_MAS_SLNO: $("#DIVI_REGI_MAS_SLNO").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 3) {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            $.ajax({
+                                url: '@Url.Action("GetSaveRegiList", "DivisionRegi")',
+                                type: 'GET',
+                                data: { DIVI_REGI_MAS_SLNO: $("#DIVI_REGI_MAS_SLNO").val() },
+                                success: function (data33) {
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                                }
+                            });
+                        }
+                        else if (response.msg.Type == 1) {
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                        else {
+                            changeStatus = 0;
+                            $('#MessageText').html(response.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        }
+                    }
+                });
+            }
+                // No Changes Exiting Data
+            else {
+                $("#MessageText").html("No Changes to Save.");
+                $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                $("#DIVISION_CODE").focus();
+            }
+        }
+    };
+    $("#btnReset").click(function () {
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            ResetOnlyMasterPageData();
+            $(".RequiredTextBox").css("border-color", "");
+            $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        }
+    });
+
+    /////////////////////////////////////////////
+
+    var DivisionGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DIVISION_CODE",
+                fields: {
+                    DIVISION_CODE: { editable: false },
+                    DIVISION_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDivisionList", "DivisionRegi")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var DivisionPageGrid = $("#DivisionWindowGrid").kendoGrid({
+        dataSource: DivisionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DIVISION_NAME", title: "Division Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DIVISION_CODE", title: "Division Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var DivisionWindow = $('#DivisionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Division Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for DIVISION_NAME window grid
+    function DivisionWindowEvent() {
+        var WindowGrid = $("#DivisionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DIVISION_CODE").val(WindowGridItem.DIVISION_CODE);
+        $("#DIVISION_NAME").val(WindowGridItem.DIVISION_NAME);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnDivisionWindowOK').click(function () {
+        DivisionWindowEvent();
+        DivisionWindow.close();
+    });
+
+    $('#btnDivisionWindowCancel').click(function () {
+        DivisionWindow.close();
+    });
+
+    $("#DivisionWindowGrid").dblclick(function () {
+        DivisionWindowEvent();
+        DivisionWindow.close();
+    });
+
+    $("#DivisionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            DivisionWindowEvent();
+            DivisionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DivisionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DIVISION_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('DivisionWindowGrid');
+                DivisionWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        // When Chages Data
+        if (changeStatus == 1)
+            OpenSaveChangesDialog();
+            // When no Chages Data
+        else {
+            ClearOperationalMessage();
+            $(".RequiredTextBox").css("border-color", "");
+            GetPaymentInformation();
+            SelectedItemOfListOfValue('SearchWindowGrid');
+            SearchWindow.open();
+        }
+    });
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "DIVI_REGI_MAS_SLNO",
+                fields: {
+                    DIVI_REGI_MAS_SLNO: { editable: false },
+                    DIVISION_CODE: { editable: false },
+                    DIVISION_NAME: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "DIVI_REGI_MAS_SLNO", hidden: true },
+            { field: "DIVISION_NAME", title: "Division Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DIVISION_CODE", title: "Division Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "auto",
+        height: "auto",
+        title: "Division Region Search",
+        position: { top: 50, left: 5 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    function GetPaymentInformation() {
+        $.ajax({
+            url: '@Url.Action("GetDivisionSearchList", "DivisionRegi")',
+            type: 'GET',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        $("#DIVI_REGI_MAS_SLNO").val(selectedItem.DIVI_REGI_MAS_SLNO);
+        $("#DIVISION_CODE").val(selectedItem.DIVISION_CODE);
+        $("#DIVISION_NAME").val(selectedItem.DIVISION_NAME);
+        $.ajax({
+            url: '@Url.Action("GetSaveRegiList", "DivisionRegi")',
+            type: 'GET',
+            data: { DIVI_REGI_MAS_SLNO: $("#DIVI_REGI_MAS_SLNO").val() },
+            success: function (data33) {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+    }
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    /////////////////////////////////////////////////////
+
+    ///////////////////Existing Division Info List/////////////////////////
+
+    $(document).on('keyup', '.RegiInfo', function (e) {
+        if (e.keyCode == 120) {
+            GetRegiInfoList();
+            SelectedItemOfListOfValue('RegiInfoWindowGrid');
+            RegiInfoWindow.open();
+        }
+    });
+
+    function GetRegiInfoList() {
+        $.ajax({
+            url: '@Url.Action("GetRegiInfoList", "DivisionRegi")',
+            type: 'GET',
+            //data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#RegiInfoWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var RegiInfoWindow = $('#RegiInfoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of Region Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var RegiInfoGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "REGION_CODE",
+                fields: {
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false }
+                }
+            }
+        },
+        pageSize: 10
+
+    });
+
+    var RegiInfoGrid = $("#RegiInfoWindowGrid").kendoGrid({
+        dataSource: RegiInfoGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "REGION_NAME", title: "Region Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "REGION_CODE", title: "Region Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+    //To Bring Data from List of Value Grid to Main Page
+    function ListOfValueGridEventRegiInfo(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        pageGridItem.set("REGION_CODE", selectedItem.REGION_CODE);
+        pageGridItem.set("REGION_NAME", selectedItem.REGION_NAME);
+        changeStatus = 1;
+    }
+
+    //Handling button click for RegiInfo window grid
+    $('#btnRegiInfoWindowOK').click(function () {
+        ListOfValueGridEventRegiInfo('RegiInfoWindowGrid');
+        RegiInfoWindow.close();
+    });
+    $('#btnRegiInfoWindowCancel').click(function () {
+        RegiInfoWindow.close();
+    });
+    $("#RegiInfoWindow").dblclick(function () {
+        ListOfValueGridEventRegiInfo('RegiInfoWindowGrid');
+        RegiInfoWindow.close();
+    });
+    $("#RegiInfoWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventRegiInfo('RegiInfoWindowGrid');
+            RegiInfoWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegiInfoWindow.close();
+        }
+        event.stopPropagation();
+    });
+    ///////////////////////////////////////////////////////
+</script>

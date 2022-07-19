@@ -1,0 +1,362 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+
+@using (Html.BeginForm("frmRptMarketWiseInstitutionList", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: A4, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" @*onclick="Reset();"*@><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+    <input type="hidden" id="ReportName" name="ReportName" value="Market Wise Doctor List" />
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">Region:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="hidden" id="REGION_CODE" name="REGION_CODE" />
+                        <input type="text" id="REGION_NAME" placeholder="All Region/Press F9" readonly="readonly" name="REGION_NAME" class="txtBox" tabindex="1" />
+                    </div>
+                </div><br />
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">Institution Type:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="hidden" id="INSTI_TYPE_CODE" name="INSTI_TYPE_CODE" />
+                        <input type="text" id="INSTI_TYPE_NAME" placeholder="All InstitutionType/Press F9" readonly="readonly" name="INSTI_TYPE_NAME" class="txtBox" tabindex="2" />
+                    </div>
+                </div><br />
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">From Date:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" id="FromDate" name="FromDate" tabindex="3" class="txtBox datePicker" />
+                    </div>
+                </div><br />
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">To Date:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <input type="text" id="ToDate" name="ToDate" tabindex="4" class="txtBox datePicker" />
+                    </div>
+                </div><br />
+
+                <div class="form-group">
+                    <div class="col-lg-3">
+                        <label class="pull-right">Order by:</label>
+                    </div>
+                    <div class="col-lg-3">
+                        <select id="Orderby" name="Orderby" class="txtBox" tabindex="5">
+                            <option value="insti_code">institution Code</option>
+                            <option value="INSTI_NAME">institution Name</option>
+                            <option value="INSTI_TYPE_NAME">Institution Type</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+<div id="RegionWindow" style="display: none;">
+    <div id="RegionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="InstitutionTypeWindow" style="display: none;">
+    <div id="InstitutionTypeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstitutionTypeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstitutionTypeWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}"
+            //,
+            //value: new Date()
+        });
+    }); //End of Document.Ready()
+    //$("#btnReset").click(function () {
+    //    $('.FormBody input[type=text]').val('');
+    //    $('#MessageText').html('');
+    //});
+
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        $('#btnSubmit').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+
+    ////////////////////InstitutionType/////////////////////////
+
+    var InstitutionTypeGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "INSTI_TYPE_CODE",
+                fields: {
+                    INSTI_TYPE_CODE: { editable: false },
+                    INSTI_TYPE_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetInstitutionTypeList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var InstitutionTypePageGrid = $("#InstitutionTypeWindowGrid").kendoGrid({
+        dataSource: InstitutionTypeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "INSTI_TYPE_NAME", title: "Institution Type Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_CODE", title: "Institution Type Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var InstitutionTypeWindow = $('#InstitutionTypeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of InstitutionType Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function InstitutionTypeWindowEvent() {
+        var WindowGrid = $("#InstitutionTypeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#INSTI_TYPE_CODE").val(WindowGridItem.INSTI_TYPE_CODE);
+        $("#INSTI_TYPE_NAME").val(WindowGridItem.INSTI_TYPE_NAME);
+        $("#FromDate").focus();
+        //changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnInstitutionTypeWindowOK').click(function () {
+        InstitutionTypeWindowEvent();
+        InstitutionTypeWindow.close();
+    });
+
+    $('#btnInstitutionTypeWindowCancel').click(function () {
+        InstitutionTypeWindow.close();
+    });
+
+    $("#InstitutionTypeWindowGrid").dblclick(function () {
+        InstitutionTypeWindowEvent();
+        InstitutionTypeWindow.close();
+    });
+
+    $("#InstitutionTypeWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            InstitutionTypeWindowEvent();
+            InstitutionTypeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            InstitutionTypeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#INSTI_TYPE_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('InstitutionTypeWindowGrid');
+                InstitutionTypeWindow.open();
+            }
+        }
+    });
+
+    /////////////////////////////////////////////////
+
+    //////////////////Region///////////////////////////
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "REGION_CODE",
+                fields: {
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetRegionRankin", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "REGION_CODE", title: "Region Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "REGION_NAME", title: "Region Code", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Region Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#REGION_CODE").val(WindowGridItem.REGION_CODE);
+        $("#REGION_NAME").val(WindowGridItem.REGION_NAME);
+        $("#INSTI_TYPE_NAME").focus();
+        //changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+            }
+        }
+    });
+
+    //$("#btnReset").click(function () {
+    //    $('#MessageText').html('');
+    //    $(".txtBox").val("");
+    //    location.reload();
+    //});
+
+    /////////////////////////////////////////////////
+</script>

@@ -1,0 +1,1209 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>@ViewBag.formTitle</title>
+<div class="row box box-danger">
+    <div class="col-lg-6">
+        <span id="MessageText" class="pull-right"></span>
+    </div>
+    <div class="col-lg-6">
+        <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+        <button type="button" id="btnDelete" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-remove"></i> Delete</button>
+        <button type="button" id="btnSearch" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-search"></i> Search</button>
+        <button type="button" id="btnSubmit" onclick="Save()" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+
+    </div>
+</div>
+
+<div class="row box box-primary">
+    <form class="form-horizontal">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-lg-2">
+
+                    <label>Institute Code</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" id="SUStatus" class="txtBox" />
+                    <input type="hidden" class="txtBox" id="INSTI_MKT_MAS_SLNO_1" />
+                    <input type="text" id="INSTI_CODE" name="INSTI_CODE" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="Press F9" value="">
+                    @*<input type="text" id="INSTI_CODE" placeholder="Press F9" class="txtBox" name="INSTI_CODE" tabindex="" />*@
+                </div>
+                <div class="col-lg-2">
+                    <label>Institute Name</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="INSTI_NAME" class="txtBox" name="INSTI_NAME" @*class="txtBox RequiredTextBox"*@ readonly="readonly" tabindex="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label>Institute Type</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" class="txtBox" id="INSTI_TYPE_CODE" />
+                    <input type="text" id="INSTI_TYPE_NAME" class="txtBox" name="INSTI_TYPE_NAME" readonly="readonly" tabindex="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Address1</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ADDRESS1" class="txtBox" name="ADDRESS1" readonly="readonly" tabindex="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-2">
+                    <label>Address2</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="hidden" class="txtBox" id="INSTI_MKT_MAS_SLNO" />
+                    <input type="text" id="ADDRESS2" class="txtBox" name="ADDRESS3" readonly="readonly" tabindex="" />
+                </div>
+                <div class="col-lg-2">
+                    <label>Address3</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="text" id="ADDRESS3" class="txtBox" name="ADDRESS3" readonly="readonly" tabindex="" />
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+
+<div class="row box box-success">
+    <div id="PageDetailGrid" class="grdKendo" tabindex="14"></div>
+</div>
+
+<div id="DeleteAllDataWindow" style="display: none;">
+    <p><h5>Are you sure to delete?</h5></p>
+    <input type="button" style="height: 25px; width: 60px; margin-left: 10px; float: left;" id="btnConfirmationOK" value="OK" />
+    <input type="button" style="height: 25px; width: 60px; margin-left: 30px; float: left;" id="btnConfirmationCancel" value="Cancel" />
+</div>
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+<div id="DeleteConfirmWindow" style="display: none;">
+    <input type="button" class="TwoButtonWindow" id="btnConfirmationYes" value="Yes" />
+    <input type="button" class="TwoButtonWindow" id="btnConfirmationNo" value="No" onclick="CancelWindow()" />
+</div>
+
+<div id="SaveChangeWindow" style="display: none;">
+    <p><h5>Data will be lost if you continue.</h5></p>
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowOk" value="OK" />
+    <input type="button" class="ThreeButtonWindow" id="btnSaveChangeWindowCancel" value="Cancel" />
+</div>
+
+<div id="InstitutionWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Institution Name:</label>
+        <input type="text" id="txtInstitutcode" placeholder="Searching by Institute Code" style="width: 250px;" /><input type="button" id="btnSearchInstitution" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+        @*<input type="button" id="btnSearchInstitution" class="Button" value="Search" style="position: absolute; margin-left: 20px;" />*@
+    </div>
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="InstitutionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstitutionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstitutionWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="SearchWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyer" style="width: 250px;" /><input type="button" id="btnGridSearch" value="Search" /></p>*@
+
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Institute Code:</label>
+        <input type="text" id="txtAllSearch" placeholder="Searching by Institute Code" style="width: 250px;" /><input type="button" id="btnAllSearchByItem" value="Search" style="margin-left: 2px; margin-top: 1px;" />
+    </div>
+    <div id="SearchWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSearchWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSearchWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+<div id="MarketInfoWindow" style="display: none;">
+    <div class="row" style="width: 596px;">
+        <label style="margin-left: 20px;">Market Name:</label>
+        <input type="text" id="txtMarketName" placeholder="Searching by Market Name" style="width: 250px;" />
+        <span id="MessageTextPopup" class="pull-right"></span>
+    </div>
+    <div id="MarketInfoWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnMarketInfoWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnMarketInfoWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+    <h3 style="position: absolute; top: 50%; left: 42%; color: White;">
+        Loading, please wait...<img src="~/Content/Images/cube.gif" />
+    </h3>
+</div>
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+<script type="text/javascript">
+    // To Declare Global Variable
+    var changeStatus = 0;
+    var resetEditDeleteStatus = 0;
+    var deleteStatus = 0;
+    var dataitem = {};
+    var gridInput = 0;
+    //$('#btnSubmit').prop('disabled', true);
+    //var saveStatus = 0;
+    //// Start  $(document).ready(function ()
+    $(document).ready(function () {
+        $('#SUStatus').val(0);
+        //$('#btnDelete').attr('disabled', true);
+        //To Define Data ZoneDivi for Kendo Grid
+        var dataSourceMarketInfo = new kendo.data.DataSource({
+            batch: true,
+            schema: {
+                model: {
+                    id: "INSTI_MKT_DET_SLNO",
+                    fields: {
+                        INSTI_MKT_DET_SLNO: { editable: true },
+                        INSTI_MKT_MAS_SLNO: { editable: true },
+                        MARKET_CODE: { editable: true, defaultValue: 'Press F9' },
+                        MARKET_NAME: { editable: true }
+                    }
+                }
+            },
+            pageSize: 10
+        });
+
+        //To Define Columns for ZoneDivi Kendo Grid
+        var gridDivisionInfo = $('#PageDetailGrid').kendoGrid({
+            dataSource: dataSourceMarketInfo,
+            //width: 430,
+            pageable: true,
+            editable: true,
+            selectable: "row",
+            toolbar: [{ text: "Add Market Info.", className: "btnMarketGrid", imageClass: "k-icon k-add" }],
+            navigatable: true,
+            filterable: true,
+            sortable: true,
+            edit: function (e) {
+                $('input[name = "MARKET_CODE"]').attr("readonly", true);
+                $('input[name = "MARKET_NAME"]').attr("readonly", true);
+                $('input[name = "SBU_GROUP"]').attr("readonly", true);
+            },
+            height: 350,
+            columns: [
+                { field: "INSTI_MKT_DET_SLNO", hidden: true },
+                { field: "INSTI_MKT_MAS_SLNO", hidden: true },
+                { field: "MARKET_CODE", title: "Market Code", filterable: true, width: 40, attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "MARKET_NAME", title: "Market Name", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { field: "SBU_GROUP", title: "SBU UNIT", filterable: true, width: 100, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+                { command: [{ name: "DeletedRow", text: "Delete", imageClass: "k-icon k-i-close", click: DeleteWindow }], title: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete", width: "100px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            ]
+        }).data('kendoGrid');
+
+        $(".btnMarketGrid").click(function () {
+            var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+            $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                this.element.find('tbody tr:first').addClass('k-state-selected');
+            });
+            supplieraddressgrid.addRow();
+        });
+
+        $("#PageDetailGrid").keyup(function (e) {
+            if (e.keyCode == 13) {
+                var supplieraddressgrid = $("#PageDetailGrid").data("kendoGrid");
+                $("#PageDetailGrid").data().kendoGrid.bind('dataBound', function () {
+                    this.element.find('tbody tr:first').addClass('k-state-selected');
+                });
+                supplieraddressgrid.addRow();
+            }
+        });
+
+
+
+        //Handling No button click for grid row deletion
+        $('#btnConfirmationCancel').click(function () {
+            dataitem = {};
+            CloseConfirmationDialog();
+        });
+
+        //To clear operational/error message
+        ClearOperationalMessage();
+
+        //For removing operational & required message after triggering other event
+        ClearRequiredTextBoxRedColor();
+
+        // To check unsaved data in master or details
+        CheckUnSavedMasterDetailData();
+
+        // Focus ZONE_CODE textbox
+        $(".SetFocus").focus();
+
+        // Click Save Chages Popup No Button
+        $("#btnSaveChangeWindowOk").click(function () {
+            if (resetEditDeleteStatus == 1) { // Reset
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                //$("#ZONE_DIVI_STATUS").val("Active");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+            } else if (resetEditDeleteStatus == 2) { // Search
+                ResetOnlyMasterPageData();
+                $(".RequiredTextBox").css("border-color", "");
+                //$("#ZONE_DIVI_STATUS").val("Active");
+                $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                changeStatus = 0;
+                CloseSaveChangesDialog();
+                GetPaymentInformation();
+                SelectedItemOfListOfValue('SearchWindowGrid');
+                SearchWindow.open();
+            } else if (resetEditDeleteStatus == 3) {
+                var instituteCode = $('#INSTI_MKT_MAS_SLNO').val();// Delete Button
+                if (deleteStatus == 1) {
+                    if ($("#INSTI_MKT_MAS_SLNO").val() != "") {
+                        master.INSTI_MKT_MAS_SLNO = $('#INSTI_MKT_MAS_SLNO').val();
+                        var mstSl = $("#INSTI_MKT_MAS_SLNO_1").val();
+                        //alert(mstSl);
+                        //var instituteCode = $('#INSTI_MKT_MAS_SLNO').val();
+                        $.ajax({
+                            url: '@Url.Action("DeleteAllData", "InstitutionCoverMarketInformation")',
+                            type: 'POST',
+                            data: JSON.stringify({ master: mstSl }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    ClearOperationalMessage();
+                                    ResetOnlyMasterPageData();
+                                    $(".RequiredTextBox").css("border-color", "");
+                                    //$("#ZONE_DIVI_STATUS").val("Active");
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                } else if (deleteStatus == 2) {
+                    if (dataitem.INSTI_MKT_DET_SLNO != "") {
+                        $.ajax({
+                            url: '@Url.Action("DeleteByDtlId", "InstitutionCoverMarketInformation")',
+                            type: 'POST',
+                            data: JSON.stringify({ "INSTI_MKT_DET_SLNO": dataitem.INSTI_MKT_DET_SLNO }),
+                            contentType: 'application/json;',
+                            dataType: 'json',
+                            success: function (respnse) {
+                                if (respnse.msg.Type == 2) {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                    $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                                } else {
+                                    $('#MessageText').html(respnse.msg.Msg);
+                                    $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#MessageText').html("Deleted Successfully.");
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataitem);
+                    }
+                    $(".RequiredTextBox").css("border-color", "");
+                    //changeStatus = 0;
+                    dataitem = {};
+                    CloseSaveChangesDialog();
+                }
+            }
+            else
+                CloseSaveChangesDialog();
+        });
+
+        // Click Save Chages Popup Cancel Button
+        $("#btnSaveChangeWindowCancel").click(function () {
+            CloseSaveChangesDialog();
+        });
+
+        // **       Page Unloaded **//
+        window.onbeforeunload = function (e) {
+            if (changeStatus == 1) {
+                e.preventDefault();
+            }
+        };
+
+        /**************************************All Data Delete Function********************************************************/
+        $('#btnDelete').click(function () {
+            $('#SUStatus').val(0);
+            CheckRequiredTextBoxMaxLength('INSTI_CODE', 50);
+            if ($('#INSTI_CODE').val() != '') {
+                DeleteWindowAll();
+            }
+            else {
+                //DeleteWindow();
+                CheckRequiredTextBoxMaxLength('INSTI_CODE', 50);
+                //$("#MessageText").show(500).css("margin", "0 1px 20px 0").html("Select Institute Code !!").delay(800).fadeOut(10000);
+                //$('#INSTI_CODE').css('border-color', 'red');
+            }
+        });
+        //Batch-wise delete Master and Detail Info
+        $('#btnConfirmationOK').click(function () {
+            var pageGrid = $('#PageDetailGrid').data("kendoGrid");
+            var dataItem = (pageGrid.dataItem(pageGrid.select()));
+            var mstSl = $('#INSTI_MKT_MAS_SLNO').val();
+            //alert(mstSl);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteAllData", "InstitutionCoverMarketInformation")',
+                dataType: 'JSON',
+                data: JSON.stringify({ model: mstSl }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (respnse) {
+                    if (respnse.msg.Type == 2) {
+                        ClearOperationalMessage();
+                        ResetOnlyMasterPageData();
+                        $('#MessageText').html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        var grid = $('#PageDetailGrid').data("kendoGrid");
+                        var dataItem = grid.dataItem(grid.select());
+                        $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                        $(".RequiredTextBox").css("border-color", "");
+                        //$("#Status").val("Active");
+                        $(".SetFocus").focus();
+                        //$('#PageDetailGrid').data('kendoGrid').dataSource.data([]);
+                        confirmDeleteWindowAll.close();
+                    }
+                    else {
+                        $("#MessageText").html(respnse.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        confirmDeleteWindowAll.close();
+                    }
+                }
+            });
+        })
+
+        //Row-wise delete from Kendo grid
+        $('#btnConfirmationYes').click(function () {
+            var pageGrid = $('#PageDetailGrid').data("kendoGrid");
+            var dataItem = (pageGrid.dataItem(pageGrid.select()));
+            var dtlSlNo = dataItem.INSTI_MKT_DET_SLNO;
+            //alert(dtlSlNo);
+            if (dtlSlNo != 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("DeleteByDtlId", "InstitutionCoverMarketInformation")',
+                    dataType: 'JSON',
+                    data: JSON.stringify({ dtlSlNo: dtlSlNo }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (respnse) {
+                        if (respnse.msg.Type == 2) {
+                            ClearOperationalMessage();
+                            //ResetOnlyMasterPageData();
+                            $('#MessageText').html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            var grid = $('#PageDetailGrid').data("kendoGrid");
+                            var dataItem = grid.dataItem(grid.select());
+                            //$("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                            $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+
+                            var countTotal = $("#PageDetailGrid").data("kendoGrid").dataSource.data();
+                            if (countTotal.length == 0) {
+                                //$('#btnDelete').attr('disabled', false);
+                            }
+
+                            $(".RequiredTextBox").css("border-color", "");
+                            //$("#Status").val("Active");
+                            $(".SetFocus").focus();
+                            confirmDeleteWindow.close();
+                        }
+                        else {
+                            $("#MessageText").html(respnse.msg.Msg);
+                            $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                            confirmDeleteWindow.close();
+                        }
+                    }
+                });
+            }
+            else {
+                $("#PageDetailGrid").data("kendoGrid").dataSource.remove(dataItem);
+                confirmDeleteWindow.close();
+            }
+        });
+
+    });
+
+
+
+
+
+    /*********Load Page Grid*******/
+    function LoadData() {
+        var loadData = $('#PageDetailGrid').data('kendoGrid');
+        loadData.dataSource.read();
+    }
+
+
+
+    //  **       Page Unloaded **//
+    //});
+    // ** End Start Document .Ready
+
+    var details = { "INSTI_MKT_DET_SLNO": "", "INSTI_MKT_MAS_SLNO": "", "MARKET_CODE": "", "MARKET_NAME": "" };
+    var master = { "INSTI_MKT_MAS_SLNO": "", "INSTI_CODE": "", "INSTI_NAME": "", "INSTI_TYPE_CODE": "", "INSTI_TYPE_NAME": "", "ADDRESS1": "", "ADDRESS2": "", "ADDRESS3": "", "ADDRESS4": "", "MarketList": [] };
+    var saveStatus = 1;
+    // Save Or Update Data
+
+
+    /*************Delete ****************/
+
+
+    var confirmDeleteWindow;
+    function CancelWindow() {
+        confirmDeleteWindow.close();
+    }
+
+    function DeleteWindow() {
+        confirmDeleteWindow = $('#DeleteConfirmWindow').kendoWindow({
+            width: "300px",
+            padding: "0px 0px 0px 100px",
+            title: "Do You Want To Delete Record?",
+            visible: false,
+            draggable: true,
+            position: { top: 200, left: 400 }
+        }).data('kendoWindow');
+
+        confirmDeleteWindow.open();
+    }
+
+
+    /***********Confirm Delete Window(both master & detail)****************/
+    var confirmDeleteWindowAll;
+    function CancelWindowAll() {
+        confirmDeleteWindowAll.close();
+    }
+
+    function DeleteWindowAll() {
+        confirmDeleteWindowAll = $('#DeleteAllDataWindow').kendoWindow({
+            width: "300px",
+            padding: "0px 0px 0px 100px",
+            title: "Do You Want To Delete Record?",
+            visible: false,
+            draggable: true,
+            position: { top: 200, left: 400 }
+        }).data('kendoWindow');
+
+        confirmDeleteWindowAll.open();
+    }
+
+
+    function Save() {
+        saveStatus = 1;
+        CheckRequiredTextBoxMaxLength('INSTI_CODE', 50);
+        if (saveStatus == 1) {
+            master.MarketList = [];
+            master.INSTI_MKT_MAS_SLNO = $("INSTI_MKT_MAS_SLNO").val();
+            master.INSTI_CODE = $("#INSTI_CODE").val();
+            master.INSTI_NAME = $("#INSTI_NAME").val();
+            master.INSTI_TYPE_CODE = $("#INSTI_TYPE_CODE").val();
+            master.INSTI_TYPE_NAME = $("#INSTI_TYPE_NAME").val();
+            master.ADDRESS1 = $("#ADDRESS1").val();
+            master.ADDRESS2 = $("#ADDRESS2").val();
+            master.ADDRESS3 = $("#ADDRESS3").val();
+            master.ADDRESS4 = $("#ADDRESS4").val();
+            master.SUStatus = $("#SUStatus").val();
+
+            var detailDataSource = $('#PageDetailGrid').data("kendoGrid").dataSource;
+            var detailData = detailDataSource.data();
+
+            if (detailData.length > 0) {
+                for (var i = 0; i < detailData.length; i++) {
+                    details.MARKET_CODE = detailData[i].MARKET_CODE;
+                    details.MARKET_NAME = detailData[i].MARKET_NAME;
+                    details.SBU_GROUP = detailData[i].SBU_GROUP;
+                    details.INSTI_MKT_DET_SLNO = detailData[i].INSTI_MKT_DET_SLNO;
+                    //alert('sun');
+                    //InstMktDtlModel.ZONE_DIVI_STATUS = data[i].ZONE_DIVI_STATUS;
+
+                    master.MarketList.push(details);
+
+                    details = { "INSTI_MKT_DET_SLNO": "", "INSTI_MKT_MAS_SLNO": "", "MARKET_CODE": "", "MARKET_NAME": "", "SBU_GROUP": "" };
+                }
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("InstitutionMarketInfo", "InstitutionCoverMarketInformation")',
+                dataType: 'JSON',
+                data: JSON.stringify({ master: master }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response.msg.Type == 3) {
+                        ClearOperationalMessage();
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    if (response.msg.Type == 2) {
+                        //$("#SUStatus").val(1);
+                        //ResetOnlyMasterPageData();
+                        ClearOperationalMessage();
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        //$("#MessageText").show(500).css("color", "green").html("Data Saved Successfully.").delay(800).fadeOut(10000);
+                    }
+                    else if (response.msg.Type == 3) {
+
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'green', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                    }
+                    else {
+                        $('#MessageText').html(response.msg.Msg);
+                        $("#MessageText").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+                        //$("#MessageText").show(500).css('color', 'red').html(response.Message).delay(800).fadeOut(10000);
+                    }
+                },
+
+                error: function () {
+                    $("#MessageText").show(500).css("color", "red").html("Error Occured !!.").delay(800).fadeOut(10000);
+                }
+            });
+        }
+        else {
+            $("#PageDetailGrid").find('.k-grid-content tbody').append('<tr class="kendo-data-row"><td style="text-align:center; color: red"><b>Required Details Information !</b></td></tr>');
+            //$("#MessageText").show(500).css("color", "red").html("Value Required!!").delay(800).fadeOut(10000);
+        }
+    }
+
+
+
+    ////Institute Name twise Filter table row
+    //$("#txtInstituteName").keyup(function () {
+    //    //alert('afd');
+    //    $("#InstitutionWindowGrid").find("tr").hide();
+    //    var data = this.value.split(" ");
+    //    var jo = $("#InstitutionWindowGrid").find("tr");
+    //    $.each(data, function (i, v) {
+    //        jo = jo.filter(function () {
+    //            return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+    //        });
+    //    });
+    //    jo.show();
+    //}).focus(function () {
+    //});
+
+    //Market Name twise Filter table row
+    $("#txtMarketName").keyup(function () {
+        //alert('afd');
+        $("#MarketInfoWindowGrid").find("tr").hide();
+        var data = this.value.split(" ");
+        var jo = $("#MarketInfoWindowGrid").find("tr");
+        $.each(data, function (i, v) {
+            jo = jo.filter(function () {
+                return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+            });
+        });
+        jo.show();
+    }).focus(function () {
+    });
+
+
+
+    //Search institute Name twise Filter table row
+    //$("#txtAllSearch").keyup(function () {
+    //    //alert('afd');
+    //    $("#SearchWindowGrid").find("tr").hide();
+    //    var data = this.value.split(" ");
+    //    var jo = $("#SearchWindowGrid").find("tr");
+    //    $.each(data, function (i, v) {
+    //        jo = jo.filter(function () {
+    //            return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+    //        });
+    //    });
+    //    jo.show();
+    //}).focus(function () {
+    //});
+
+
+    $('#btnAllSearchByItem').click(function () {
+        var searchCode = $('#txtAllSearch').val();
+        getSearchInstitute('/InstitutionCoverMarketInformation/GetInstituteSearchList', searchCode);
+        $('#INSTI_CODE').val('');
+        $('#INSTI_NAME').val('');
+        $('#INSTI_TYPE_NAME').val('');
+        $('#ADDRESS1').val('');
+        $('#ADDRESS2').val('');
+        $('#ADDRESS3').val('');
+        $('#txtAddress3').val('');
+        $('#txtAddress4').val('');
+    });
+
+    function getSearchInstitute(requestedUrl, searchCode) {
+        $.ajax({
+            url: requestedUrl,
+            method: 'get',
+            data: { searchCode: searchCode },
+            dataType: 'json',
+            success: function (data) {
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+
+
+    $("#btnReset").click(function () {
+
+        resetEditDeleteStatus = 1; //Reset Button
+        // When Chages Data
+        //if (changeStatus == 1)
+        //    OpenSaveChangesDialog();
+        //    // When no Chages Data
+        //else {
+        $('#SUStatus').val(0);
+        ClearOperationalMessage();
+        ResetOnlyMasterPageData();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#PageDetailGrid").data("kendoGrid").dataSource.data([]);
+        //}
+    });
+
+    /////////////////////////////////////////////
+
+    var InstitutionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "INSTI_CODE",
+                fields: {
+                    INSTI_CODE: { editable: false },
+                    INSTI_NAME: { editable: false },
+                    INSTI_TYPE_CODE: { editable: false },
+                    INSTI_TYPE_NAME: { editable: false },
+                    ADDRESS1: { editable: false },
+                    ADDRESS2: { editable: false },
+                    ADDRESS3: { editable: false },
+                    ADDRESS4: { editable: false }
+                }
+            }
+        },
+        @*transport: {
+            read: {
+                url: '@Url.Action("GetInstitutionInfo", "InstitutionCoverMarketInformation")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+
+        pageSize: 10*@
+    })
+
+    var InstitutionPageGrid = $("#InstitutionWindowGrid").kendoGrid({
+        dataSource: InstitutionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        //filterable: true,
+        //sortable: true,
+        height: 300,
+        columns: [
+            { field: "INSTI_CODE", title: "Institute Code", filterable: true, hidden: false, sortable: true, width: "40px", attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_NAME", title: "Institute Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_CODE", title: "Institute Type", width: "60px", filterable: true, sortable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_NAME", title: "Institute Type", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS1", title: "Address", width: "60px", filterable: true, sortable: true, hidden: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS2", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS3", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS4", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+
+    //$(function () {
+    //    var arrows = [38, 40];
+    //    var grid = $("#InstitutionWindowGrid").data("kendoGrid");
+    //    grid.table.on("keydown", function (e) {
+    //        if (arrows.indexOf(e.keyCode) >= 0) {
+    //            setTimeout(function () {
+    //                grid.select($("#row").closest("tr"));
+    //            });
+    //        }
+    //    })
+    //});
+
+    //$("#InstitutionWindowGrid").on('cellselect', function (event) {
+    //    var datafield = event.args.datafield;
+    //    var row = event.args.rowindex;
+    //    var columntext = $("#InstitutionWindowGrid").jqxGrid('getcolumn', event.args.datafield).text;
+    //});
+
+    var InstitutionWindow = $('#InstitutionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution Information",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    //Handling button click for ZONE_NAME window grid
+    function InstitutionWindowEvent() {
+        var gridData = $("#InstitutionWindowGrid").data("kendoGrid");
+        var selectedItem = (gridData.dataItem(gridData.select())); //Selected Row
+        //var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#INSTI_CODE").val(selectedItem.INSTI_CODE);
+        $("#INSTI_NAME").val(selectedItem.INSTI_NAME);
+        $("#INSTI_TYPE_CODE").val(selectedItem.INSTI_TYPE_CODE);
+        $("#INSTI_TYPE_NAME").val(selectedItem.INSTI_TYPE_NAME);
+        $("#ADDRESS1").val(selectedItem.ADDRESS1);
+        $("#ADDRESS2").val(selectedItem.ADDRESS2);
+        $("#ADDRESS3").val(selectedItem.ADDRESS3);
+        $("#ADDRESS4").val(selectedItem.ADDRESS4);
+        changeStatus = 1;
+    };
+
+    //To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    $('#btnInstitutionWindowOK').click(function () {
+        InstitutionWindowEvent();
+        InstitutionWindow.close();
+    });
+
+    $('#btnInstitutionWindowCancel').click(function () {
+        InstitutionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#InstitutionWindowGrid").dblclick(function () {
+        InstitutionWindowEvent();
+        InstitutionWindow.close();
+    });
+
+    $("#InstitutionWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            InstitutionWindowEvent();
+            InstitutionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            InstitutionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#INSTI_CODE").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('InstitutionWindowGrid');
+                InstitutionWindow.open();
+                InstitutionWindow.center();
+
+            }
+        }
+    });
+
+
+    $('#btnSearchInstitution').click(function () {
+        var instCode = $('#txtInstitutcode').val();
+        getInstitution('/InstitutionCoverMarketInformation/GetInstitutionInfo', instCode);
+        //if (instCode == '') {
+        //    instCode = 0;
+        //}
+        //var doctorName = $('#txtPName').val();
+        //var degree = $('#txtPDegree').val();
+        $('#INSTI_CODE').val('');
+        $('#INSTI_NAME').val('');
+        $('#INSTI_TYPE_NAME').val('');
+        $('#ADDRESS1').val('');
+        $('#ADDRESS2').val('');
+        $('#ADDRESS3').val('');
+    });
+
+
+    function getInstitution(requestedUrl, instCode) {
+        $.ajax({
+            url: requestedUrl,
+            method: 'get',
+            data: { instCode: instCode },
+            dataType: 'json',
+            success: function (data) {
+                $("#InstitutionWindowGrid").data("kendoGrid").dataSource.data(data);
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+
+
+
+
+    /////////////////////////////////////////////////
+
+    $("#btnSearch").click(function () {
+        resetEditDeleteStatus = 2;
+        $('#SUStatus').val(1);
+        ClearOperationalMessage();
+        $(".RequiredTextBox").css("border-color", "");
+        $("#txtAllSearch").val("");
+        //GetPaymentInformation();
+        //$('#SUStatus').val(1);
+        SelectedItemOfListOfValue('SearchWindowGrid');
+        SearchWindow.open();
+
+    });
+
+    //$("#btnAllSearchByItem").click(function () {
+    //    var instituteCode = $("#txtAllSearch").val();
+    //    //GetPaymentInformation(instituteCode);
+    //    ItemList2("/InstitutionCoverMarketInformation/GetInstituteSearchList", instituteCode);
+    //    SearchWindowEvents();
+    //    //SearchWindow.close();
+
+    //});
+
+    var SearchGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "INSTI_MKT_MAS_SLNO",
+                fields: {
+                    INSTI_MKT_MAS_SLNO: { editable: false },
+                    INSTI_CODE: { editable: false },
+                    INSTI_NAME: { editable: false },
+                    INSTI_TYPE_CODE: { editable: false },
+                    INSTI_TYPE_NAME: { editable: false },
+                    ADDRESS1: { editable: false },
+                    ADDRESS2: { editable: false },
+                    ADDRESS3: { editable: false },
+                    ADDRESS4: { editable: false },
+                }
+            }
+        },
+        //pageSize: 10
+    });
+
+    var SearchGrid = $("#SearchWindowGrid").kendoGrid({
+        dataSource: SearchGridDataSource,
+        //pageable: true,
+        //groupable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        //filterable: true,
+        sortable: true,
+        height: 320,
+        columns: [
+            { field: "INSTI_MKT_MAS_SLNO", filterable: true, hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_CODE", title: "Institution Code", hidden: false, filterable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_NAME", title: "Institution Name", filterable: true, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_CODE", title: "Institution Type Code", filterable: true, width: "50px", hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_NAME", title: "Institution Type Name", filterable: true, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS1", title: "ADDRESS1", filterable: true, width: "50px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS2", title: "ADDRESS2", filterable: true, width: "50px", hidden: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS3", title: "ADDRESS3", filterable: true, width: "50px", hidden: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "ADDRESS4", title: "ADDRESS4", filterable: true, width: "50px", hidden: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+            //{ field: "INSTI_CODE", title: "Institution Code", width: "100px" },
+        ]
+    });
+
+    var SearchWindow = $('#SearchWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "60%",
+        height: "auto",
+        title: "Institute Search",
+        position: { top: 50, left: 50 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+
+    //function ItemList2(RequestedURL, instituteCode) {
+    //    $.ajax({
+    //        url: RequestedURL,
+    //        type: 'GET',
+    //        data: { "instituteCode": instituteCode },
+    //        dataType: "JSON",
+    //        success: function (data) {
+    //            $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+    //            if (data.length == 1) {
+    //                SearchWindowEvents(data);
+    //                SearchWindow.close();
+    //            }
+    //        }
+    //    });
+    //}
+
+    //$("#txtAllSearch").keyup(function () {
+    //    //alert('afd');
+    //    $("#SearchWindowGrid").find("tr").hide();
+    //    var data = this.value.split(" ");
+    //    var jo = $("#SearchWindowGrid").find("tr");
+    //    $.each(data, function (i, v) {
+    //        jo = jo.filter(function () {
+    //            return (this.innerHTML.toUpperCase().indexOf(v.toUpperCase()) != -1);
+    //        });
+    //    });
+    //    jo.show();
+    //}).focus(function () {
+    //});
+
+
+    @*function GetPaymentInformation() {
+        saveStatus = 1;
+        //var grid = $("#SearchWindowGrid").data("kendoGrid");
+        //var selectedItem = (grid.dataItem(grid.select()));
+        //var instituteCode = selectedItem.INSTI_CODE
+
+        $.ajax({
+            url: '@Url.Action("GetInstituteSearchList", "InstitutionCoverMarketInformation")',
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                //$('#INSTI_MKT_MAS_SLNO_1').val(data.INSTI_MKT_MAS_SLNO_1);
+                //$('#INSTI_CODE').val(data.INSTI_CODE);
+                $("#SearchWindowGrid").data("kendoGrid").dataSource.data(data);
+                $('#SUStatus').val(1);
+
+            }
+        });
+    }*@
+
+
+    //function InstitutionWindowEvent() {
+    //    var WindowGrid = $("#InstitutionWindowGrid").data("kendoGrid");
+    //    var WindowGridRow = WindowGrid.select();
+    //    var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+    //    $("#INSTI_CODE").val(WindowGridItem.INSTI_CODE);
+    //    $("#INSTI_NAME").val(WindowGridItem.INSTI_NAME);
+    //    $("#INSTI_TYPE_CODE").val(WindowGridItem.INSTI_TYPE_CODE);
+    //    $("#INSTI_TYPE_NAME").val(WindowGridItem.INSTI_TYPE_NAME);
+    //    $("#ADDRESS1").val(WindowGridItem.ADDRESS1);
+    //    $("#ADDRESS2").val(WindowGridItem.ADDRESS2);
+    //    $("#ADDRESS3").val(WindowGridItem.ADDRESS3);
+    //    $("#ADDRESS4").val(WindowGridItem.ADDRESS4);
+    //    changeStatus = 1;
+    //};
+
+    function SearchWindowEvents() {
+        var grid = $("#SearchWindowGrid").data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+        //var gridData = $("#SearchWindowGrid").data("kendoGrid");
+        //var selectedItem = (gridData.dataItem(gridData.select()));
+        //alert('sun')
+        //$('#COLL_DIST_MST_SLNO').val(data.COLL_DIST_MST_SLNO);
+        $("#INSTI_MKT_MAS_SLNO").val(selectedItem.INSTI_MKT_MAS_SLNO);
+        //$("#INSTI_MKT_MAS_SLNO_1").val(selectedItem.INSTI_MKT_MAS_SLNO);
+        $("#INSTI_CODE").val(selectedItem.INSTI_CODE);
+        $("#INSTI_NAME").val(selectedItem.INSTI_NAME);
+        $("#INSTI_TYPE_CODE").val(selectedItem.INSTI_TYPE_CODE);
+        $("#INSTI_TYPE_NAME").val(selectedItem.INSTI_TYPE_NAME);
+        $("#ADDRESS1").val(selectedItem.ADDRESS1);
+        $("#ADDRESS2").val(selectedItem.ADDRESS2);
+        $("#ADDRESS3").val(selectedItem.ADDRESS3);
+        $("#ADDRESS4").val(selectedItem.ADDRESS4);
+        //alert('sun')
+        var instituteCode = selectedItem.INSTI_CODE
+
+        $.ajax({
+            url: '@Url.Action("GetSaveMarketInfo", "InstitutionCoverMarketInformation")',
+            type: 'GET',
+            data: { instituteCode: instituteCode },
+            success: function (data33) {
+                if (data33.length > 0) {
+                    $("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+                    //$('#btnDelete').attr('disabled', true);
+                }
+                else {
+                    $('#btnDelete').attr('disabled', false);
+                }
+                //$('#INSTI_MKT_MAS_SLNO').val(data33.INSTI_MKT_MAS_SLNO);
+                //$("#PageDetailGrid").data("kendoGrid").dataSource.data(data33);
+            }
+        });
+    }
+
+    $("#SearchWindowGrid").dblclick(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $("#SearchWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            SearchWindowEvents();
+            SearchWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            SearchWindow.close();
+        }
+        event.stopPropagation();
+    });
+    $('#btnSearchWindowOK').click(function () {
+        SearchWindowEvents();
+        SearchWindow.close();
+    });
+    $('#btnSearchWindowCancel').click(function () {
+        SearchWindow.close();
+    });
+
+    /////////////////////////////////////////////////////
+
+    ///////////////////Existing Division Info List/////////////////////////
+
+    $(document).on('keyup', '.MarketInfo', function (e) {
+        if (e.keyCode == 120) {
+            GetMarketInfoList();
+            SelectedItemOfListOfValue('MarketInfoWindowGrid');
+            MarketInfoWindow.open();
+        }
+    });
+
+    function GetMarketInfoList() {
+        $.ajax({
+            url: '@Url.Action("GetMarketInfo", "InstitutionCoverMarketInformation")',
+            type: 'GET',
+            //data: { "supplierid": $("#SupplierID").val() },
+            success: function (data) {
+                $("#MarketInfoWindowGrid").data("kendoGrid").dataSource.data(data);
+            }
+        });
+    }
+
+    var MarketInfoWindow = $('#MarketInfoWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "auto",
+        title: "List Of MarketInfo",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+    var MarketInfoGridDataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "MARKET_CODE",
+                fields: {
+                    MARKET_CODE: { editable: false },
+                    MARKET_NAME: { editable: false }
+                }
+            }
+        },
+
+    });
+
+    var MarketGrid = $("#MarketInfoWindowGrid").kendoGrid({
+        dataSource: MarketInfoGridDataSource,
+        //pageable: true,
+        editable: false,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+
+        { field: "MARKET_NAME", title: "Market Name", width: "60px", filterable: true, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+        { field: "MARKET_CODE", title: "Market Code", width: "60px", filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+        { field: "SBU_GROUP", title: "SBU UNIT", width: "60px", filterable: false, sortable: false, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+        ]
+    });
+    //To Bring Data from List of Value Grid to Main Page
+    var isDuplicate = 0;
+    function ListOfValueGridEventDiviInfo(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        var selectedItem = (grid.dataItem(grid.select())); //Selected Row
+
+        var dataSourceBillRef = $("#PageDetailGrid").data("kendoGrid").dataSource;
+        var dataBillRef = dataSourceBillRef.data(); // Get Detail Grid Data
+        for (var j = 0; j <= dataBillRef.length - 1; j++) {
+            if (dataBillRef[j].MARKET_CODE == selectedItem.MARKET_CODE) {
+                isDuplicate = 1;
+                break;
+            }
+        }
+        if (isDuplicate == 0) {
+            var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+            var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+            pageGridItem.set("MARKET_CODE", selectedItem.MARKET_CODE);
+            pageGridItem.set("MARKET_NAME", selectedItem.MARKET_NAME);
+            pageGridItem.set("SBU_GROUP", selectedItem.SBU_GROUP);
+            MarketInfoWindow.close();
+        } else {
+            isDuplicate = 0;
+            $('#MessageTextPopup').html("Duplicate Market.");
+            $("#MessageTextPopup").css({ 'color': 'red', 'font-size': 'larger', 'font-weight': 'bold', 'text-align': 'left' });
+        }
+
+        //var pageGrid = $("#PageDetailGrid").data("kendoGrid");
+        //var pageGridItem = pageGrid.dataItem(pageGrid.select());
+
+        //pageGridItem.set("MARKET_CODE", selectedItem.MARKET_CODE);
+        //pageGridItem.set("MARKET_NAME", selectedItem.MARKET_NAME);
+    }
+
+    //Handling button click for MarketInfo window grid
+    $('#btnMarketInfoWindowOK').click(function () {
+        ListOfValueGridEventDiviInfo('MarketInfoWindowGrid');
+        //MarketInfoWindow.close();
+    });
+    $('#btnMarketInfoWindowCancel').click(function () {
+        MarketInfoWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#MarketInfoWindow").dblclick(function () {
+        ListOfValueGridEventDiviInfo('MarketInfoWindowGrid');
+        //MarketInfoWindow.close();
+    });
+    $("#MarketInfoWindow").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            ListOfValueGridEventDiviInfo('MarketInfoWindowGrid');
+            //MarketInfoWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            MarketInfoWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    ///////////////////////////////////////////////////////
+</script>
+

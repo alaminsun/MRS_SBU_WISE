@@ -1,0 +1,591 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTiltle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmRptSpecializationAndTherapeuticLevelTwoWiseManufacturerShareRanking", "Reports", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="row box box-danger">
+        <div class="col-lg-3">
+            <span id="MessageText" class="pull-right"></span>
+        </div>
+        <div class="col-lg-3">
+            <label style="font-size: medium; margin-top: 15px">Paper: Legal, Landscape</label>
+        </div>
+        <div class="col-lg-2" style="margin-top: 15px">
+            <input type="radio" class="iradio_flat-green" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 40px;" @*tabindex="3"*@ checked="checked" />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+            <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" @*tabindex="4"*@ />
+            <label style="font-size: small; font-weight: bold; color: #00688B;">EXCEL</label>
+        </div>
+        <div class="col-lg-4">
+            <button type="button" id="btnReset" class=" btn bg-olive btn-flat margin pull-right" onclick="Reset();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+            <button type="submit" id="btnShowReport" onclick="return displayReport();" class=" btn bg-olive btn-flat margin pull-right"><i class="glyphicon glyphicon-save"></i> Display Report</button>
+        </div>
+    </div>
+
+    <div class="row box box-primary">
+        <form class="form-horizontal">
+            <div class="box-body">
+                @*<div class="form-group col-lg-5">
+                        <label style="">Generic Wise National Value Share (by %)</label>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="Generic Wise National Value Share (by %)" name="ReportName" value="Generic Wise National Value Share (by %)" checked="checked" />
+                        </div><br />
+                        <label style="">Generic Wise National Value Share (By Value)</label>
+                        <div class="col-lg-1" style="">
+                            <input type="radio" id="Generic Wise National Value Share (By Value)" name="ReportName" value="Generic Wise National Value Share (By Value)" />
+                        </div><br />
+                    </div>*@
+                <div class="form-group col-lg-6 panel-danger">
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">From Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="FromDate" name="FromDate" tabindex="1" class="txtBox datePicker form-control" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">To Date:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" id="ToDate" name="ToDate" tabindex="2" class="txtBox datePicker form-control" />
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">Location:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="REGION_CODE" name="REGION_CODE" class="txtBox RequiredTextBox" />
+                            <input type="text" id="REGION_NAME" name="REGION_NAME" tabindex="3" style="width:200px" class="txtBox RequiredTextBox form-control" required="required" readonly="readonly" placeholder="(Press F9)">
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">Therapeutic Class (L-2):</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="TC_L2_CODE" name="TC_L2_CODE" class="txtBox RequiredTextBox" />
+                            <input type="text" id="TC_L2_DESC" name="TC_L2_DESC" tabindex="4" style="width:200px" class="txtBox RequiredTextBox form-control" required="required" readonly="readonly" placeholder="(Press F9)">
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label class="pull-right">Dosage From:</label>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="hidden" id="DOSAGE_FORM_CODE" name="DOSAGE_FORM_CODE" class="txtBox RequiredTextBox" />
+                            <input type="text" id="DOSAGE_FORM_NAME" name="DOSAGE_FORM_NAME" tabindex="5" style="width:200px" class="txtBox RequiredTextBox form-control" required="required" readonly="readonly" placeholder="(Press F9)">
+                        </div>
+                    </div><br />
+
+                    @*<div class="form-group">
+                            <div class="col-lg-5">
+                                <label class="pull-right">Market :</label>
+                            </div>
+                            <div class="col-lg-7">
+                                <input type="hidden" id="REGION_CODE" name="REGION_CODE" class="txtBox RequiredTextBox" />
+                                <input type="text" id="REGION_NAME" name="REGION_NAME" tabindex="5" style="width:250px" class="txtBox RequiredTextBox" required="required" readonly="readonly" placeholder="All Market/(Press F9)">
+                            </div>
+                        </div><br />*@
+                    @*<div class="form-group">
+                            <div class="col-lg-5">
+                                <label class="pull-right">Manufacturer :</label>
+                            </div>
+                            <div class="col-lg-7">
+                                <input type="hidden" id="TC_L1_CODE" name="TC_L1_CODE" class="txtBox RequiredTextBox" />
+                                <input type="text" id="TC_L1_DESC" name="TC_L1_DESC" tabindex="5" style="width:250px" class="txtBox RequiredTextBox form-control" required="required" readonly="readonly" placeholder="(Press F9)">
+                            </div>
+                        </div><br />*@
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+
+<div id="RegionWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="RegionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnRegionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnRegionWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="TherapeuticWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="TherapeuticWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnTherapeuticWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnTherapeuticWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="DosageWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="DosageWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnDosageWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnDosageWindowOK" class="PopUpButton" value="OK" />
+</div>
+
+
+<style>
+    .gridHeader {
+        background: #B4EEB4;
+    }
+
+    .box {
+        background: #FFFAF0;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+
+
+
+    ///*************Start Documnet Ready*************************//
+    $(document).ready(function () {
+        $(".datePicker").kendoDatePicker({
+            format: "{0:dd/MM/yyyy}",
+            value: new Date()
+
+        });
+
+        LoadPrescription()
+        //LoadDataSource()
+
+    });
+
+    var RegionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "REGION_CODE",
+                fields: {
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetRegionRankin", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 20
+
+    });
+
+    var RegionPageGrid = $("#RegionWindowGrid").kendoGrid({
+        dataSource: RegionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "REGION_CODE", title: "Region Code", filterable: true, hidden: false, sortable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "REGION_NAME", title: "Region Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+        ]
+    });
+
+    var RegionWindow = $('#RegionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnRegionWindowOK').click(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    $('#btnRegionWindowCancel').click(function () {
+        RegionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#RegionWindowGrid").dblclick(function () {
+        RegionWindowEvent();
+        RegionWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function RegionWindowEvent() {
+        var WindowGrid = $("#RegionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#REGION_CODE").val(WindowGridItem.REGION_CODE);
+        $("#REGION_NAME").val(WindowGridItem.REGION_NAME);
+        $("#TC_L2_DESC").focus();
+        changeStatus = 1;
+    };
+
+    $("#RegionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            RegionWindowEvent();
+            RegionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            RegionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('RegionWindowGrid');
+                RegionWindow.open();
+                RegionWindow.center();
+
+            }
+        }
+    });
+
+
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+    var TherapeuticGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "TC_L2_CODE",
+                fields: {
+                    TC_L2_CODE: { editable: false },
+                    TC_L2_DESC: { editable: false },
+
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetTherapeuticTwoList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 20
+
+    });
+
+    var TherapeuticPageGrid = $("#TherapeuticWindowGrid").kendoGrid({
+        dataSource: TherapeuticGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "TC_L2_CODE", title: "Therapeutic L2 Code", filterable: true, hidden: false, sortable: true, width: "40px", attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "TC_L2_DESC", title: "Therapeutic L2 Name", width: "60px", filterable: true, sortable: true },
+        ]
+    });
+
+    var TherapeuticWindow = $('#TherapeuticWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: " ",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnTherapeuticWindowOK').click(function () {
+        TherapeuticWindowEvent();
+        TherapeuticWindow.close();
+    });
+
+
+    $('#btnTherapeuticWindowCancel').click(function () {
+        TherapeuticWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#TherapeuticWindowGrid").dblclick(function () {
+        TherapeuticWindowEvent();
+        TherapeuticWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function TherapeuticWindowEvent() {
+        var WindowGrid = $("#TherapeuticWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#TC_L2_CODE").val(WindowGridItem.TC_L2_CODE);
+        $("#TC_L2_DESC").val(WindowGridItem.TC_L2_DESC);
+        $("#DOSAGE_FORM_NAME").focus();
+        changeStatus = 1;
+    };
+
+    $("#TherapeuticWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            TherapeuticWindowEvent();
+            TherapeuticWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            TherapeuticWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#TC_L2_DESC").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('TherapeuticWindowGrid');
+                TherapeuticWindow.open();
+                TherapeuticWindow.center();
+
+            }
+        }
+    });
+
+
+
+    function displayReport() {
+
+        if (($("#REGION_NAME").val() != "") && ($("#TC_L2_DESC").val() != "") && ($("#DOSAGE_FORM_NAME").val() != ""))  {
+            return true;
+        }
+        else {
+            // Check Empty or Maximum Length in ManufacturerName
+            CheckRequiredTextBoxMaxLength('REGION_NAME', 10);
+            CheckRequiredTextBoxMaxLength('TC_L2_DESC', 10);
+            CheckRequiredTextBoxMaxLength('DOSAGE_FORM_NAME', 10);
+            return false;
+        }
+    }
+
+    //function displayReport() {
+
+    //    if ($("#TC_L1_DESC").val() != "") {
+    //        return true;
+    //    }
+    //    else {
+    //        // Check Empty or Maximum Length in ManufacturerName
+    //        CheckRequiredTextBoxMaxLength('TC_L1_DESC', 10);
+    //        return false;
+    //    }
+    //}
+
+    //function displayReport() {
+
+    //    if ($("#DOSAGE_FORM_NAME").val() != "") {
+    //        return true;
+    //    }
+    //    else {
+    //        // Check Empty or Maximum Length in ManufacturerName
+    //        CheckRequiredTextBoxMaxLength('DOSAGE_FORM_NAME', 10);
+    //        return false;
+    //    }
+    //}
+
+
+
+
+
+
+
+
+    var DosageGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "DOSAGE_FORM_CODE",
+                fields: {
+                    DOSAGE_FORM_CODE: { editable: false },
+                    DOSAGE_FORM_NAME: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetDosageFormList", "Reports")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 20
+
+    });
+
+    var DosagePageGrid = $("#DosageWindowGrid").kendoGrid({
+        dataSource: DosageGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "DOSAGE_FORM_CODE", title: "Dosage Form Code", filterable: true, hidden: false, sortable: true, width: "40px", headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "DOSAGE_FORM_NAME", title: "Dosage Form Name", width: "60px", filterable: true, sortable: true, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } }
+
+        ]
+    });
+
+    var DosageWindow = $('#DosageWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Institution",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnDosageWindowOK').click(function () {
+        DosageWindowEvent();
+        DosageWindow.close();
+    });
+
+
+    $('#btnDosageWindowCancel').click(function () {
+        DosageWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#DosageWindowGrid").dblclick(function () {
+        DosageWindowEvent();
+        DosageWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function DosageWindowEvent() {
+        var WindowGrid = $("#DosageWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#DOSAGE_FORM_CODE").val(WindowGridItem.DOSAGE_FORM_CODE);
+        $("#DOSAGE_FORM_NAME").val(WindowGridItem.DOSAGE_FORM_NAME);
+        changeStatus = 1;
+    };
+
+    $("#DosageWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            DosageWindowEvent();
+            DosageWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            DosageWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#DOSAGE_FORM_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('DosageWindowGrid');
+                DosageWindow.open();
+                DosageWindow.center();
+
+            }
+        }
+    });
+
+
+    /**************Load SR Info Combo Function****************/
+
+    @*function LoadPrescription() {
+        $.ajax({
+            url: '@Url.Action("GetPrescriptionCategory", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    $('#ddlPresCategory').append($('<option>', { value: item.PRESC_CATE_CODE, html: item.PRESC_CATE_NAME }, '<option/>'));
+                });
+            },
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }*@
+
+    @*function LoadDataSource() {
+        $.ajax({
+            url: '@Url.Action("GetDataSource", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    $('#ddlDataSource').append($('<option>', { value: item.Survey_Comp_Code, html: item.Survey_Comp_Name }, '<option/>'));
+                });
+            },
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }*@
+
+    // ------- End Of Ready Function --------
+
+    ClearOperationalMessage();
+    ClearOperationMsgTextBoxRedColor();
+    ClearRequiredTextBoxRedColor();
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        $('#btnSubmit').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+</script>
+
+
+
+
+
+
+

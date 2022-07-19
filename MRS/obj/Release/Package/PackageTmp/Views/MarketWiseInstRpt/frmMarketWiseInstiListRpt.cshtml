@@ -1,0 +1,603 @@
+﻿@{
+    ViewBag.Title = @ViewBag.formTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>@ViewBag.formTitle</title>
+@using (Html.BeginForm("frmMarketWiseReport", "MarketWiseInstRpt", FormMethod.Post, new { target = "_blank", name = "H1Form", id = "H1Form" }))
+{
+    <div class="FormHeader">
+        <div class="row">
+            <div id="FormTitlePannel" class="col-lg-4">
+                <div id="FormTitle" style="font-size:larger; font-weight:bold;">MARKET WISE INSTITUTION LIST</div>
+            </div>
+            <div id="MessageText" class="col-lg-4">
+
+            </div>
+            <div class="col-lg-2" style="">
+                <input type="radio" id="rptPDF" name="ReportType" value="PDF" style="width: 2%; margin-left: 70px;" tabindex="3" checked="checked" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">PDF</label>
+
+                <input type="radio" id="rptExcel" name="ReportType" value="EXCEL" style="width: 2%;" tabindex="4" />
+                <label style="font-size: small; font-weight: bold; color: #00688B;">Excel</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="submit" id="btnShowReport" value="Report" style="position: absolute; right: 80px; width: 80px; font-size: 12px;" />
+                <input type="button" id="btnReset" value="Reset" onclick="Reset();" style="position: absolute; right:16px; width: 62px; font-size: 12px;" />
+
+            </div>
+        </div>
+    </div>
+    <div class="FormBody" style="font-size: 12px;">
+
+        @*<table>
+
+            <tr>
+
+                <td>Generic Name</td>
+                @*<td><select id="ddlGeneric" name="ReportName" class="textField" style="width: 100%;">*@
+        @*<td>
+                <select id="ddlGeneric" name="ReportName" class="textField" style="width: 100%;">
+                    <option value="allGeneric">All Generic</option>
+                    <option value="selectedGeneric">Selected Generic</option>
+                </select>
+            </td>*@
+
+        @*</tr>
+            </table>*@
+        <div class="row">
+            <div class="col-lg-2">
+
+                <label> @*<input type="hidden" value="1" name="popRegion" id="popRegion" />*@Region Code :</label>
+            </div>
+            <div class="col-lg-2">
+                @*<input type="hidden" id="SUStatus" class="txtBox" />*@
+                @*<input type="hidden" class="txtBox" id="INSTI_MKT_MAS_SLNO_1" />*@
+                <input type="hidden" id="REGION_CODE" name="REGION_CODE" class="txtBox RequiredTextBox">
+                <input type="text" id="REGION_NAME" name="REGION_NAME" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="All Region (Press F9)">
+                @*<input type="text" id="REGION_CODE" placeholder="Press F9" class="txtBox" name="REGION_CODE" tabindex="" />*@
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+
+                <label>@*<input type="hidden" value="2" name="popInstituteType" id="popInstituteType" />*@Institution Type :</label>
+            </div>
+            <div class="col-lg-2">
+                @*<input type="hidden" id="SUStatus" class="txtBox" />*@
+                @*<input type="hidden" class="txtBox" id="INSTI_MKT_MAS_SLNO_1" />*@
+                <input type="hidden" id="INSTI_TYPE_CODE" name="INSTI_TYPE_CODE" class="txtBox RequiredTextBox">
+                <input type="text" id="INSTI_TYPE_NAME" name="INSTI_TYPE_NAME" tabindex="1" class="txtBox RequiredTextBox" readonly="readonly" placeholder="All Institution Type (Press F9)">
+                @*<input type="text" id="REGION_CODE" placeholder="Press F9" class="txtBox" name="REGION_CODE" tabindex="" />*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+
+                <label>@*<input type="hidden" value="3" name="frmDate" id="frmDate" />*@From Date :</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="FromDate" name="FromDate" class="datePicker txtBox" />
+                @*<input type="text" id="REGION_CODE" placeholder="Press F9" class="txtBox" name="REGION_CODE" tabindex="" />*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+
+                <label>@*<input type="hidden" value="4" name="ftoDate" id="ftoDate" />*@To Date :</label>
+            </div>
+            <div class="col-lg-2">
+                <input type="text" id="ToDate" name="ToDate" class="datePicker txtBox" />
+                @*<input type="text" id="REGION_CODE" placeholder="Press F9" class="txtBox" name="REGION_CODE" tabindex="" />*@
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-2">
+
+                <label>@*<input type="hidden" value="5" name="ddlOrder" id="ddlOrder" />*@Order By :</label>
+            </div>
+
+            <div class="col-lg-2">
+                <select id="OrderBy" name="OrderBy" class="textField" style="width: 100%;">
+                    <option value="INSTI_CODE">Institute Code</option>
+                    <option value="INSTI_NAME">Institute Name</option>
+                    <option value="INSTI_TYPE_NAME">Institute Type</option>
+                    <option value="ADDRESS">Address</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row" style="margin-bottom: 15px;">
+        </div>
+    </div>
+}
+
+<div id="InstitutionWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="InstitutionWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstitutionWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstitutionWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="InstitutionTypeWindow" style="display: none;">
+    @*<p>ZoneDivi:<input type="text" id="txtBuyerAgent" style="width: 250px;" /><input type="button" id="btnGridSearchAgent" value="Search" /></p>*@
+    <div id="InstitutionTypeWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnInstitutionTypeWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnInstitutionTypeWindowOK" class="PopUpButton" value="OK" />
+</div>
+<div id="SupplierWindow" style="display: none;">
+    <div id="SupplierWindowGrid" class="PopUpGrid">
+    </div>
+    <input type="button" id="btnSupplierWindowCancel" class="PopUpButton" value="Cancel" />
+    <input type="button" id="btnSupplierWindowOK" class="PopUpButton" value="OK" />
+
+</div>
+
+<script type="text/javascript">
+
+    //<script type="text/javascript">
+    // To Declare Global Variable
+
+    ///*************Start Documnet Ready*************************//
+    $(document).ready(function () {
+
+
+            $(".datePicker").kendoDatePicker({
+                format: "{0:dd/MM/yyyy}"
+
+            });
+
+
+        //    $.ajaxSetup({
+        //        beforeSend: function () {
+        //            $("#divLoading").show();
+        //        },
+        //        complete: function () {
+        //            $("#divLoading").hide();
+        //        }
+        //    });
+        //LoadGeneric();
+        //$('#RetailerCode').attr('disabled', 'disabled');
+        //$('#chkFromInvoice').attr('disabled', 'disabled');
+        //$('#ddlFromInvoiceNo').attr('disabled', 'disabled');
+        //$('#ddlToInvoiceNo').attr('disabled', 'disabled');
+        //$('#InvoiceNo').attr('disabled', 'disabled');
+        //$('#ChkSR').attr('disabled', 'disabled');
+        //$('#ddlGeneric').attr('disabled', 'disabled');
+
+        //Active attribute
+        //$('#chkInvoiceDate').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#chkFromInvoice').attr('disabled', false);
+        //        GetFromInvoiceNo();
+        //        GetToInvoiceNo();
+        //        $('#chkSR').attr('disabled', false);
+        //        $('#ddlGeneric').attr('disabled', false);
+
+
+        //    }
+        //    else {
+        //        $('#chkFromInvoice').attr('disabled', 'disabled');
+        //        $('#chkSR').attr('disabled', 'disabled');
+        //        $('#ddlGeneric').attr('disabled', 'disabled');
+        //    }
+        //});
+        //$('#chkInvoiceNo').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#InvoiceNo').attr('disabled', false);
+        //    }
+        //    else {
+        //        $('#InvoiceNo').attr('disabled', 'disabled');
+        //    }
+        //});
+        //$('#chkFromInvoice').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#ddlFromInvoiceNo').attr('disabled', false);
+        //        $('#ddlToInvoiceNo').attr('disabled', false);
+        //    }
+        //    else {
+        //        $('#ddlFromInvoiceNo').attr('disabled', 'disabled');
+        //        $('#ddlToInvoiceNo').attr('disabled', 'disabled');
+        //    }
+        //});
+
+        //$('#rdbDateWiseInvoicePOS').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#chkInvoiceNo').attr('disabled', false);
+        //        $('#chkFromInvoiceNo').attr('disabled', false);
+        //        $('#chkInvoiceDate').attr('disabled', false);
+        //        $('#InvoiceDate').attr('disabled', false);
+
+        //    }
+        //});
+        //$('#rdbDateWiseChallanPOS').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#chkInvoiceNo').attr('disabled', false);
+        //        $('#chkFromInvoiceNo').attr('disabled', false);
+        //        $('#chkInvoiceDate').attr('disabled', false);
+        //        $('#InvoiceDate').attr('disabled', false);
+
+        //    }
+        //});
+
+        //$('#rdbDateWiseInvoice').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#chkInvoiceNo').attr('disabled', false);
+        //        $('#chkFromInvoiceNo').attr('disabled', false);
+        //        $('#chkInvoiceDate').attr('disabled', false);
+        //        $('#InvoiceDate').attr('disabled', false);
+
+        //    }
+        //});
+        //$('#rdbDateWiseChallan').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#chkInvoiceNo').attr('disabled', false);
+        //        $('#chkFromInvoiceNo').attr('disabled', false);
+        //        $('#chkInvoiceDate').attr('disabled', false);
+        //        $('#InvoiceDate').attr('disabled', false);
+
+        //    }
+        //});
+
+        //$('#rdbDateWiseChallanSummary').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        //$('#chkInvoiceDate').attr('checked', true);
+        //        //if ($(this).is(':checked')) {
+        //        $('#chkSR').attr('disabled', false);
+        //        $('#ddlGeneric').attr('disabled', false);
+        //        //LoadSR();
+        //        $("#chkSR").attr('checked', true);
+        //        //  }
+        //        //else {
+        //        //    $('#chkFromInvoice').attr('disabled', 'disabled');
+        //        //    $('#chkSR').attr('disabled', 'disabled');
+        //        //    $('#ddlGeneric').attr('disabled', 'disabled');
+        //        //    $("#chkSR").attr('checked', false);
+        //        //}
+        //    }
+        //    //else
+        //    //{
+        //    //    $("#chkSR").attr('checked', false);
+        //    //    $('#chkFromInvoice').attr('disabled', 'disabled');
+        //    //    $('#chkSR').attr('disabled', 'disabled');
+        //    //}
+        //});
+
+
+        //$("#chkDeliveryDate").hide();
+        //$('#txtDeliveryDate').data("kendocurrentDatePicker").enable(false);
+
+        //$('input[type="radio"]').click(function () {
+        //    if ($('#rdbDateWiseChallanSummary').is(':checked')) {
+        //        $('#txtDeliveryDate').data("kendocurrentDatePicker").enable(true);
+        //        $("#chkDeliveryDate").show();
+        //        $('#chkDeliveryDate').attr('checked', true);
+        //    }
+        //    else {
+        //        $('#txtDeliveryDate').data("kendocurrentDatePicker").enable(false);
+        //        $("#chkDeliveryDate").hide();
+        //        //$('#chkDeliveryDate').attr('checked', false);
+        //    }
+        //});
+
+        //$('#InvoiceDate').change(function () {
+        //    GetFromInvoiceNo();
+        //    GetToInvoiceNo();
+        //});
+    });
+
+
+
+
+    var InstitutionGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "REGION_CODE",
+                fields: {
+                    REGION_CODE: { editable: false },
+                    REGION_NAME: { editable: false },
+                    //INSTI_TYPE_CODE: { editable: false },
+                    //INSTI_TYPE_NAME: { editable: false },
+                    //ADDRESS1: { editable: false },
+                    //ADDRESS2: { editable: false },
+                    //ADDRESS3: { editable: false },
+                    //ADDRESS4: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetRegion", "MarketWiseInstRpt")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var InstitutionPageGrid = $("#InstitutionWindowGrid").kendoGrid({
+        dataSource: InstitutionGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "REGION_CODE", title: "Region Code", filterable: true, hidden: true, sortable: true, width: "40px", attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "REGION_NAME", title: "Region Name", width: "60px", filterable: true, sortable: true },
+            //{ field: "INSTI_TYPE_CODE", title: "Institute Type", width: "60px", filterable: true, sortable: true, hidden: true },
+            //{ field: "INSTI_TYPE_NAME", title: "Institute Type", width: "60px", filterable: true, sortable: true },
+            //{ field: "ADDRESS1", title: "Address", width: "60px", filterable: true, sortable: true, hidden: false },
+            //{ field: "ADDRESS2", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true },
+            //{ field: "ADDRESS3", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true },
+            //{ field: "ADDRESS4", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true }
+        ]
+    });
+
+    var InstitutionWindow = $('#InstitutionWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "List of Region",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnInstitutionWindowOK').click(function () {
+        InstitutionWindowEvent();
+        InstitutionWindow.close();
+    });
+
+
+    $('#btnInstitutionWindowCancel').click(function () {
+        InstitutionWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#InstitutionWindowGrid").dblclick(function () {
+        InstitutionWindowEvent();
+        InstitutionWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function InstitutionWindowEvent() {
+        var WindowGrid = $("#InstitutionWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#REGION_CODE").val(WindowGridItem.REGION_CODE);
+        $("#REGION_NAME").val(WindowGridItem.REGION_NAME);
+        //$("#INSTI_TYPE_CODE").val(WindowGridItem.INSTI_TYPE_CODE);
+        //$("#INSTI_TYPE_NAME").val(WindowGridItem.INSTI_TYPE_NAME);
+        //$("#ADDRESS1").val(WindowGridItem.ADDRESS1);
+        //$("#ADDRESS2").val(WindowGridItem.ADDRESS2);
+        //$("#ADDRESS3").val(WindowGridItem.ADDRESS3);
+        //$("#ADDRESS4").val(WindowGridItem.ADDRESS4);
+        changeStatus = 1;
+    };
+
+    $("#InstitutionWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            InstitutionWindowEvent();
+            InstitutionWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            InstitutionWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#REGION_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('InstitutionWindowGrid');
+                InstitutionWindow.open();
+                InstitutionWindow.center();
+
+            }
+        }
+    });
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+
+
+
+
+
+
+    var InstitutionTypeGridDataSource = new kendo.data.DataSource({
+        batch: true,
+        schema: {
+            model: {
+                id: "INSTI_TYPE_CODE",
+                fields: {
+                    INSTI_TYPE_CODE: { editable: false },
+                    INSTI_TYPE_NAME: { editable: false },
+                    //INSTI_TYPE_CODE: { editable: false },
+                    //INSTI_TYPE_NAME: { editable: false },
+                    //ADDRESS1: { editable: false },
+                    //ADDRESS2: { editable: false },
+                    //ADDRESS3: { editable: false },
+                    //ADDRESS4: { editable: false }
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: '@Url.Action("GetAllInstitutionType", "MarketWiseInstRpt")',
+                type: "GET",
+                dataType: "JSON"
+            }
+        },
+        pageSize: 30
+
+    });
+
+    var InstitutionTypePageGrid = $("#InstitutionTypeWindowGrid").kendoGrid({
+        dataSource: InstitutionTypeGridDataSource,
+        pageable: true,
+        editable: true,
+        selectable: "row",
+        navigatable: true,
+        filterable: true,
+        sortable: true,
+        height: 300,
+        columns: [
+            { field: "INSTI_TYPE_CODE", title: "Institution Type Code", filterable: true, hidden: true, sortable: true, width: "40px", attributes: { "class": "MarketInfo" }, headerAttributes: { "class": "gridHeader", style: "font-weight: bold;font-size: 13px;" } },
+            { field: "INSTI_TYPE_NAME", title: "Institution Type Name", width: "60px", filterable: true, sortable: true },
+            //{ field: "INSTI_TYPE_CODE", title: "Institute Type", width: "60px", filterable: true, sortable: true, hidden: true },
+            //{ field: "INSTI_TYPE_NAME", title: "Institute Type", width: "60px", filterable: true, sortable: true },
+            //{ field: "ADDRESS1", title: "Address", width: "60px", filterable: true, sortable: true, hidden: false },
+            //{ field: "ADDRESS2", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true },
+            //{ field: "ADDRESS3", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true },
+            //{ field: "ADDRESS4", title: "Address", width: "60px", filterable: true, sortable: true, hidden: true }
+        ]
+    });
+
+    var InstitutionTypeWindow = $('#InstitutionTypeWindow').kendoWindow({
+        actions: ["Minimize", "Maximize", "Close"],
+        visible: false,
+        width: "700px",
+        height: "400px",
+        title: "Institution Type ",
+        position: { top: 100, left: 300 },
+        modal: true,
+        draggable: true
+    }).data('kendoWindow');
+
+
+    $('#btnInstitutionTypeWindowOK').click(function () {
+        InstitutionTypeWindowEvent();
+        InstitutionTypeWindow.close();
+    });
+
+
+    $('#btnInstitutionTypeWindowCancel').click(function () {
+        InstitutionTypeWindow.close();
+    });
+
+    // Select Data through double Click From PopUp
+    $("#InstitutionTypeWindowGrid").dblclick(function () {
+        InstitutionTypeWindowEvent();
+        InstitutionTypeWindow.close();
+    });
+
+
+    //Handling button click for ZONE_NAME window grid
+    function InstitutionTypeWindowEvent() {
+        var WindowGrid = $("#InstitutionTypeWindowGrid").data("kendoGrid");
+        var WindowGridRow = WindowGrid.select();
+        var WindowGridItem = WindowGrid.dataItem(WindowGridRow);
+
+        $("#INSTI_TYPE_CODE").val(WindowGridItem.INSTI_TYPE_CODE);
+        $("#INSTI_TYPE_NAME").val(WindowGridItem.INSTI_TYPE_NAME);
+        //$("#INSTI_TYPE_CODE").val(WindowGridItem.INSTI_TYPE_CODE);
+        //$("#INSTI_TYPE_NAME").val(WindowGridItem.INSTI_TYPE_NAME);
+        //$("#ADDRESS1").val(WindowGridItem.ADDRESS1);
+        //$("#ADDRESS2").val(WindowGridItem.ADDRESS2);
+        //$("#ADDRESS3").val(WindowGridItem.ADDRESS3);
+        //$("#ADDRESS4").val(WindowGridItem.ADDRESS4);
+        changeStatus = 1;
+    };
+
+    $("#InstitutionTypeWindowGrid").keyup(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            InstitutionTypeWindowEvent();
+            InstitutionTypeWindow.close();
+        }
+            // Close Window with escape key
+        else if (keycode == '27') {
+            InstitutionTypeWindow.close();
+        }
+        event.stopPropagation();
+    });
+
+    $(document.body).keyup(function (e) {
+        if ($("#INSTI_TYPE_NAME").is(":focus")) {
+            if (e.keyCode == 120) {
+                SelectedItemOfListOfValue('InstitutionTypeWindowGrid');
+                InstitutionTypeWindow.open();
+                InstitutionTypeWindow.center();
+
+            }
+        }
+    });
+
+    ////To select the first row as default & to clear the filter while loading the grid
+    function SelectedItemOfListOfValue(gridName) {
+        var grid = $('#' + gridName).data("kendoGrid");
+        //Reload Grid
+        grid.dataSource.read();
+        //Clear Filter
+        $('#' + gridName).data("kendoGrid").dataSource.filter([]);
+        //Select First Row
+        $('#' + gridName).data().kendoGrid.bind('dataBound', function (e) {
+            this.element.find('tbody tr:first').addClass('k-state-selected');
+        });
+    }
+
+
+    /**************Load SR Info Combo Function****************/
+
+    @*function LoadGeneric() {
+        $.ajax({
+            url: '@Url.Action("GetGeneric", "Reports")',
+            type: 'GET',
+            dataType: 'JSON',
+            data: "{}",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $.each(data, function (i, item) {
+
+                    $('#ddlGeneric').append($('<option>', { value: item.GENERIC_CODE, html: item.GENERIC_NAME }, '<option/>'));
+                });
+            },
+
+            error: function () {
+                alert("Failed to load Generic !!");
+            }
+        });
+    }*@
+
+
+   // ------- End Of Ready Function --------
+
+    $("#btnReset").click(function () {
+        $('.FormBody input[type=text]').val('');
+        $('#MessageText').html('');
+        //$('.FormBody .datePicker').val(getISODateTime(new Date()));
+        $('#btnSubmit').attr('disabled', false);
+        $('#btnDelete').attr('disabled', false);
+        $(".txtBox").val("");
+        location.reload();
+    });
+</script>
+
