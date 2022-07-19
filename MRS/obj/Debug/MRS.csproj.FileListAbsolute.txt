@@ -9189,3 +9189,496 @@ E:\MRS_SBU_Wise\MRS\obj\Debug\MRS.csproj.ResolveComReference.cache
 E:\MRS_SBU_Wise\MRS\obj\Debug\MRS.dll
 E:\MRS_SBU_Wise\MRS\obj\Debug\MRS.pdb
 E:\MRS_SBU_Wise\MRS\obj\Debug\MRS.csprojResolveAssemblyReference.cache
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptManufacturerInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSelectedManufacturerInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\frmRptGenericWiseProductList.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Generic wise Prescriber List of a Market.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Generic wise Prescriber List of a Territory.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Generic wise Prescriber List of a Region.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Institution's Generic wise Product Share Ranking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC CONTRIBUTION TO NATIONAL SHARE (ALL).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE MARKET by Perc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE REGION By Perc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE REGION by Val.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE TERRITORY By Val.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUSE SHARE OF A MARKET BY VALUE.RPT
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE PRODUCT SHARE VALUE OF SQUARE PHARMACEUTICALS LTD.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Group Wise Selected Institution Value Share By Percentage.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Group Wise Selected Institution Value Share By Value.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Value Share.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor's Generic wise Product Share Ranking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Institute Generic Wise Product Share Ranking of The Market.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Indivisual Doctor Value Share Percentage.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Institutional Information.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Manufacturer Wise Product List.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Market Wise Individual Doctor Value Share Percentage.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Market Wise Individual Doctor Value Share.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\NATIONAL vs REGION Product Share Ranking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptCategorywiseInstitute.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDegreeWiseDoctor.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDosageForm.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDosageStrength.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBasedNationalProductShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseDetailProduct.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGroupWiseSelectedDoctorValueShare(byPerc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGroupWiseSelectedDoctorValueShare(byValue).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndividualInstitutionValueShare(byPerc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndividualInstitutionValueShare(byValue).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptManufecturerWiseDetailProduct.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseDoctorValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValue(ByPerc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValue(ByValue).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseInstitutionList.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseProductShareRankingPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseProductShareRankingValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalProductShareRankingByPersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalProductShareRankingByValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPotentialCategory.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPreOrgSlpOtcCllSts.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptProductCollectionStatus.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel1.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByPersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseProductShareRankingByPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseProductShareRankingByValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Specialization wise Doctor List.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Zone Division Region Territory and Market Location.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionProductShareRankingPersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionProductShareRankingValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class  wise Value Share (By Perc) of a Division.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class  wise Value Share (By Val) of a Division.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class wise National Value Share (By Value).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUSE SHARE OF A DIVISION PERSENT.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUSE SHARE OF A DIVISION VALUE.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueSharebyValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBaseRegionProductShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel2.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel3.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel4.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneProductShareRankingPersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneProductShareRankingValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseValueShareofaTerritory(By Perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseNationalValueShare(by Perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseNationalValueShare(By Value).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWisevalueShareNationalVsRegion.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseValueShareOfAGeneric.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class  wise Value Share (By Perc) of a Territory.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassWiseNationalValueShare(By Perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClasswiseValueShareofaRegionPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClasswiseValueShareofaRegionValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED DOCTOR MONTHLY VALUE SHARE (by Val).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED DOCTOR MONTHLY VALUE SHARE (by perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED DOCTOR VALUE SHARE (by Val).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED DOCTOR VALUE SHARE (by perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED INSTITUTIONS MONTHLY VALUE SHARE (by Val).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED INSTITUTIONS MONTHLY VALUE SHARE (by perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE (by val).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE (by perc).rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseIndividualInstitutionValueSharePerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseIndividualInstitutionValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptManufacturerContributiontoNationalShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPrescriptionWiseNumberProduct.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptProductFrequencyInPrescription.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndGenericWiseValueShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticClassLevel4WiseValueShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticLevel-1WiseManufacturerShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticLevel-2WiseManufacturerShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticLevel-3WiseManufacturerShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevelwiseNationalValueShareContribution.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\THERAPEUTIC CLASS WISE VALUE SHARE BY PERSENT FOR MARKET.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\THERAPEUTIC CLASS WISE VALUE SHARE BY VALUE FOR MARKET.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\THERAPEUTIC CLASS WISE VALUE SHARE BY VALUE FOR TERRITORY.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\NATIONAL IDENTICAL VALUE SHARE.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationandGenericwiseManufacturerShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClasswiseValueShareRankingforNationalVsRegion.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticLevel4wiseIndividualInstitutionValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticLevel4wiseIndividualInstitutionValueShareValue.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualDoctorValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\InvestmentDatabaseSystem.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationJibonTherapeuticClassLevel4wiseValueShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\REGION WISE IDENTICAL VALUE SHARE.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SurveySheet.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualDoctorValueShareReport.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndication.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDoctorsCoveredBy4PSurvey.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBasedProductShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MarketWiseDoctorListExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Specialization Wise Doctor List Excel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueSharePersentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueShareValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBasedNationalProductShareRankingExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBaseRegionProductShareRankingExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptInvestmentSystem.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueSharePersentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShareValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueShareValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueShareValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseInstitutionListExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Institutional Information Excel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueSharebyValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueShareExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Generic Wise Product Share Ranking of The Region1.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Generic Wise Product Share Ranking of The Region Excel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Generic Wise Product Share Ranking of The Region.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenderWiseNoOfDoctor.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketWiseFrequencyShareInNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketWiseFrequencyShareInPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionWiseFrequencyShareInNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionWiseFrequencyShareInPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MarketWiseDoctorList.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyRankingGenericVsSpecialization.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenderWiseNoOfDoctorExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseFrequencyShareinNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseFrequencyShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalFrequencyShareinPCT.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalFrequencyShareinNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValueShareExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndicationWiseCompanyShareofaGeneric.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPrescriptionFrequencyDistributionGenericVsSpecialization.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseFrequencyShareInNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseFrequencyShareInPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByPersentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueSharePersentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueSharePersentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShareExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MARKET WISE IDENTICAL VALUE SHARE.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\TERRITORY WISE IDENTICAL VALUE SHARE.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDesignationWiseDonation.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDonationDetails.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptSpecialCampProgram.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptUserInput.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMonthlyMarketWiseInvestment.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocCommitmentMeetUp.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocLeader.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocCommitmentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocLeadeExcelOnly.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecialCampaignWiseProd.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctor.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstitute.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpMarketValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpMarketValueSharePersent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpWiseGroupList.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpDoctorPrescriptionInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueSharePercent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueShare.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueSharePercent.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecialCampaignWiseProdDrill.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueShareExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueSharePercentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueShareExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueSharePercentExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptProductInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptDoctorInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseDoctorValueShareExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseDoctorValueShareExcel1.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueShareValueExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptReligionWiseNo.OfDoctor.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptReligionWiseNo.OfDoctorExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneWiseFrequencyShareinNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneWiseFrequencyShareInPct.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseFrequencyShareInNo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseFrequencyShareInPerc.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSAPDataLoaderPOUser.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseValueShareOfAGeneric.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationandGenericwiseManufacturerShareRankingExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptInstitutionWiseFrequencyBasedProductShareRanking.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDegreeCategoryandGenericwiseManufacturerShareRankingExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecificGenericSelectionwithotherGenericofDoctor.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecificGenericSelectionwithotherGenericofInstitution.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDoctorsCoveredBy4PSurvey1.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketTerritoryRegionWiseDoctorCumChemistsNoReport.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptProductWiseInvestmentSystem.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptDoctorCumChemistInfo.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueShareValuePMSExcel.rpt
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MarketWiseDoctorList.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketWiseFrequencyShareInNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketWiseFrequencyShareInPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionWiseFrequencyShareInNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionWiseFrequencyShareInPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptDoctorCumChemistInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDoctorsCoveredBy4PSurvey1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueShareValuePMSExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptProductWiseInvestmentSystem.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketTerritoryRegionWiseDoctorCumChemistsNoReport.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecificGenericSelectionwithotherGenericofInstitution.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecificGenericSelectionwithotherGenericofDoctor.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptInstitutionWiseFrequencyBasedProductShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenderWiseNoOfDoctor.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyRankingGenericVsSpecialization.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenderWiseNoOfDoctorExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndicationWiseCompanyShareofaGeneric.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseFrequencyShareinNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseFrequencyShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValueShareExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalFrequencyShareinPCT.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalFrequencyShareinNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPrescriptionFrequencyDistributionGenericVsSpecialization.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Generic Wise Product Share Ranking of The Region Excel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Generic Wise Product Share Ranking of The Region.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Generic Wise Product Share Ranking of The Region1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Institutional Information Excel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueSharebyValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueShareExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueSharePersentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueShareValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBasedNationalProductShareRankingExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBaseRegionProductShareRankingExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptInvestmentSystem.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueSharePersentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueShareValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseInstitutionListExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShareValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueShareValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseFrequencyShareInNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseFrequencyShareInPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByPersentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptReligionWiseNo.OfDoctor.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptReligionWiseNo.OfDoctorExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSAPDataLoaderPOUser.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDegreeCategoryandGenericwiseManufacturerShareRankingExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationandGenericwiseManufacturerShareRankingExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseFrequencyShareInNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseFrequencyShareInPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueSharePersentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueSharePersentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShareExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseDoctorValueShareExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseDoctorValueShareExcel1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueShareValueExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseValueShareOfAGeneric.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneWiseFrequencyShareinNo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneWiseFrequencyShareInPct.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Specialization Wise Doctor List Excel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDoctorsCoveredBy4PSurvey.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBasedProductShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MarketWiseDoctorListExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptDoctorInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndication.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocCommitmentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocCommitmentMeetUp.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocLeadeExcelOnly.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDocLeader.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualDoctorValueShareReport.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDesignationWiseDonation.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDonationDetails.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMonthlyMarketWiseInvestment.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptProductInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecialCampaignWiseProd.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecialCampaignWiseProdDrill.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\rptSpecialCampProgram.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptUserInput.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpDoctorPrescriptionInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctor.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueShareExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueSharePercent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseDoctorValueSharePercentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstitute.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueShareExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueSharePercent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpGroupWiseInstValueSharePercentExcel.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpMarketValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpMarketValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\ScpWiseGroupList.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SurveySheet.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MARKET WISE IDENTICAL VALUE SHARE.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\InvestmentDatabaseSystem.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\NATIONAL IDENTICAL VALUE SHARE.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\REGION WISE IDENTICAL VALUE SHARE.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseIndividualInstitutionValueSharePerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseIndividualInstitutionValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptManufacturerContributiontoNationalShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualDoctorValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPrescriptionWiseNumberProduct.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptProductFrequencyInPrescription.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationandGenericwiseManufacturerShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndGenericWiseValueShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticClassLevel4WiseValueShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticLevel-1WiseManufacturerShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticLevel-2WiseManufacturerShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationAndTherapeuticLevel-3WiseManufacturerShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSpecializationJibonTherapeuticClassLevel4wiseValueShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevelwiseNationalValueShareContribution.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClasswiseValueShareRankingforNationalVsRegion.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticLevel4wiseIndividualInstitutionValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticLevel4wiseIndividualInstitutionValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED DOCTOR MONTHLY VALUE SHARE (by Val).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED DOCTOR MONTHLY VALUE SHARE (by perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED DOCTOR VALUE SHARE (by Val).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED DOCTOR VALUE SHARE (by perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED INSTITUTIONS MONTHLY VALUE SHARE (by Val).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\SELECTED INSTITUTIONS MONTHLY VALUE SHARE (by perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE (by val).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\MANUFACTURER WISE SELECTED INSTITUTIONS VALUE SHARE (by perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUSE SHARE OF A DIVISION PERSENT.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUSE SHARE OF A DIVISION VALUE.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionRegionTerritoryMarketValueSharebyValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassWiseNationalValueShare(By Perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClasswiseValueShareofaRegionPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClasswiseValueShareofaRegionValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\TERRITORY WISE IDENTICAL VALUE SHARE.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class  wise Value Share (By Perc) of a Division.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class  wise Value Share (By Val) of a Division.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class wise National Value Share (By Value).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC CONTRIBUTION TO NATIONAL SHARE (ALL).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE MARKET by Perc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE REGION By Perc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE REGION by Val.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUE SHARE (ALL) OF THE TERRITORY By Val.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE NATIONAL VALUSE SHARE OF A MARKET BY VALUE.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Generic wise Prescriber List of a Market.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Generic wise Prescriber List of a Territory.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Generic wise Prescriber List of a Region.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\GENERIC WISE PRODUCT SHARE VALUE OF SQUARE PHARMACEUTICALS LTD.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Institution's Generic wise Product Share Ranking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Group Wise Selected Institution Value Share By Percentage1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Group Wise Selected Institution Value Share By Value.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor Value Share.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Doctor's Generic wise Product Share Ranking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Individual Institute Generic Wise Product Share Ranking of The Market.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Indivisual Doctor Value Share Percentage.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Institutional Information.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Manufacturer Wise Product List.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Market Wise Individual Doctor Value Share Percentage.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Market Wise Individual Doctor Value Share.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\NATIONAL vs REGION Product Share Ranking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptCategorywiseInstitute.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDegreeWiseDoctor.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionProductShareRankingPersent1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionProductShareRankingValue1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDivisionValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDosageForm.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptDosageStrength.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\frmRptGenericWiseProductList.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBasedNationalProductShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptFrequencyBaseRegionProductShareRanking.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseDetailProduct.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseNationalValueShare(by Perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseNationalValueShare(By Value).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWisevalueShareNationalVsRegion.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGenericWiseValueShareofaTerritory(By Perc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGroupWiseSelectedDoctorValueShare(byPerc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptGroupWiseSelectedDoctorValueShare(byValue).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndividualInstitutionValueShare(byPerc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptIndividualInstitutionValueShare(byValue).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptManufacturerInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptManufecturerWiseDetailProduct.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseDoctorValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValue(ByPerc).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseIndividualInstitutionValue(ByValue).cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseInstitutionList.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseProductShareRankingPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseProductShareRankingValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptMarketWiseValueShareOfAGeneric.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalProductShareRankingByPersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalProductShareRankingByValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPotentialCategory.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptPreOrgSlpOtcCllSts.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptProductCollectionStatus.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByPersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptRegionWiseProductShareRankingByValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptSelectedManufacturerInfo.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseProductShareRankingByPerc.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTerritoryWiseProductShareRankingByValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel21.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel31.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptTherapeuticClassLevel41.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneProductShareRankingPersent1.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneProductShareRankingValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneValueSharePersent.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptZoneValueShareValue.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Specialization wise Doctor List.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Therapeutic Class  wise Value Share (By Perc) of a Territory.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\THERAPEUTIC CLASS WISE VALUE SHARE BY PERSENT FOR MARKET.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\THERAPEUTIC CLASS WISE VALUE SHARE BY VALUE FOR MARKET.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\THERAPEUTIC CLASS WISE VALUE SHARE BY VALUE FOR TERRITORY.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\Zone Division Region Territory and Market Location.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Reports\RptNationalValueShare.cs
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\MRS.dll.config
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\MRS.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\MRS.pdb
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Antlr3.Runtime.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\EntityFramework.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\EntityFramework.SqlServer.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.AspNet.Identity.Core.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.AspNet.Identity.Owin.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Host.SystemWeb.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Cookies.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Facebook.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Google.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.OAuth.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Twitter.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Web.Infrastructure.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Newtonsoft.Json.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Owin.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Helpers.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Mvc.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Optimization.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Razor.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.WebPages.Deployment.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.WebPages.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.WebPages.Razor.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\SystemsAuth.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\WebGrease.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Helpers.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Mvc.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Optimization.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.Razor.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.WebPages.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.WebPages.Deployment.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\System.Web.WebPages.Razor.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Newtonsoft.Json.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Antlr3.Runtime.pdb
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\EntityFramework.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\EntityFramework.SqlServer.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.AspNet.Identity.Core.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.AspNet.Identity.Owin.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Host.SystemWeb.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Facebook.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Cookies.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.OAuth.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Google.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.Twitter.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\obj\Debug\MRS.csprojResolveAssemblyReference.cache
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\obj\Debug\MRS.csproj.ResolveComReference.cache
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\obj\Debug\MRS.dll
+G:\MRS\Publish Version\Latest\updated\MRS_08_10_2020\MRS_SBU_Wise\MRS_SBU_WISE\MRS\obj\Debug\MRS.pdb
